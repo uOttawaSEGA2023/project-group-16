@@ -16,6 +16,10 @@ public class Patient extends User{
 	public int getHealthCardNumber() {
 		return this.healthCardNumber;
 	}
+
+	public void setHealthCardNumber(int newHealthCardNumber) {
+		healthCardNumber = newHealthCardNumber;
+	}
 	
 	
 }

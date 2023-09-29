@@ -16,11 +16,15 @@ public class Doctor extends User{
 		this.specialties = specialties;
 	}
 	
-	private int getEmployeeNumber() {
+	public int getEmployeeNumber() {
 		return this.employeeNumber;
 	}
+
+	public void setEmployeeNumber(int newEmployeeNumber) {
+		employeeNumber = newEmployeeNumber;
+	} 
 	
-	private String getSpecialties() {
+	public String getSpecialties() {
 		String result = "";
 		for (int i = 0; i < specialties.length; i++) {
 			result += specialties[i] + ", ";

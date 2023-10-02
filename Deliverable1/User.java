@@ -1,4 +1,6 @@
 public class User{
+	
+	//Instance Variables******************************
 	protected String firstName;
 	protected String lastName;
 	protected String username;
@@ -6,6 +8,7 @@ public class User{
 	protected String phoneNumber;
 	protected String address;
 	
+	//Constructor*************************************
 	public User(String firstName, 
 				String lastName, 
 				String username, 
@@ -20,6 +23,9 @@ public class User{
 			this.address = address;
 		}
 	
+	//Instance Methods********************************
+	
+	// Getters //
 	protected String getFirstName() {
 		return this.firstName;
 	}
@@ -32,31 +38,48 @@ public class User{
 		return this.username;
 	}
 	
-	protected void setUsername(String newUsername) {
-		this.username = newUsername;
-	}
-	
 	protected String getPassword() {
 		return this.password;
 	}
 	
-	protected void setPassword(String newPassword) {
-		this.password = newPassword;
-	}
-	
 	protected String getPhoneNumber() {
 		return this.phoneNumber;
-	}
-	
-	protected void setPhoneNumber(String newNumber) {
-		this.phoneNumber = newNumber;
 	}
 
 	protected String getAddress() {
 		return this.address;
 	}
 	
+	// Setters //
+	
+	protected void setUsername(String newUsername) {
+		this.username = newUsername;
+	}
+	
+	protected void setPassword(String newPassword) {
+		this.password = newPassword;
+	}
+	
+	protected void setPhoneNumber(String newNumber) {
+		this.phoneNumber = newNumber;
+	}
+	
 	protected void setAddress(String newAddress) {
 		this.address = newAddress;
+	}
+	
+	/**
+	 * Returns basic information of a User. 
+	 * 
+	 * @returns A String with information on a user's name, address, phone number.
+	 */
+	public String toString() {
+		return "Name: " 
+				+ getFirstName() 
+				+ " " + getLastName() 
+				+ "\nPhone number: "
+				+ getPhoneNumber()
+				+ "\nAddress: "
+				+ getAddress();
 	}
 }

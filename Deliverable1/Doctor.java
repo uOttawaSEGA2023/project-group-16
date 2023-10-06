@@ -20,8 +20,8 @@ public class Doctor extends User{
 		return this.employeeNumber;
 	}
 
-	public void setEmployeeNumber(int newEmployeeNumber) {
-		employeeNumber = newEmployeeNumber;
+	public void setEmployeeNumber(int id) {
+		employeeNumber = id;
 	} 
 	
 	public String getSpecialties() {
@@ -31,10 +31,10 @@ public class Doctor extends User{
 		}
 		
 		return result.substring(0,specialties.length-2);
-		
 	}
 	
-	
-	
+	public void setSpecialties(String [] s) {
+		specialties = s;
+	}
 	
 }

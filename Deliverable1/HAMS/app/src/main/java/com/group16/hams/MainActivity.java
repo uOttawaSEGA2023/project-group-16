@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -16,9 +17,12 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.FirebaseException;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import org.checkerframework.common.subtyping.qual.Bottom;
 
@@ -48,40 +52,61 @@ public class MainActivity extends AppCompatActivity {
         super.onStart();
         // Check if user is signed in (non-null) and update UI accordingly.
         FirebaseUser currentUser = mAuth.getCurrentUser();
-        updateUI(currentUser);
     }
 
     private void updateUI(FirebaseUser currentUser) {
+        setContentView(R.layout.logged_in_patient);
     }
 
-    public void onLoginAttempt(View view){
-        mAuth.signInWithEmailAndPassword(email.getText().toString(), password.getText().toString())
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+    public void onLoginAttempt(View view) {
+        String email = this.email.getText().toString();
+        String password = this.password.getText().toString();
+
+        Toast t = new Toast(MainActivity.this);
+        if(email.isEmpty() && password.isEmpty()){
+            t.makeText(MainActivity.this, "Both fields are empty",
+                    Toast.LENGTH_SHORT).show();
+            return;
+        } else if (email.isEmpty()){
+            t.makeText(MainActivity.this, "Email field is empty",
+                    Toast.LENGTH_SHORT).show();
+            return;
+        } else if (password.isEmpty()){
+            t.makeText(MainActivity.this, "Password field is empty",
+                    Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        mAuth.signInWithEmailAndPassword(email, password)
+                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
+
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithCustomToken:success");
                             Toast t = Toast.makeText(MainActivity.this, "Success!",
                                     Toast.LENGTH_SHORT);
-                            t.setGravity(Gravity.BOTTOM, 0, 30);
                             t.show();
                             FirebaseUser user = mAuth.getCurrentUser();
+
                             Database.getUser(user);
-                            updateUI(user);
+
+                            (new Handler()).postDelayed(new Runnable() {
+                                @Override
+                                public void run() { updateUI(user); }
+                            }, 250);
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithCustomToken:failure", task.getException());
                             Toast t = Toast.makeText(MainActivity.this, "Wrong Email or Password",
                                     Toast.LENGTH_SHORT);
-                            t.setGravity(Gravity.BOTTOM, 0, 0);
                             t.show();
-                            updateUI(null);
+
                         }
                     }
                 });
     }
-
 
     public void onClickRegister(View view) {
         Intent intent = new Intent(this, ChooseType.class);

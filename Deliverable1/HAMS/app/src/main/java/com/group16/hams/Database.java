@@ -13,11 +13,15 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import entities.*;
+
 public class Database {
     static FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference myRef = database.getReference();
 
-    public static String address, firstName, lastName, username, password, phoneNumber, healthCardNumber;
+    public static Doctor d;
+    public static Patient p;
+
 
     public static void getUser(FirebaseUser user) {
         // Change for doctor
@@ -27,8 +31,16 @@ public class Database {
         ValueEventListener listener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                address = snapshot.child("address").getValue(String.class);
-                System.out.println(address);
+                p = new Patient(snapshot.child("firstName").getValue(String.class),
+                        snapshot.child("lastName").getValue(String.class),
+                        snapshot.child("username").getValue(String.class),
+                        snapshot.child("password").getValue(String.class),
+                        snapshot.child("phoneNumber").getValue(String.class),
+                        snapshot.child("address").getValue(String.class),
+                        snapshot.child("healthCardNumber").getValue(Integer.class)
+                );
+
+                Log.w(TAG, p.toString());
             }
 
             @Override

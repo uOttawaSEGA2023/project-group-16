@@ -19,28 +19,38 @@ public class Database {
     static FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference myRef = database.getReference();
 
-    public static Doctor d;
-    public static Patient p;
+    public static User currentUser;
 
 
     public static void getUser(FirebaseUser user) {
         // Change for doctor
-        DatabaseReference myRef = database.getReference().child("Users").
-                child("Patients").child(user.getUid());
+        DatabaseReference myRef = database.getReference().child("Users");
 
         ValueEventListener listener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                p = new Patient(snapshot.child("firstName").getValue(String.class),
-                        snapshot.child("lastName").getValue(String.class),
-                        snapshot.child("username").getValue(String.class),
-                        snapshot.child("password").getValue(String.class),
-                        snapshot.child("phoneNumber").getValue(String.class),
-                        snapshot.child("address").getValue(String.class),
-                        snapshot.child("healthCardNumber").getValue(Integer.class)
-                );
+                if (snapshot.child("Patients").child(user.getUid()).exists()) {
+                    snapshot = snapshot.child("Patients").child(user.getUid());
+                    currentUser = new Patient(snapshot.child("firstName").getValue(String.class),
+                            snapshot.child("lastName").getValue(String.class),
+                            snapshot.child("username").getValue(String.class),
+                            snapshot.child("password").getValue(String.class),
+                            snapshot.child("phoneNumber").getValue(String.class),
+                            snapshot.child("address").getValue(String.class),
+                            snapshot.child("healthCardNumber").getValue(Integer.class));
+                } else if (snapshot.child("Doctors").child(user.getUid()).exists()){
+                    snapshot = snapshot.child("Doctors").child(user.getUid());
+                    currentUser = new Doctor(snapshot.child("firstName").getValue(String.class),
+                            snapshot.child("lastName").getValue(String.class),
+                            snapshot.child("username").getValue(String.class),
+                            snapshot.child("password").getValue(String.class),
+                            snapshot.child("phoneNumber").getValue(String.class),
+                            snapshot.child("address").getValue(String.class),
+                            snapshot.child("employeeNumber").getValue(Integer.class),
+                            snapshot.child("specialties").getValue(String.class).split(" "));
+                }
+                    Log.w(TAG, currentUser.toString());
 
-                Log.w(TAG, p.toString());
             }
 
             @Override
@@ -49,6 +59,5 @@ public class Database {
             }
         };
         myRef.addValueEventListener(listener);
-        System.out.println("E");
     }
 }

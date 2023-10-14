@@ -44,31 +44,31 @@ public class RegisterPatient extends AppCompatActivity {
                 String healthCardNumberText = healthCardNumber.getText().toString();
 
                 if (validateName(firstNameText) == false){
-                    firstName.setText("Invalid Input!");
+                    firstName.setError("Invalid Input!");
                     validFlag = false;
                 }
                 if (validateName(lastNameText) == false){
-                    lastName.setText("Invalid Input!");
+                    lastName.setError("Invalid Input!");
                     validFlag = false;
                 }
                 if (validateUsername(usernameText) == false){
-                    username.setText("Invalid Input!");
+                    username.setError("Invalid Input!");
                     validFlag = false;
                 }
                 if (validatePhoneNumber(phoneNumberText) == false){
-                    phoneNumber.setText("Invalid Input!");
+                    phoneNumber.setError("Invalid Input!");
                     validFlag = false;
                 }
                 if (validateAddress(addressText) == false){
-                    address.setText("Invalid Input!");
+                    address.setError("Invalid Input!");
                     validFlag = false;
                 }
                 if (passwordText.isEmpty() || passwordText == null){
-                    password.setText("Invalid Input!");
+                    password.setError("Invalid Input!");
                     validFlag = false;
                 }
                 if (healthCardNumberText.isEmpty() || healthCardNumberText == null){
-                    healthCardNumber.setText("Invalid Input!");
+                    healthCardNumber.setError("Invalid Input!");
                     validFlag = false;
                 }
 

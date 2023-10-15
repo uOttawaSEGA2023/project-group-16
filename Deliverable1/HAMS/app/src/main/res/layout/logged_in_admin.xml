@@ -8,7 +8,7 @@
     android:orientation="vertical"
     android:gravity="center"
     android:background="@drawable/homepage"
-    tools:context=".LoggedInPatient">
+    tools:context=".LoggedInAdmin">
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
@@ -29,7 +29,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Welcome! You are logged in as Patient"
+                android:text="Welcome! You are logged in as Admin"
                 android:id="@+id/welcomeText"
                 android:textSize="36sp"
                 android:textAlignment="center"

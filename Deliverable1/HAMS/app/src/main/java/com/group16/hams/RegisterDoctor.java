@@ -1,19 +1,36 @@
 package com.group16.hams;
 
+import static android.content.ContentValues.TAG;
+
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
+import entities.*;
 
 import java.util.regex.Pattern;
 
 public class RegisterDoctor extends AppCompatActivity {
 
     private Button join;
+    private FirebaseAuth mAuth;
     private EditText firstName, lastName, username, password, phoneNumber, address;
+
+    private User u;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,6 +84,36 @@ public class RegisterDoctor extends AppCompatActivity {
                 if (validFlag) {
                     // Save data
                     Intent intent = new Intent(RegisterDoctor.this, MainActivity.class);
+                    mAuth = FirebaseAuth.getInstance();
+                    mAuth.createUserWithEmailAndPassword(usernameText, passwordText)
+                            .addOnCompleteListener(RegisterDoctor.this, new OnCompleteListener<AuthResult>() {
+                                @Override
+                                public void onComplete(@NonNull Task<AuthResult> task) {
+                                    if (task.isSuccessful()) {
+                                        // Sign in success, update UI with the signed-in user's information
+                                        Log.d(TAG, "createUserWithEmail:success");
+                                        FirebaseUser user = mAuth.getCurrentUser();
+                                        u = new Doctor(firstNameText,
+                                                lastNameText,
+                                                usernameText,
+                                                passwordText,
+                                                phoneNumberText,
+                                                addressText,
+                                                1, new String[]{"Hello", "Hi"});
+                                        (new Handler()).postDelayed(new Runnable() {
+                                            @Override
+                                            public void run() { Database.registerUser(user, u); }
+                                        }, 1000);
+                                        Toast.makeText(RegisterDoctor.this, "Success! Please log in.",
+                                                Toast.LENGTH_SHORT).show();
+                                    } else {
+                                        // If sign in fails, display a message to the user.
+                                        Log.w(TAG, "createUserWithEmail:failure", task.getException());
+                                        Toast.makeText(RegisterDoctor.this, "Authentication failed.",
+                                                Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            });
                     startActivity(intent);
                 }
             }
@@ -102,4 +149,6 @@ public class RegisterDoctor extends AppCompatActivity {
         Pattern pattern = Pattern.compile(addressRegex);
         return pattern.matcher(address).matches();
     }
+
+
 }

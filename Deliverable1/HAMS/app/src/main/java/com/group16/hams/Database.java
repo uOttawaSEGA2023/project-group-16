@@ -16,16 +16,14 @@ import com.google.firebase.database.ValueEventListener;
 import entities.*;
 
 public class Database {
-    static FirebaseDatabase database = FirebaseDatabase.getInstance();
-    DatabaseReference myRef = database.getReference();
+    private static FirebaseDatabase database = FirebaseDatabase.getInstance();
+    private static DatabaseReference myRef = database.getReference().child("Users");
 
     public static User currentUser;
 
 
     public static void getUser(FirebaseUser user) {
         // Change for doctor
-        DatabaseReference myRef = database.getReference().child("Users");
-
         ValueEventListener listener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -59,5 +57,13 @@ public class Database {
             }
         };
         myRef.addValueEventListener(listener);
+    }
+
+    public static void registerUser(FirebaseUser user, User u){
+        if (u instanceof Doctor){
+            myRef.child("Doctors").child(user.getUid()).setValue(u);
+        } else if (u instanceof Patient){
+            myRef.child("Patients").child(user.getUid()).setValue(u);
+        }
     }
 }

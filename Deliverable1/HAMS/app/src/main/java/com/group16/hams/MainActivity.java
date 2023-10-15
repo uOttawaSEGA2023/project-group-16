@@ -64,9 +64,6 @@ public class MainActivity extends AppCompatActivity {
             intent = new Intent(this, LoggedInDoctor.class);
             startActivity(intent);
         }
-
-        System.out.println("Test!");
-
     }
 
     public void onLoginAttempt(View view) {
@@ -105,7 +102,7 @@ public class MainActivity extends AppCompatActivity {
                             (new Handler()).postDelayed(new Runnable() {
                                 @Override
                                 public void run() { updateUI(user); }
-                            }, 250);
+                            }, 1000);
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithCustomToken:failure", task.getException());

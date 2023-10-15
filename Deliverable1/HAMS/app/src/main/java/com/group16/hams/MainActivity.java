@@ -55,8 +55,18 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void updateUI(FirebaseUser currentUser) {
-        Intent intent = new Intent(this, LoggedInPatient.class);
-        startActivity(intent);
+        Intent intent;
+
+        if (Database.currentUser instanceof Patient){
+            intent = new Intent(this, LoggedInPatient.class);
+            startActivity(intent);
+        } else if (Database.currentUser instanceof  Doctor){
+            intent = new Intent(this, LoggedInDoctor.class);
+            startActivity(intent);
+        }
+
+        System.out.println("Test!");
+
     }
 
     public void onLoginAttempt(View view) {
@@ -92,7 +102,6 @@ public class MainActivity extends AppCompatActivity {
                             FirebaseUser user = mAuth.getCurrentUser();
 
                             Database.getUser(user);
-
                             (new Handler()).postDelayed(new Runnable() {
                                 @Override
                                 public void run() { updateUI(user); }

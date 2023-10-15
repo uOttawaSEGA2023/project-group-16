@@ -48,14 +48,15 @@
                 app:cornerRadius = "20dp"/>
 
             <Button
+                android:id="@+id/logoutButton"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
-                android:id="@+id/logoutButton"
-                android:text="Logout"
-                android:textSize="18sp"
                 android:layout_marginTop="18dp"
                 android:backgroundTint="@color/purple"
-                app:cornerRadius = "20dp"/>
+                android:onClick="onClickLogout"
+                android:text="Logout"
+                android:textSize="18sp"
+                app:cornerRadius="20dp" />
         </LinearLayout>
 
     </androidx.cardview.widget.CardView>

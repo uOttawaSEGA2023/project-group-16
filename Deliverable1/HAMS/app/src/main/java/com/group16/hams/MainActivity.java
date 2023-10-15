@@ -55,7 +55,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void updateUI(FirebaseUser currentUser) {
-        setContentView(R.layout.logged_in_patient);
+        Intent intent = new Intent(this, LoggedInPatient.class);
+        startActivity(intent);
     }
 
     public void onLoginAttempt(View view) {

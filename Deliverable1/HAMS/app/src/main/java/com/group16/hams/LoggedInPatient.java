@@ -25,6 +25,7 @@ public class LoggedInPatient extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         logoutButton = findViewById(R.id.logoutButton);
 
+        /*
         logoutButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -32,9 +33,16 @@ public class LoggedInPatient extends AppCompatActivity {
                 mAuth.signOut();
                 Intent intent = new Intent(LoggedInPatient.this, MainActivity.class);
                 startActivity(intent);
-                finish();
+                //finish();
                 Toast.makeText(LoggedInPatient.this, "Logout Successful", Toast.LENGTH_SHORT).show();
             }
         });
+        */
+    }
+
+    public void onClickLogout(View view) {
+        mAuth.signOut();
+        finish();
+        Toast.makeText(this, "Logout Successful", Toast.LENGTH_SHORT).show();
     }
 }

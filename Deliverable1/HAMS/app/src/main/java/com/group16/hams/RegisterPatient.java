@@ -72,19 +72,19 @@ public class RegisterPatient extends AppCompatActivity {
                     validFlag = false;
                 }
                 if (validatePhoneNumber(phoneNumberText) == false){
-                    phoneNumber.setError("Invalid Number!");
+                    phoneNumber.setError("Invalid Input!");
                     validFlag = false;
                 }
                 if (validateAddress(addressText) == false){
-                    address.setError("Invalid Address!");
+                    address.setError("Invalid Input!");
                     validFlag = false;
                 }
-                if (passwordText.length() < 6 || passwordText == null){
-                    password.setError("Password must be longer than 6 Inputs!");
+                if (passwordText.isEmpty() || passwordText == null){
+                    password.setError("Invalid Input!");
                     validFlag = false;
                 }
-                if (healthCardNumberText.length() < 10 || healthCardNumberText == null || onlyDigits(healthCardNumberText) == false){
-                    healthCardNumber.setError("Invalid Health Card Number (Numbers Only)!");
+                if (healthCardNumberText.isEmpty() || healthCardNumberText == null){
+                    healthCardNumber.setError("Invalid Input!");
                     validFlag = false;
                 }
 
@@ -163,11 +163,5 @@ public class RegisterPatient extends AppCompatActivity {
         String addressRegex = "^[A-Za-z\\s]+,\\s*\\d+,[\\sA-Za-z]+,[\\sA-Za-z]+$";
         Pattern pattern = Pattern.compile(addressRegex);
         return pattern.matcher(address).matches();
-    }
-
-    public static boolean onlyDigits(String str) {
-        String regex = "[0-9]+";
-        Pattern pattern = Pattern.compile(regex);
-        return pattern.matcher(str).matches();
     }
 }

@@ -56,31 +56,30 @@ public class RegisterDoctor extends AppCompatActivity {
                 String phoneNumberText = phoneNumber.getText().toString();
                 String addressText = address.getText().toString();
 
-                if (validateName(firstNameText) == false){
+                if (!validateName(firstNameText)) {
                     firstName.setError("Invalid Input!");
                     validFlag = false;
                 }
-                if (validateName(lastNameText) == false){
+                if (!validateName(lastNameText)) {
                     lastName.setError("Invalid Input!");
                     validFlag = false;
                 }
-                if (validateUsername(usernameText) == false){
+                if (!validateUsername(usernameText)) {
                     username.setError("Invalid Input!");
                     validFlag = false;
                 }
-                if (validatePhoneNumber(phoneNumberText) == false){
-                    phoneNumber.setError("Invalid Number!");
+                if (!validatePhoneNumber(phoneNumberText)) {
+                    phoneNumber.setError("Invalid Input!");
                     validFlag = false;
                 }
-                if (validateAddress(addressText) == false){
-                    address.setError("Invalid Address!");
+                if (!validateAddress(addressText)) {
+                    address.setError("Invalid Input!");
                     validFlag = false;
                 }
-                if (passwordText.length() < 6 || passwordText == null){
-                    password.setError("Password must be longer than 6 Inputs!");
+                if (passwordText.isEmpty() || passwordText == null) {
+                    password.setError("Invalid Input!");
                     validFlag = false;
                 }
-
 
                 if (validFlag) {
                     // Save data
@@ -153,6 +152,6 @@ public class RegisterDoctor extends AppCompatActivity {
         Pattern pattern = Pattern.compile(addressRegex);
         return pattern.matcher(address).matches();
     }
-    
+
 
 }

@@ -85,8 +85,6 @@ public class RegisterDoctor extends AppCompatActivity {
                     validFlag = false;
                 }
 
-<<<<<<< HEAD
-=======
                 if (specialtyText.isEmpty() || specialtyText == null || !validateSpecialty(specialtyText)) {
                     specialty.setError("Invalid Input");
                     validFlag = false;
@@ -99,8 +97,6 @@ public class RegisterDoctor extends AppCompatActivity {
 
 
 
-
->>>>>>> f3fdd567147959cc53c677e869b52576ffa21254
                 if (validFlag) {
 
                     Intent intent = new Intent(RegisterDoctor.this, MainActivity.class);

@@ -44,7 +44,7 @@ public class Database {
                             snapshot.child("password").getValue(String.class),
                             snapshot.child("phoneNumber").getValue(String.class),
                             snapshot.child("address").getValue(String.class),
-                            snapshot.child("employeeNumber").getValue(Integer.class),
+                            String.valueOf(snapshot.child("employeeNumber").getValue(Integer.class)),
                             snapshot.child("specialties").getValue(String.class).split(" "));
                 } else if (snapshot.child("Admin").child(user.getUid()).exists()){
                     snapshot = snapshot.child("Admin").child(user.getUid());

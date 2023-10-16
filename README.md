@@ -1,3 +1,3 @@
 Administrator login credentials:
-Username/Email: admin
-Password: admin
+Username/Email: admin@admin.com
+Password: adminadmin

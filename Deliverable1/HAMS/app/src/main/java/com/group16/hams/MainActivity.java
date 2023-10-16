@@ -63,6 +63,9 @@ public class MainActivity extends AppCompatActivity {
         } else if (Database.currentUser instanceof  Doctor){
             intent = new Intent(this, LoggedInDoctor.class);
             startActivity(intent);
+        } else if (Database.currentUser instanceof Administrator){
+            intent = new Intent(this, LoggedInAdmin.class);
+            startActivity(intent);
         }
     }
 

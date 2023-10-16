@@ -46,6 +46,9 @@ public class Database {
                             snapshot.child("address").getValue(String.class),
                             snapshot.child("employeeNumber").getValue(Integer.class),
                             snapshot.child("specialties").getValue(String.class).split(" "));
+                } else if (snapshot.child("Admin").child(user.getUid()).exists()){
+                    snapshot = snapshot.child("Admin").child(user.getUid());
+                    currentUser = new Administrator();
                 }
                     Log.w(TAG, currentUser.toString());
 

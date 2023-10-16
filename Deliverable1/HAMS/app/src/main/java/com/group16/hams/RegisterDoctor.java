@@ -46,6 +46,7 @@ public class RegisterDoctor extends AppCompatActivity {
         address = findViewById(R.id.address);
 
         join.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View view) {
                 boolean validFlag = true;
@@ -153,6 +154,6 @@ public class RegisterDoctor extends AppCompatActivity {
         Pattern pattern = Pattern.compile(addressRegex);
         return pattern.matcher(address).matches();
     }
-    
+
 
 }

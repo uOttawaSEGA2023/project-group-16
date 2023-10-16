@@ -83,7 +83,7 @@ public class RegisterPatient extends AppCompatActivity {
                     password.setError("Password must be longer than 6 Inputs!");
                     validFlag = false;
                 }
-                if (healthCardNumberText.length() < 10 || healthCardNumberText == null || onlyDigits(healthCardNumberText) == false){
+                if (healthCardNumberText.length() != 10 || healthCardNumberText == null || onlyDigits(healthCardNumberText) == false){
                     healthCardNumber.setError("Invalid Health Card Number (Numbers Only)!");
                     validFlag = false;
                 }

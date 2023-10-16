@@ -117,6 +117,7 @@ public class RegisterPatient extends AppCompatActivity {
 
                                         Toast.makeText(RegisterPatient.this, "Success! Please log in.",
                                                 Toast.LENGTH_SHORT).show();
+                                        startActivity(intent);
 
                                     } else {
                                         // If sign in fails, display a message to the user.
@@ -126,7 +127,6 @@ public class RegisterPatient extends AppCompatActivity {
                                     }
                                 }
                             });
-                    startActivity(intent);
                 }
             }
         });

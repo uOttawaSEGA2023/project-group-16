@@ -109,6 +109,7 @@ public class RegisterDoctor extends AppCompatActivity {
 
                                         Toast.makeText(RegisterDoctor.this, "Success! Please log in.",
                                                 Toast.LENGTH_SHORT).show();
+                                        startActivity(intent);
                                     } else {
                                         // If sign in fails, display a message to the user.
                                         Log.w(TAG, "createUserWithEmail:failure", task.getException());
@@ -117,7 +118,6 @@ public class RegisterDoctor extends AppCompatActivity {
                                     }
                                 }
                             });
-                    startActivity(intent);
                 }
             }
         });

@@ -100,10 +100,13 @@ public class RegisterDoctor extends AppCompatActivity {
                                                 phoneNumberText,
                                                 addressText,
                                                 1, new String[]{"Hello", "Hi"});
-                                        (new Handler()).postDelayed(new Runnable() {
-                                            @Override
-                                            public void run() { Database.registerUser(user, u); }
-                                        }, 1000);
+//                                        (new Handler()).postDelayed(new Runnable() {
+//                                            @Override
+//                                            public void run() { Database.registerUser(user, u); }
+//                                        }, 1000);
+
+                                        Database.registerUser(user, u);
+
                                         Toast.makeText(RegisterDoctor.this, "Success! Please log in.",
                                                 Toast.LENGTH_SHORT).show();
                                     } else {

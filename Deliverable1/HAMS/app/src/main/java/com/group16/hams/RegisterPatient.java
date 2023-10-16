@@ -107,12 +107,17 @@ public class RegisterPatient extends AppCompatActivity {
                                                 phoneNumberText,
                                                 addressText,
                                                 Integer.parseInt(healthCardNumberText));
-                                        (new Handler()).postDelayed(new Runnable() {
-                                            @Override
-                                            public void run() { Database.registerUser(user, u); }
-                                        }, 1000);
+
+//                                        (new Handler()).postDelayed(new Runnable() {
+//                                            @Override
+//                                            public void run() { Database.registerUser(user, u); }
+//                                        }, 1000);
+
+                                        Database.registerUser(user, u);
+
                                         Toast.makeText(RegisterPatient.this, "Success! Please log in.",
                                                 Toast.LENGTH_SHORT).show();
+
                                     } else {
                                         // If sign in fails, display a message to the user.
                                         Log.w(TAG, "createUserWithEmail:failure", task.getException());

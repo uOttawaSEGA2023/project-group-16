@@ -28,7 +28,7 @@ public class RegisterDoctor extends AppCompatActivity {
 
     private Button join;
     private FirebaseAuth mAuth;
-    private EditText firstName, lastName, username, password, phoneNumber, address;
+    private EditText firstName, lastName, username, password, phoneNumber, address, specialty, employeeId;
 
     private User u;
 
@@ -44,6 +44,8 @@ public class RegisterDoctor extends AppCompatActivity {
         password = findViewById(R.id.password_registration);
         phoneNumber = findViewById(R.id.phone_number);
         address = findViewById(R.id.address);
+        specialty = findViewById(R.id.specialty);
+        employeeId = findViewById(R.id.employee_id);
 
         join.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -55,6 +57,8 @@ public class RegisterDoctor extends AppCompatActivity {
                 String passwordText = password.getText().toString();
                 String phoneNumberText = phoneNumber.getText().toString();
                 String addressText = address.getText().toString();
+                String specialtyText = specialty.getText().toString();
+                String employeeIdText = employeeId.getText().toString();
 
                 if (!validateName(firstNameText)) {
                     firstName.setError("Invalid Input!");
@@ -81,8 +85,21 @@ public class RegisterDoctor extends AppCompatActivity {
                     validFlag = false;
                 }
 
+                if (specialtyText.isEmpty() || specialtyText == null || !validateSpecialty(specialtyText)) {
+                    specialty.setError("Invalid Input");
+                    validFlag = false;
+                }
+
+                if (employeeIdText.isEmpty() || employeeIdText == null || !validateEmployeeId(employeeIdText)) {
+                    employeeId.setError("Invalid Input!");
+                    validFlag = false;
+                }
+
+
+
+
                 if (validFlag) {
-                    // Save data
+
                     Intent intent = new Intent(RegisterDoctor.this, MainActivity.class);
                     mAuth = FirebaseAuth.getInstance();
                     mAuth.createUserWithEmailAndPassword(usernameText, passwordText)
@@ -90,7 +107,7 @@ public class RegisterDoctor extends AppCompatActivity {
                                 @Override
                                 public void onComplete(@NonNull Task<AuthResult> task) {
                                     if (task.isSuccessful()) {
-                                        // Sign in success, update UI with the signed-in user's information
+
                                         Log.d(TAG, "createUserWithEmail:success");
                                         FirebaseUser user = mAuth.getCurrentUser();
                                         u = new Doctor(firstNameText,
@@ -99,11 +116,9 @@ public class RegisterDoctor extends AppCompatActivity {
                                                 passwordText,
                                                 phoneNumberText,
                                                 addressText,
-                                                1, new String[]{"Hello", "Hi"});
-//                                        (new Handler()).postDelayed(new Runnable() {
-//                                            @Override
-//                                            public void run() { Database.registerUser(user, u); }
-//                                        }, 1000);
+                                                employeeIdText,
+                                                new String[]{specialtyText});
+
 
                                         Database.registerUser(user, u);
 
@@ -111,7 +126,7 @@ public class RegisterDoctor extends AppCompatActivity {
                                                 Toast.LENGTH_SHORT).show();
                                         startActivity(intent);
                                     } else {
-                                        // If sign in fails, display a message to the user.
+
                                         Log.w(TAG, "createUserWithEmail:failure", task.getException());
                                         Toast.makeText(RegisterDoctor.this, "Authentication failed.",
                                                 Toast.LENGTH_SHORT).show();
@@ -153,5 +168,28 @@ public class RegisterDoctor extends AppCompatActivity {
         return pattern.matcher(address).matches();
     }
 
+    private boolean validateSpecialty(String specialty) {
+
+        String[] specialties = specialty.split(" ");
+        for (String spec : specialties) {
+            try {
+                Integer.parseInt(spec);
+                return false;
+            } catch (NumberFormatException e) {
+
+            }
+        }
+        return true;
+    }
+
+
+    private boolean validateEmployeeId(String employeeId) {
+        try {
+            Integer.parseInt(employeeId);
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    }
 
 }

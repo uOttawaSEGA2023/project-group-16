@@ -62,6 +62,7 @@ public class RegisterDoctor extends AppCompatActivity {
                 String addressText = address.getText().toString();
                 String employeeNumberText = employeeNumber.getText().toString();
                 String specialtiesText = specialtiesEditText.getText().toString();
+                String[] specialtiesArray = specialtiesText.split(" ");
 
 
                 if (validateName(firstNameText) == false) {
@@ -120,7 +121,7 @@ public class RegisterDoctor extends AppCompatActivity {
                                                 phoneNumberText,
                                                 addressText,
                                                 Integer.parseInt(employeeNumberText),
-                                                new String[]{"Hello", "Hi"});
+                                                specialtiesArray);
 
 
                                         Database.registerUser(user, u);

@@ -28,9 +28,11 @@ public class RegisterDoctor extends AppCompatActivity {
 
     private Button join;
     private FirebaseAuth mAuth;
-    private EditText firstName, lastName, username, password, phoneNumber, address;
+    private EditText firstName, lastName, username, password, phoneNumber, address, employeeNumber, specialtiesEditText;
 
     private User u;
+    private String[] specialties;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +46,8 @@ public class RegisterDoctor extends AppCompatActivity {
         password = findViewById(R.id.password_registration);
         phoneNumber = findViewById(R.id.phone_number);
         address = findViewById(R.id.address);
+        employeeNumber = findViewById(R.id.employee_id);
+        specialtiesEditText = findViewById(R.id.specialty);
 
         join.setOnClickListener(new View.OnClickListener() {
 
@@ -56,31 +60,45 @@ public class RegisterDoctor extends AppCompatActivity {
                 String passwordText = password.getText().toString();
                 String phoneNumberText = phoneNumber.getText().toString();
                 String addressText = address.getText().toString();
+                String employeeNumberText = employeeNumber.getText().toString();
+                String specialtiesText = specialtiesEditText.getText().toString();
 
-                if (validateName(firstNameText) == false){
+
+                if (validateName(firstNameText) == false) {
                     firstName.setError("Invalid Input!");
                     validFlag = false;
                 }
-                if (validateName(lastNameText) == false){
+                if (validateName(lastNameText) == false) {
                     lastName.setError("Invalid Input!");
                     validFlag = false;
                 }
-                if (validateUsername(usernameText) == false){
+                if (validateUsername(usernameText) == false) {
                     username.setError("Invalid Input!");
                     validFlag = false;
                 }
-                if (validatePhoneNumber(phoneNumberText) == false){
+                if (validatePhoneNumber(phoneNumberText) == false) {
                     phoneNumber.setError("Invalid Number!");
                     validFlag = false;
                 }
-                if (validateAddress(addressText) == false){
+                if (validateAddress(addressText) == false) {
                     address.setError("Invalid Address!");
                     validFlag = false;
                 }
-                if (passwordText.length() < 6 || passwordText == null){
+                if (passwordText.length() < 6 || passwordText == null) {
                     password.setError("Password must be longer than 6 Inputs!");
                     validFlag = false;
                 }
+
+                if (validateEmployeeNumber(employeeNumberText) == false) {
+                    employeeNumber.setError("Invalid Number!");
+                    validFlag = false;
+                }
+
+                if (!validateString(specialtiesText)) {
+                    specialtiesEditText.setError("Invalid Input!");
+                    validFlag = false;
+                }
+
 
 
                 if (validFlag) {
@@ -101,11 +119,9 @@ public class RegisterDoctor extends AppCompatActivity {
                                                 passwordText,
                                                 phoneNumberText,
                                                 addressText,
-                                                1, new String[]{"Hello", "Hi"});
-//                                        (new Handler()).postDelayed(new Runnable() {
-//                                            @Override
-//                                            public void run() { Database.registerUser(user, u); }
-//                                        }, 1000);
+                                                Integer.parseInt(employeeNumberText),
+                                                new String[]{"Hello", "Hi"});
+
 
                                         Database.registerUser(user, u);
 
@@ -155,5 +171,14 @@ public class RegisterDoctor extends AppCompatActivity {
         return pattern.matcher(address).matches();
     }
 
+    private boolean validateEmployeeNumber(String employeeNumber) {
+        return employeeNumber != null && !employeeNumber.isEmpty();
+    }
+
+    private boolean validateString(String input) {
+        return input != null && !input.isEmpty();
+    }
 
 }
+
+

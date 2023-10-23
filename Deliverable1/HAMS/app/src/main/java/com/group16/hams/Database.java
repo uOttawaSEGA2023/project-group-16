@@ -2,6 +2,7 @@ package com.group16.hams;
 
 import static android.content.ContentValues.TAG;
 
+import android.provider.ContactsContract;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -14,6 +15,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import entities.*;
+import java.util.ArrayList;
 
 public class Database {
     private static FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -69,4 +71,32 @@ public class Database {
             myRef.child("Patients").child(user.getUid()).setValue(u);
         }
     }
+
+    //NOT FINISHED
+    //ONCE WE HAVE IMPLEMENTED REGISTRATION STATUS WE CAN SPECIFY IT AS A PARAMETER AND SPECIFICALLY
+    //LOOP THROUGH ALL USERS IN ONLY THAT STATUS INSTEAD OF LOOPING THROUGH ALL USERS
+    public ArrayList<User> getAllUsers() {
+        ArrayList<User> totalUsers = new ArrayList<User>();
+        User newUser;
+
+        ValueEventListener listener = new ValueEventListener() {
+
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot dsp : dataSnapshot.getChildren()) {
+                    //NOT FINISHED
+                    //LOOP THROUGH ALL UESRS AND IF THEY ARE A PATIENT CREATE A NEW PATIENT
+                    //IF THEY ARE A DOCTOR CREATE A DOCTOR, THEN ADD TO totalUsers
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.w(TAG, "Failed to read value.", error.toException());
+            }
+        };
+
+        return totalUsers;
+    }
+
 }

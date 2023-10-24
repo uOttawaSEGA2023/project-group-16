@@ -72,21 +72,42 @@ public class Database {
         }
     }
 
-    //NOT FINISHED
-    //ONCE WE HAVE IMPLEMENTED REGISTRATION STATUS WE CAN SPECIFY IT AS A PARAMETER AND SPECIFICALLY
-    //LOOP THROUGH ALL USERS IN ONLY THAT STATUS INSTEAD OF LOOPING THROUGH ALL USERS
+    //I THINK THIS SHOULD WORK BUT I AM UNSURE
+    //STILL NOT ENTIRELY COMPLETE. IDEALLY WE COULD PASS THE STATUS AS A PARAMETER AND READ ALL THE
+    //USERS IN A PARTICULAR STATUS
     public ArrayList<User> getAllUsers() {
         ArrayList<User> totalUsers = new ArrayList<User>();
-        User newUser;
 
         ValueEventListener listener = new ValueEventListener() {
 
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                User newUser;
+
                 for (DataSnapshot dsp : dataSnapshot.getChildren()) {
-                    //NOT FINISHED
-                    //LOOP THROUGH ALL UESRS AND IF THEY ARE A PATIENT CREATE A NEW PATIENT
-                    //IF THEY ARE A DOCTOR CREATE A DOCTOR, THEN ADD TO totalUsers
+                    //I THINK THIS SHOULD WORK BUT I AM UNSURE
+                    if (dsp.getKey().equals("Patient")) {
+                        newUser = new Patient(dsp.child("firstName").getValue(String.class),
+                                dsp.child("lastName").getValue(String.class),
+                                dsp.child("username").getValue(String.class),
+                                dsp.child("password").getValue(String.class),
+                                dsp.child("phoneNumber").getValue(String.class),
+                                dsp.child("address").getValue(String.class),
+                                dsp.child("healthCardNumber").getValue(Integer.class));
+                        totalUsers.add(newUser);
+                    }
+
+                    else if (dsp.getKey().equals("Doctor")) {
+                        newUser = new Doctor(dsp.child("firstName").getValue(String.class),
+                                dsp.child("lastName").getValue(String.class),
+                                dsp.child("username").getValue(String.class),
+                                dsp.child("password").getValue(String.class),
+                                dsp.child("phoneNumber").getValue(String.class),
+                                dsp.child("address").getValue(String.class),
+                                dsp.child("employeeNumber").getValue(Integer.class),
+                                dsp.child("specialties").getValue(String.class).split(" "));
+                        totalUsers.add(newUser);
+                    }
                 }
             }
 

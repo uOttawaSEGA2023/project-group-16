@@ -2,7 +2,6 @@ package com.group16.hams;
 
 import static android.content.ContentValues.TAG;
 
-import android.provider.ContactsContract;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -19,13 +18,19 @@ import java.util.ArrayList;
 
 public class Database {
     private static FirebaseDatabase database = FirebaseDatabase.getInstance();
-    private static DatabaseReference myRef = database.getReference().child("Users");
-
+    private static DatabaseReference myRef = database.getReference();
+    private static DatabaseReference pendingRef = myRef.child("Rejected");
+    private static DatabaseReference rejectedRef = myRef.child("Pending");
+    private static DatabaseReference userRef = myRef.child("Users");
     public static User currentUser;
+    public enum UserStatus{
+        PENDING,
+        REJECTED,
+        ACCEPTED;
+    }
 
-
+    //Adjust getUser for new status
     public static void getUser(FirebaseUser user) {
-        // Change for doctor
         ValueEventListener listener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -61,23 +66,22 @@ public class Database {
                 Log.w(TAG, "Failed to read value.", error.toException());
             }
         };
-        myRef.addValueEventListener(listener);
+        userRef.addValueEventListener(listener);
     }
 
     public static void registerUser(FirebaseUser user, User u){
         if (u instanceof Doctor){
-            myRef.child("Doctors").child(user.getUid()).setValue(u);
+            pendingRef.child("Doctors").child(user.getUid()).setValue(u);
         } else if (u instanceof Patient){
-            myRef.child("Patients").child(user.getUid()).setValue(u);
+            pendingRef.child("Patients").child(user.getUid()).setValue(u);
         }
     }
 
     //I THINK THIS SHOULD WORK BUT I AM UNSURE
     //STILL NOT ENTIRELY COMPLETE. IDEALLY WE COULD PASS THE STATUS AS A PARAMETER AND READ ALL THE
     //USERS IN A PARTICULAR STATUS
-    public ArrayList<User> getAllUsers() {
+    public static ArrayList<User> getAllUsers(UserStatus status) {
         ArrayList<User> totalUsers = new ArrayList<User>();
-
         ValueEventListener listener = new ValueEventListener() {
 
             @Override
@@ -116,6 +120,15 @@ public class Database {
                 Log.w(TAG, "Failed to read value.", error.toException());
             }
         };
+
+        switch(status){
+            case PENDING:
+                pendingRef.addValueEventListener(listener);
+            case REJECTED:
+                rejectedRef.addValueEventListener(listener);
+            case ACCEPTED:
+                userRef.addValueEventListener(listener);
+        }
 
         return totalUsers;
     }

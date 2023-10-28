@@ -15,15 +15,24 @@ import com.google.firebase.database.ValueEventListener;
 
 import entities.*;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+
 public class Database {
     private static FirebaseDatabase database = FirebaseDatabase.getInstance();
-    private static DatabaseReference myRef = database.getReference().child("Users");
-
+    private static DatabaseReference myRef = database.getReference();
+    private static DatabaseReference pendingRef = myRef.child("Pending");
+    private static DatabaseReference rejectedRef = myRef.child("Rejected");
+    private static DatabaseReference userRef = myRef.child("Users");
     public static User currentUser;
+    public enum UserStatus{
+        PENDING,
+        REJECTED,
+        ACCEPTED;
+    }
 
-
+    //Adjust getUser for new status
     public static void getUser(FirebaseUser user) {
-        // Change for doctor
         ValueEventListener listener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -59,14 +68,145 @@ public class Database {
                 Log.w(TAG, "Failed to read value.", error.toException());
             }
         };
-        myRef.addValueEventListener(listener);
+        userRef.addValueEventListener(listener);
     }
 
     public static void registerUser(FirebaseUser user, User u){
         if (u instanceof Doctor){
-            myRef.child("Doctors").child(user.getUid()).setValue(u);
+            pendingRef.child("Doctors").child(user.getUid()).setValue(u);
         } else if (u instanceof Patient){
-            myRef.child("Patients").child(user.getUid()).setValue(u);
+            pendingRef.child("Patients").child(user.getUid()).setValue(u);
         }
     }
+
+    public interface UserFetchCallback {
+        void onUsersFetched(ArrayList<User> users);
+    }
+
+    public static ArrayList<User> getAllUsers(UserStatus status, UserFetchCallback callback) {
+        ArrayList<User> totalUsers = new ArrayList<User>();
+
+        switch(status){
+            case PENDING:
+                pendingRef.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        User newUser;
+                        for (DataSnapshot dsp : dataSnapshot.getChildren()) {
+                            //I THINK THIS SHOULD WORK BUT I AM UNSURE
+                            if (dsp.getKey().equals("Patient")) {
+                                newUser = new Patient(dsp.child("firstName").getValue(String.class),
+                                        dsp.child("lastName").getValue(String.class),
+                                        dsp.child("username").getValue(String.class),
+                                        dsp.child("password").getValue(String.class),
+                                        dsp.child("phoneNumber").getValue(String.class),
+                                        dsp.child("address").getValue(String.class),
+                                        dsp.child("healthCardNumber").getValue(Integer.class));
+                                totalUsers.add(newUser);
+                            }
+
+                            else if (dsp.getKey().equals("Doctor")) {
+                                newUser = new Doctor(dsp.child("firstName").getValue(String.class),
+                                        dsp.child("lastName").getValue(String.class),
+                                        dsp.child("username").getValue(String.class),
+                                        dsp.child("password").getValue(String.class),
+                                        dsp.child("phoneNumber").getValue(String.class),
+                                        dsp.child("address").getValue(String.class),
+                                        dsp.child("employeeNumber").getValue(Integer.class),
+                                        dsp.child("specialties").getValue(String.class).split(" "));
+                                totalUsers.add(newUser);
+                            }
+                        }
+                        callback.onUsersFetched(totalUsers);
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                        Log.w(TAG, "Failed to read value.", error.toException());
+                    }
+                });
+                break;
+            case REJECTED:
+                rejectedRef.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        User newUser;
+                        for (DataSnapshot dsp : dataSnapshot.getChildren()) {
+                            //I THINK THIS SHOULD WORK BUT I AM UNSURE
+                            if (dsp.getKey().equals("Patient")) {
+                                newUser = new Patient(dsp.child("firstName").getValue(String.class),
+                                        dsp.child("lastName").getValue(String.class),
+                                        dsp.child("username").getValue(String.class),
+                                        dsp.child("password").getValue(String.class),
+                                        dsp.child("phoneNumber").getValue(String.class),
+                                        dsp.child("address").getValue(String.class),
+                                        dsp.child("healthCardNumber").getValue(Integer.class));
+                                totalUsers.add(newUser);
+                            }
+
+                            else if (dsp.getKey().equals("Doctor")) {
+                                newUser = new Doctor(dsp.child("firstName").getValue(String.class),
+                                        dsp.child("lastName").getValue(String.class),
+                                        dsp.child("username").getValue(String.class),
+                                        dsp.child("password").getValue(String.class),
+                                        dsp.child("phoneNumber").getValue(String.class),
+                                        dsp.child("address").getValue(String.class),
+                                        dsp.child("employeeNumber").getValue(Integer.class),
+                                        dsp.child("specialties").getValue(String.class).split(" "));
+                                totalUsers.add(newUser);
+                            }
+                        }
+                        callback.onUsersFetched(totalUsers);
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                        Log.w(TAG, "Failed to read value.", error.toException());
+                    }
+                });
+                break;
+            case ACCEPTED:
+                userRef.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        User newUser;
+                        for (DataSnapshot dsp : dataSnapshot.getChildren()) {
+                            //I THINK THIS SHOULD WORK BUT I AM UNSURE
+                            if (dsp.getKey().equals("Patient")) {
+                                newUser = new Patient(dsp.child("firstName").getValue(String.class),
+                                        dsp.child("lastName").getValue(String.class),
+                                        dsp.child("username").getValue(String.class),
+                                        dsp.child("password").getValue(String.class),
+                                        dsp.child("phoneNumber").getValue(String.class),
+                                        dsp.child("address").getValue(String.class),
+                                        dsp.child("healthCardNumber").getValue(Integer.class));
+                                totalUsers.add(newUser);
+                            }
+
+                            else if (dsp.getKey().equals("Doctor")) {
+                                newUser = new Doctor(dsp.child("firstName").getValue(String.class),
+                                        dsp.child("lastName").getValue(String.class),
+                                        dsp.child("username").getValue(String.class),
+                                        dsp.child("password").getValue(String.class),
+                                        dsp.child("phoneNumber").getValue(String.class),
+                                        dsp.child("address").getValue(String.class),
+                                        dsp.child("employeeNumber").getValue(Integer.class),
+                                        dsp.child("specialties").getValue(String.class).split(" "));
+                                totalUsers.add(newUser);
+                            }
+                        }
+                        callback.onUsersFetched(totalUsers);
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                        Log.w(TAG, "Failed to read value.", error.toException());
+                    }
+                });
+                break;
+        }
+
+        return totalUsers;
+    }
+
 }

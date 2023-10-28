@@ -34,4 +34,19 @@ public class LoggedInAdmin extends AppCompatActivity {
         finish();
         Toast.makeText(this, "Logout Successful", Toast.LENGTH_SHORT).show();
     }
+
+    public void onClickPending(View view) {
+        Intent intent = new Intent(this, PendingAccounts.class);
+        startActivity(intent);
+    }
+
+    public void onClickAccepted(View view) {
+        Intent intent = new Intent(this, AcceptedAccounts.class);
+        startActivity(intent);
+    }
+
+    public void onClickRejected(View view) {
+        Intent intent = new Intent(this, RejectedAccounts.class);
+        startActivity(intent);
+    }
 }

@@ -7,4 +7,5 @@
     <string name="doctor">Doctor</string>
     <string name="patient">Patient</string>
     <string name="account_prompt_text">Which type of account would you like to create?</string>
+    <string name="return_text">Return</string>
 </resources>

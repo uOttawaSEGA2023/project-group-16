@@ -172,10 +172,10 @@ public class RegisterDoctor extends AppCompatActivity {
         return pattern.matcher(address).matches();
     }
 
+
     private boolean validateEmployeeNumber(String employeeNumber) {
         return employeeNumber != null && !employeeNumber.isEmpty();
     }
-
     private boolean validateString(String input) {
         return input != null && !input.isEmpty();
     }

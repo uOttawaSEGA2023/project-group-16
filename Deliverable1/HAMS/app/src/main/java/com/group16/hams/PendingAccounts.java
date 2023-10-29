@@ -1,8 +1,12 @@
 package com.group16.hams;
 
+import static android.content.ContentValues.TAG;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 
 import java.util.ArrayList;
@@ -26,7 +30,21 @@ public class PendingAccounts extends AppCompatActivity {
         finish();
     }
 
+    public void onClickLoad(View view){
+        setPendingUsersList();
+    }
+
     private void setPendingUsersList(){
+
+        pendingUsersList = Database.getAllUsers(Database.UserStatus.PENDING);
+
+        (new Handler()).postDelayed(new Runnable() {
+            @Override
+            public void run() { recycleAdd(); }
+        }, 1000);
+    }
+
+    private void recycleAdd(){
         User curUser;
         String curName;
         String curEmail;
@@ -35,14 +53,6 @@ public class PendingAccounts extends AppCompatActivity {
         String curHealthCardNumber;
         String curEmployeeNumber;
         String curSpecialites;
-
-        Database.getAllUsers(Database.UserStatus.PENDING, new Database.UserFetchCallback() {
-            @Override
-            public void onUsersFetched(ArrayList<User> users) {
-                pendingUsersList.clear();
-                pendingUsersList.addAll(users);
-            }
-        });
 
         for (int i = 0; i < pendingUsersList.size(); i++) {
             curUser = pendingUsersList.get(i);

@@ -79,133 +79,56 @@ public class Database {
         }
     }
 
-    public interface UserFetchCallback {
-        void onUsersFetched(ArrayList<User> users);
-    }
-
-    public static ArrayList<User> getAllUsers(UserStatus status, UserFetchCallback callback) {
+    public static ArrayList<User> getAllUsers(UserStatus status) {
         ArrayList<User> totalUsers = new ArrayList<User>();
+        ValueEventListener listener = new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot pSnap : snapshot.child("Patients").getChildren()) { // Snapshot of Patients
+                    System.out.println("Key: " + pSnap.getKey());
+                    System.out.println("Children: " + pSnap.getChildren());
 
-        switch(status){
+                    totalUsers.add(new Patient(pSnap.child("firstName").getValue(String.class),
+                            pSnap.child("lastName").getValue(String.class),
+                            pSnap.child("username").getValue(String.class),
+                            pSnap.child("password").getValue(String.class),
+                            pSnap.child("phoneNumber").getValue(String.class),
+                            pSnap.child("address").getValue(String.class),
+                            pSnap.child("healthCardNumber").getValue(Integer.class))
+                    );
+                }
+                for (DataSnapshot dSnap : snapshot.child("Doctors").getChildren()) {
+                    if (dSnap.getKey().equals("Doctors") && dSnap.hasChildren()) {
+                        totalUsers.add(new Doctor(dSnap.child("firstName").getValue(String.class),
+                                dSnap.child("lastName").getValue(String.class),
+                                dSnap.child("username").getValue(String.class),
+                                dSnap.child("password").getValue(String.class),
+                                dSnap.child("phoneNumber").getValue(String.class),
+                                dSnap.child("address").getValue(String.class),
+                                dSnap.child("employeeNumber").getValue(Integer.class),
+                                dSnap.child("specialties").getValue(String.class).split(" "))
+                            );
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.w(TAG, "Failed to read value.", error.toException());
+            }
+        };
+
+        switch (status){
             case PENDING:
-                pendingRef.addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        User newUser;
-                        for (DataSnapshot dsp : dataSnapshot.getChildren()) {
-                            //I THINK THIS SHOULD WORK BUT I AM UNSURE
-                            if (dsp.getKey().equals("Patient")) {
-                                newUser = new Patient(dsp.child("firstName").getValue(String.class),
-                                        dsp.child("lastName").getValue(String.class),
-                                        dsp.child("username").getValue(String.class),
-                                        dsp.child("password").getValue(String.class),
-                                        dsp.child("phoneNumber").getValue(String.class),
-                                        dsp.child("address").getValue(String.class),
-                                        dsp.child("healthCardNumber").getValue(Integer.class));
-                                totalUsers.add(newUser);
-                            }
-
-                            else if (dsp.getKey().equals("Doctor")) {
-                                newUser = new Doctor(dsp.child("firstName").getValue(String.class),
-                                        dsp.child("lastName").getValue(String.class),
-                                        dsp.child("username").getValue(String.class),
-                                        dsp.child("password").getValue(String.class),
-                                        dsp.child("phoneNumber").getValue(String.class),
-                                        dsp.child("address").getValue(String.class),
-                                        dsp.child("employeeNumber").getValue(Integer.class),
-                                        dsp.child("specialties").getValue(String.class).split(" "));
-                                totalUsers.add(newUser);
-                            }
-                        }
-                        callback.onUsersFetched(totalUsers);
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-                        Log.w(TAG, "Failed to read value.", error.toException());
-                    }
-                });
+                pendingRef.addValueEventListener(listener);
                 break;
             case REJECTED:
-                rejectedRef.addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        User newUser;
-                        for (DataSnapshot dsp : dataSnapshot.getChildren()) {
-                            //I THINK THIS SHOULD WORK BUT I AM UNSURE
-                            if (dsp.getKey().equals("Patient")) {
-                                newUser = new Patient(dsp.child("firstName").getValue(String.class),
-                                        dsp.child("lastName").getValue(String.class),
-                                        dsp.child("username").getValue(String.class),
-                                        dsp.child("password").getValue(String.class),
-                                        dsp.child("phoneNumber").getValue(String.class),
-                                        dsp.child("address").getValue(String.class),
-                                        dsp.child("healthCardNumber").getValue(Integer.class));
-                                totalUsers.add(newUser);
-                            }
-
-                            else if (dsp.getKey().equals("Doctor")) {
-                                newUser = new Doctor(dsp.child("firstName").getValue(String.class),
-                                        dsp.child("lastName").getValue(String.class),
-                                        dsp.child("username").getValue(String.class),
-                                        dsp.child("password").getValue(String.class),
-                                        dsp.child("phoneNumber").getValue(String.class),
-                                        dsp.child("address").getValue(String.class),
-                                        dsp.child("employeeNumber").getValue(Integer.class),
-                                        dsp.child("specialties").getValue(String.class).split(" "));
-                                totalUsers.add(newUser);
-                            }
-                        }
-                        callback.onUsersFetched(totalUsers);
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-                        Log.w(TAG, "Failed to read value.", error.toException());
-                    }
-                });
+                rejectedRef.addValueEventListener(listener);
                 break;
             case ACCEPTED:
-                userRef.addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        User newUser;
-                        for (DataSnapshot dsp : dataSnapshot.getChildren()) {
-                            //I THINK THIS SHOULD WORK BUT I AM UNSURE
-                            if (dsp.getKey().equals("Patient")) {
-                                newUser = new Patient(dsp.child("firstName").getValue(String.class),
-                                        dsp.child("lastName").getValue(String.class),
-                                        dsp.child("username").getValue(String.class),
-                                        dsp.child("password").getValue(String.class),
-                                        dsp.child("phoneNumber").getValue(String.class),
-                                        dsp.child("address").getValue(String.class),
-                                        dsp.child("healthCardNumber").getValue(Integer.class));
-                                totalUsers.add(newUser);
-                            }
-
-                            else if (dsp.getKey().equals("Doctor")) {
-                                newUser = new Doctor(dsp.child("firstName").getValue(String.class),
-                                        dsp.child("lastName").getValue(String.class),
-                                        dsp.child("username").getValue(String.class),
-                                        dsp.child("password").getValue(String.class),
-                                        dsp.child("phoneNumber").getValue(String.class),
-                                        dsp.child("address").getValue(String.class),
-                                        dsp.child("employeeNumber").getValue(Integer.class),
-                                        dsp.child("specialties").getValue(String.class).split(" "));
-                                totalUsers.add(newUser);
-                            }
-                        }
-                        callback.onUsersFetched(totalUsers);
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-                        Log.w(TAG, "Failed to read value.", error.toException());
-                    }
-                });
+                userRef.addValueEventListener(listener);
                 break;
         }
-
         return totalUsers;
     }
 

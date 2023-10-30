@@ -33,7 +33,7 @@ public class PendingAccounts extends AppCompatActivity implements RecyclerViewIn
             @Override
             public void run() {
                 UserRecyclerViewAdapter adapter = new UserRecyclerViewAdapter
-                        (pendingUserViews, this);
+                        (pendingUserViews, PendingAccounts.this);
                 recyclerView.setLayoutManager(new LinearLayoutManager(context));
                 recyclerView.setAdapter(adapter);
             }

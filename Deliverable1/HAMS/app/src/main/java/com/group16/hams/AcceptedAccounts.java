@@ -33,7 +33,7 @@ public class AcceptedAccounts extends AppCompatActivity implements RecyclerViewI
             @Override
             public void run() {
                 UserRecyclerViewAdapter adapter = new UserRecyclerViewAdapter
-                        (acceptedUserViews, this);
+                        (acceptedUserViews, AcceptedAccounts.this);
                 recyclerView.setLayoutManager(new LinearLayoutManager(context));
                 recyclerView.setAdapter(adapter);
             }

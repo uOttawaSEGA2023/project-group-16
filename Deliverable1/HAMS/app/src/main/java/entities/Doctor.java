@@ -3,7 +3,7 @@ package entities;
 public class Doctor extends User{
 	
 	private int employeeNumber;
-	private String [] specialties;
+	private String specialties;
 	
 	public Doctor(String firstName, 
 				String lastName, 
@@ -12,7 +12,7 @@ public class Doctor extends User{
 				String phoneNumber, 
 				String address, 
 				int employeeNumber,
-				String [] specialties) {
+				String specialties) {
 		super(firstName, lastName, username, password, phoneNumber, address);
 		this.employeeNumber = employeeNumber;
 		this.specialties = specialties;
@@ -27,16 +27,35 @@ public class Doctor extends User{
 	} 
 	
 	public String getSpecialties() {
-		String result = "";
-		for (int i = 0; i < specialties.length; i++) {
-			result += specialties[i] + ", ";
+		String[] words = specialties.trim().toLowerCase().split(",");
+
+		StringBuilder processedString = new StringBuilder();
+
+		for (String word : words) {
+			processedString.append(word.trim()).append(", ");
 		}
-		
-		return result.substring(0,specialties.length-1);
+
+		if (processedString.length() > 2) {
+			processedString.setLength(processedString.length() - 2);
+		}
+
+		return processedString.toString();
 	}
-	
-	public void setSpecialties(String [] s) {
+
+	public void setSpecialties(String s) {
 		specialties = s;
 	}
-	
+
+	@Override
+	public String toString() {
+		return "Doctor{" +
+				"firstName='" + getFirstName() + '\'' +
+				", lastName='" + getLastName() + '\'' +
+				", username='" + getUsername() + '\'' +
+				", phoneNumber='" + getPhoneNumber() + '\'' +
+				", address='" + getAddress() + '\'' +
+				", employeeNumber=" + employeeNumber +
+				", specialties='" + specialties + '\'' +
+				'}';
+	}
 }

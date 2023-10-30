@@ -55,7 +55,7 @@ public class Database {
                             snapshot.child("phoneNumber").getValue(String.class),
                             snapshot.child("address").getValue(String.class),
                             snapshot.child("employeeNumber").getValue(Integer.class),
-                            snapshot.child("specialties").getValue(String.class).split(" "));
+                            snapshot.child("specialties").getValue(String.class));
                 } else if (snapshot.child("Admin").child(user.getUid()).exists()){
                     snapshot = snapshot.child("Admin").child(user.getUid());
                     currentUser = new Administrator();
@@ -120,7 +120,7 @@ public class Database {
                                 dSnap.child("phoneNumber").getValue(String.class),
                                 dSnap.child("address").getValue(String.class),
                                 dSnap.child("employeeNumber").getValue(Integer.class),
-                                dSnap.child("specialties").getValue(String.class).split(" "))
+                                dSnap.child("specialties").getValue(String.class))
                             );
                 }
             }

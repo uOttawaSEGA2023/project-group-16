@@ -5,7 +5,10 @@ import static android.content.ContentValues.TAG;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Dialog;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -33,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
     private Button sign_in;
     private EditText email, password;
     private FirebaseAuth mAuth;
+    private Dialog popUp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,16 +99,35 @@ public class MainActivity extends AppCompatActivity {
 
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
-                            Log.d(TAG, "signInWithCustomToken:success");
-                            Toast t = Toast.makeText(MainActivity.this, "Success!",
-                                    Toast.LENGTH_SHORT);
-                            t.show();
                             FirebaseUser user = mAuth.getCurrentUser();
+                            Database.getUser(user);
 
-                            Database.getUser(user, Database.UserStatus.ACCEPTED);
+                            Log.d(TAG, "signInWithCustomToken:success");
                             (new Handler()).postDelayed(new Runnable() {
                                 @Override
-                                public void run() { updateUI(user); }
+                                public void run() {
+                                    String message = "";
+                                    switch(Database.currentUserStatus){
+                                        case PENDING:
+                                            message = "Pending for admin approval";
+                                            break;
+                                        case REJECTED:
+                                            popUp = new Dialog(MainActivity.this);
+                                            popUp.setContentView(R.layout.message_popup);
+                                            popUp.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                                            popUp.show();
+                                            break;
+                                        case ACCEPTED:
+                                            message = "Success!";
+                                            updateUI(user);
+                                            break;
+                                    }
+                                    if (!message.isEmpty()) {
+                                        Toast t = Toast.makeText(MainActivity.this, message,
+                                                Toast.LENGTH_SHORT);
+                                        t.show();
+                                    }
+                                }
                             }, 1000);
                         } else {
                             // If sign in fails, display a message to the user.

@@ -15,7 +15,6 @@ import com.google.firebase.database.ValueEventListener;
 
 import entities.*;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class Database {
@@ -33,65 +32,51 @@ public class Database {
     public static UserStatus currentUserStatus;
 
     //Adjust getUser for new status
-    public static void getUser(FirebaseUser user, UserStatus status) {
+    public static void getUser(FirebaseUser user) {
         ValueEventListener listener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (snapshot.child("Patients").child(user.getUid()).exists()) {
-                    snapshot = snapshot.child("Patients").child(user.getUid());
-                    currentUser = new Patient(snapshot.child("firstName").getValue(String.class),
-                            snapshot.child("lastName").getValue(String.class),
-                            snapshot.child("username").getValue(String.class),
-                            snapshot.child("password").getValue(String.class),
-                            snapshot.child("phoneNumber").getValue(String.class),
-                            snapshot.child("address").getValue(String.class),
-                            snapshot.child("healthCardNumber").getValue(Integer.class));
-                } else if (snapshot.child("Doctors").child(user.getUid()).exists()){
-                    snapshot = snapshot.child("Doctors").child(user.getUid());
-                    currentUser = new Doctor(snapshot.child("firstName").getValue(String.class),
-                            snapshot.child("lastName").getValue(String.class),
-                            snapshot.child("username").getValue(String.class),
-                            snapshot.child("password").getValue(String.class),
-                            snapshot.child("phoneNumber").getValue(String.class),
-                            snapshot.child("address").getValue(String.class),
-                            snapshot.child("employeeNumber").getValue(Integer.class),
-                            snapshot.child("specialties").getValue(String.class).split(" "));
-                } else if (snapshot.child("Admin").child(user.getUid()).exists()){
-                    snapshot = snapshot.child("Admin").child(user.getUid());
-                    currentUser = new Administrator();
+                for (DataSnapshot snap: snapshot.getChildren()) { // Children of the database (Pending, Rejected, Users/Accepted)
+                    String parent = snap.getKey();
+                    if (snap.child("Patients").child(user.getUid()).exists()) {
+                        determineStatus(parent);
+                        snap = snap.child("Patients").child(user.getUid());
+                        currentUser = new Patient(snap.child("firstName").getValue(String.class),
+                                snap.child("lastName").getValue(String.class),
+                                snap.child("username").getValue(String.class),
+                                snap.child("password").getValue(String.class),
+                                snap.child("phoneNumber").getValue(String.class),
+                                snap.child("address").getValue(String.class),
+                                snap.child("healthCardNumber").getValue(Integer.class));
+                        break;
+                    } else if (snap.child("Doctors").child(user.getUid()).exists()) {
+                        snap = snap.child("Doctors").child(user.getUid());
+                        determineStatus(parent);
+                        currentUser = new Doctor(snapshot.child("firstName").getValue(String.class),
+                                snap.child("lastName").getValue(String.class),
+                                snap.child("username").getValue(String.class),
+                                snap.child("password").getValue(String.class),
+                                snap.child("phoneNumber").getValue(String.class),
+                                snap.child("address").getValue(String.class),
+                                snap.child("employeeNumber").getValue(Integer.class),
+                                snap.child("specialties").getValue(String.class).split(" "));
+                        break;
+                    } else if (snap.child("Admin").child(user.getUid()).exists()) {
+                        determineStatus(parent);
+                        snap = snap.child("Admin").child(user.getUid());
+                        currentUser = new Administrator();
+                        break;
+                    }
                 }
-                    Log.w(TAG, currentUser.toString());
-
             }
-
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
                 Log.w(TAG, "Failed to read value.", error.toException());
             }
         };
-        switch (status){
-            case PENDING:
-                pendingRef.addValueEventListener(listener);
-                currentUserStatus = UserStatus.PENDING;
-                break;
-            case REJECTED:
-                rejectedRef.addValueEventListener(listener);
-                currentUserStatus = UserStatus.REJECTED;
-                break;
-            case ACCEPTED:
-                userRef.addValueEventListener(listener);
-                currentUserStatus = UserStatus.ACCEPTED;
-                break;
-        }
 
-    }
+        myRef.addValueEventListener(listener);
 
-    public static void registerUser(FirebaseUser user, User u){
-        if (u instanceof Doctor){
-            pendingRef.child("Doctors").child(user.getUid()).setValue(u);
-        } else if (u instanceof Patient){
-            pendingRef.child("Patients").child(user.getUid()).setValue(u);
-        }
     }
 
     public static ArrayList<User> getAllUsers(UserStatus status) {
@@ -143,6 +128,23 @@ public class Database {
                 break;
         }
         return totalUsers;
+    }
+
+    public static void registerUser(FirebaseUser user, User u){
+        if (u instanceof Doctor){
+            pendingRef.child("Doctors").child(user.getUid()).setValue(u);
+        } else if (u instanceof Patient){
+            pendingRef.child("Patients").child(user.getUid()).setValue(u);
+        }
+    }
+
+    private static void determineStatus(String status){
+        if (status.equals("Pending"))
+            currentUserStatus = UserStatus.PENDING;
+        else if (status.equals("Rejected"))
+            currentUserStatus = UserStatus.REJECTED;
+        else if (status.equals("Users"))
+            currentUserStatus = UserStatus.ACCEPTED;
     }
 
 }

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="350dp"
+    android:layout_height="350dp"
+    android:layout_gravity="center"
+    android:background="@android:drawable/alert_light_frame">
+
+    <TextView
+        android:id="@+id/rejectedTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="18dp"
+        android:text="REJECTED"
+        android:textSize="50sp" />
+
+    <TextView
+        android:id="@+id/rejectedText"
+        android:layout_width="285dp"
+        android:layout_height="103dp"
+        android:layout_below="@id/rejectedTitle"
+        android:textAlignment="center"
+        android:layout_marginTop="19dp"
+        android:layout_centerHorizontal="true"
+        android:text="Unfortunately, your request to register has been rejected
+        by the administrator. Please contact the administrator through the number below:"
+        android:textSize="22sp" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/rejectedText"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="56dp"
+        android:autoLink="phone"
+        android:text="819-919-6099"
+        android:textSize="30dp" />
+
+</RelativeLayout>

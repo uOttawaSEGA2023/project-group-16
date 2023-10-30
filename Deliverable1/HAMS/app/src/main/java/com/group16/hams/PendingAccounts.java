@@ -46,6 +46,21 @@ public class PendingAccounts extends AppCompatActivity implements RecyclerViewIn
         finish();
     }
 
+    public void onClickAccept() {
+
+        for (int i = 0; i < clickedUsers.size(); i++) {
+            pendingUserViews.remove(clickedUsers.get(i));
+        }
+    }
+
+    public void onClickReject() {
+
+
+        for (int i = 0; i < clickedUsers.size(); i++) {
+            pendingUserViews.remove(clickedUsers.get(i));
+        }
+    }
+
     private void setPendingUsersList(){
 
         pendingUsersList = Database.getAllUsers(Database.UserStatus.PENDING);
@@ -95,6 +110,7 @@ public class PendingAccounts extends AppCompatActivity implements RecyclerViewIn
         }
 
     }
+
 
     @Override
     public void onItemClick(int position) {

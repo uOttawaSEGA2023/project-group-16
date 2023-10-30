@@ -36,4 +36,31 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <Button
+        android:id="@+id/acceptButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="onClickAccept"
+        android:text="Accept"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.187"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/pendingRecyclerView"
+        app:layout_constraintVertical_bias="0.434" />
+
+    <Button
+        android:id="@+id/rejectButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="43dp"
+        android:onClick="onClickReject"
+        android:text="Reject"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.811"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/pendingRecyclerView"
+        app:layout_constraintVertical_bias="0.0" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -27,9 +28,17 @@ public class PendingAccounts extends AppCompatActivity {
         setContentView(R.layout.pending_accounts);
         RecyclerView recyclerView = findViewById(R.id.recyclerView);
         setPendingUsersList();
-        UserRecyclerViewAdapter adapter = new UserRecyclerViewAdapter(pendingUserViews);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter(adapter);
+
+        Context context = this;
+        (new Handler()).postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                UserRecyclerViewAdapter adapter = new UserRecyclerViewAdapter(pendingUserViews);
+                recyclerView.setLayoutManager(new LinearLayoutManager(context));
+                recyclerView.setAdapter(adapter);
+            }
+        }, 1000);
+
 
     }
 
@@ -49,9 +58,6 @@ public class PendingAccounts extends AppCompatActivity {
         (new Handler()).postDelayed(new Runnable() {
             @Override
             public void run() {
-                for (User users : pendingUsersList){
-                    System.out.println(users.toString());
-                }
                 recycleAdd();
             }
         }, 1000);
@@ -80,7 +86,7 @@ public class PendingAccounts extends AppCompatActivity {
                 curHealthCardNumber = String.valueOf(((Patient) curUser).getHealthCardNumber());
 
                 pendingUserViews.add(new RecyclerViewHolder(0, curName, curEmail, curAddress,
-                        curPhoneNumber, curHealthCardNumber));
+                        curPhoneNumber, curHealthCardNumber, ""));
             }
 
             else if (curUser instanceof Doctor) {

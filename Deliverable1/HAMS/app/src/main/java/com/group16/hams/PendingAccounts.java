@@ -29,8 +29,9 @@ public class PendingAccounts extends AppCompatActivity {
         pendingUsersList = Database.getAllUsers(Database.UserStatus.PENDING);
         recycleAdd();
         UserRecyclerViewAdapter adapter = new UserRecyclerViewAdapter(pendingUserViews);
-        recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setAdapter(adapter);
+
     }
 
     public void onClickReturn(View view) {

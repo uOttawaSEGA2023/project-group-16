@@ -20,7 +20,7 @@ public class UserRecyclerViewAdapter extends RecyclerView.Adapter {
         this.holders = holders;
     }
 
-    public int getItemLayoutType(int position) {
+    public int getItemViewType(int position) {
         switch (holders.get(position).getLayoutType()) {
             case 0:
                 return 0;
@@ -51,7 +51,7 @@ public class UserRecyclerViewAdapter extends RecyclerView.Adapter {
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        switch (holders.get(position).getLayoutType()) {
+        switch (getItemViewType(position)) {
             case 0:
                 ((PatientLayoutViewHolder)holder).tvFullName.setText
                         ("Full Name: " + holders.get(position).getFullName());

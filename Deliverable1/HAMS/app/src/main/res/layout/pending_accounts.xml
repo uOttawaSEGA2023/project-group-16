@@ -13,7 +13,7 @@
         android:layout_width="290dp"
         android:layout_height="482dp"
         android:alpha="1"
-        android:background="@color/ic_launcher_background"
+        android:background="@color/white"
         android:scrollbars="vertical"
         android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"

@@ -32,7 +32,7 @@ public class Doctor extends User{
 			result += specialties[i] + ", ";
 		}
 		
-		return result.substring(0,specialties.length-2);
+		return result.substring(0,specialties.length-1);
 	}
 	
 	public void setSpecialties(String [] s) {

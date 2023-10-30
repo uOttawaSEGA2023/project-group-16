@@ -26,8 +26,7 @@ public class PendingAccounts extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.pending_accounts);
         RecyclerView recyclerView = findViewById(R.id.recyclerView);
-        pendingUsersList = Database.getAllUsers(Database.UserStatus.PENDING);
-        recycleAdd();
+        setPendingUsersList();
         UserRecyclerViewAdapter adapter = new UserRecyclerViewAdapter(pendingUserViews);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
@@ -46,13 +45,18 @@ public class PendingAccounts extends AppCompatActivity {
 
         pendingUsersList = Database.getAllUsers(Database.UserStatus.PENDING);
 
-        /*
+
         (new Handler()).postDelayed(new Runnable() {
             @Override
-            public void run() { recycleAdd(); }
+            public void run() {
+                for (User users : pendingUsersList){
+                    System.out.println(users.toString());
+                }
+                recycleAdd();
+            }
         }, 1000);
 
-         */
+
     }
 
     private void recycleAdd(){

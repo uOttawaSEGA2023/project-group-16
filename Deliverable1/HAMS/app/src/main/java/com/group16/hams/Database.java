@@ -85,8 +85,8 @@ public class Database {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for (DataSnapshot pSnap : snapshot.child("Patients").getChildren()) { // Snapshot of Patients
-                    System.out.println("Key: " + pSnap.getKey());
-                    System.out.println("Children: " + pSnap.getChildren());
+//                    System.out.println("Key: " + pSnap.getKey());
+//                    System.out.println("Children: " + pSnap.getChildren());
 
                     totalUsers.add(new Patient(pSnap.child("firstName").getValue(String.class),
                             pSnap.child("lastName").getValue(String.class),
@@ -98,8 +98,7 @@ public class Database {
                     );
                 }
                 for (DataSnapshot dSnap : snapshot.child("Doctors").getChildren()) {
-                    if (dSnap.getKey().equals("Doctors") && dSnap.hasChildren()) {
-                        totalUsers.add(new Doctor(dSnap.child("firstName").getValue(String.class),
+                    totalUsers.add(new Doctor(dSnap.child("firstName").getValue(String.class),
                                 dSnap.child("lastName").getValue(String.class),
                                 dSnap.child("username").getValue(String.class),
                                 dSnap.child("password").getValue(String.class),
@@ -108,7 +107,6 @@ public class Database {
                                 dSnap.child("employeeNumber").getValue(Integer.class),
                                 dSnap.child("specialties").getValue(String.class).split(" "))
                             );
-                    }
                 }
             }
 

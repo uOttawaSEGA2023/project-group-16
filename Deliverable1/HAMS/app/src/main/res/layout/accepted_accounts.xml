@@ -44,7 +44,6 @@
         android:layout_marginTop="34dp"
         android:layout_marginEnd="160dp"
         android:layout_marginBottom="65dp"
-        android:onClick="onClickLoad"
         android:text="Load"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

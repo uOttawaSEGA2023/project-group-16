@@ -8,6 +8,7 @@ public class RecyclerViewHolder {
     String phoneNumber;
     String healthOrEmployee;
     String specialties;
+    boolean beenClicked = false;
 
     public RecyclerViewHolder(int type, String fullName, String email, String address,
                               String phoneNumber, String employeeNumber, String specialties) {
@@ -44,5 +45,13 @@ public class RecyclerViewHolder {
     }
     public String getSpecialties() {
         return specialties;
+    }
+
+    public boolean getBeenClicked() {
+        return beenClicked;
+    }
+
+    public void changeClickedStatus() {
+        beenClicked = !beenClicked;
     }
 }

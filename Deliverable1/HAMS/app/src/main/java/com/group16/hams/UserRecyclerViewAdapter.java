@@ -1,5 +1,7 @@
 package com.group16.hams;
 
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,46 +13,48 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 
 import entities.Patient;
+import entities.User;
 
-public class UserRecyclerViewAdapter extends RecyclerView.Adapter {
+public class UserRecyclerViewAdapter extends RecyclerView.Adapter<UserRecyclerViewAdapter.LayoutViewHolder> {
+    private final RecyclerViewInterface recyclerViewInterface;
     ArrayList<RecyclerViewHolder> holders;
-    public UserRecyclerViewAdapter(ArrayList<RecyclerViewHolder> holders) {
+
+    public UserRecyclerViewAdapter(ArrayList<RecyclerViewHolder> holders,
+                                   RecyclerViewInterface recyclerViewInterface) {
         this.holders = holders;
-        System.out.println(getItemCount());
+        this.recyclerViewInterface = recyclerViewInterface;
     }
 
     @NonNull
     @Override
     public LayoutViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        System.out.println("CREATING");
         View userLayout = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.recycler_view_row, parent, false);
-        return new LayoutViewHolder(userLayout);
+        return new LayoutViewHolder(userLayout, recyclerViewInterface);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        System.out.println("BINDING");
-        ((LayoutViewHolder)holder).tvFullName.setText
+    public void onBindViewHolder(@NonNull LayoutViewHolder holder, int position) {
+        holder.tvFullName.setText
                 ("Full Name: " + holders.get(position).getFullName());
-        ((LayoutViewHolder)holder).tvEmail.setText
+        holder.tvEmail.setText
                 ("Email: " + holders.get(position).getEmail());
-        ((LayoutViewHolder)holder).tvAddress.setText
+        holder.tvAddress.setText
                 ("Address: " + holders.get(position).getAddress());
-        ((LayoutViewHolder)holder).tvPhoneNumber.setText
+        holder.tvPhoneNumber.setText
                 ("Phone Number: " + holders.get(position).getPhoneNumber());
 
         if (holders.get(position).getType() == 0) {
-            ((LayoutViewHolder)holder).tvHealthOrEmployee.setText
+            holder.tvHealthOrEmployee.setText
                     ("Health Card Number: " + holders.get(position).getHealthOrEmployee());
-            ((LayoutViewHolder)holder).tvSpecialties.setText
+            holder.tvSpecialties.setText
                     ("");
         }
 
         else {
-            ((LayoutViewHolder)holder).tvHealthOrEmployee.setText
+            holder.tvHealthOrEmployee.setText
                     ("Employee Number: " + holders.get(position).getHealthOrEmployee());
-            ((LayoutViewHolder)holder).tvSpecialties.setText
+            holder.tvSpecialties.setText
                     ("Specialties: " + holders.get(position).getSpecialties());
         }
     }
@@ -62,15 +66,40 @@ public class UserRecyclerViewAdapter extends RecyclerView.Adapter {
 
     public static class LayoutViewHolder extends RecyclerView.ViewHolder {
         TextView tvFullName, tvEmail, tvAddress, tvPhoneNumber, tvHealthOrEmployee, tvSpecialties ;
-        public LayoutViewHolder(@NonNull View itemView) {
+        public LayoutViewHolder(@NonNull View itemView, RecyclerViewInterface recyclerViewInterface) {
             super(itemView);
-            System.out.println("CONSTRUCTING");
             tvFullName = (TextView) itemView.findViewById(R.id.textName);
             tvEmail = (TextView) itemView.findViewById(R.id.textEmail);
             tvAddress = (TextView) itemView.findViewById(R.id.textAddress);
             tvPhoneNumber = (TextView) itemView.findViewById(R.id.textPhoneNumber);
             tvHealthOrEmployee = (TextView) itemView.findViewById(R.id.textEmployeeOrHealth);
             tvSpecialties = (TextView) itemView.findViewById(R.id.textSpecialties);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (recyclerViewInterface != null) {
+
+                        //THIS CAUSES THE PROGRAM TO CRASH SO I'M COMMENTING IT OUT
+                        /*
+                        if (((ColorDrawable)view.getBackground()).getColor() == Color.parseColor("#6750A4")) {
+                            view.setBackgroundColor(Color.parseColor("#187064"));
+                        }
+
+                        else {
+                            view.setBackgroundColor(Color.parseColor("#6750A4"));
+                        }
+
+                         */
+
+                        int position = getAdapterPosition();
+
+                        if (position != RecyclerView.NO_POSITION) {
+                            recyclerViewInterface.onItemClick(position);
+                        }
+                    }
+                }
+            });
         }
     }
 

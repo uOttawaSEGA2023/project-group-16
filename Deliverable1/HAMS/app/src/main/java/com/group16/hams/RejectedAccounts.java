@@ -15,10 +15,12 @@ import entities.Doctor;
 import entities.Patient;
 import entities.User;
 
-public class RejectedAccounts extends AppCompatActivity {
+public class RejectedAccounts extends AppCompatActivity implements RecyclerViewInterface{
 
     ArrayList<User> rejectedUsersList = new ArrayList<>();
+    ArrayList<RecyclerViewHolder> clickedUsers = new ArrayList<>();
     ArrayList<RecyclerViewHolder> rejectedUserViews = new ArrayList<>();
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,7 +32,8 @@ public class RejectedAccounts extends AppCompatActivity {
         (new Handler()).postDelayed(new Runnable() {
             @Override
             public void run() {
-                UserRecyclerViewAdapter adapter = new UserRecyclerViewAdapter(rejectedUserViews);
+                UserRecyclerViewAdapter adapter = new UserRecyclerViewAdapter
+                        (rejectedUserViews, this);
                 recyclerView.setLayoutManager(new LinearLayoutManager(context));
                 recyclerView.setAdapter(adapter);
             }
@@ -91,5 +94,20 @@ public class RejectedAccounts extends AppCompatActivity {
             }
         }
 
+    }
+
+    @Override
+    public void onItemClick(int position) {
+        RecyclerViewHolder curHolder = rejectedUserViews.get(position);
+
+        if (curHolder.getBeenClicked()) {
+            clickedUsers.remove(curHolder);
+        }
+
+        else {
+            clickedUsers.add(curHolder);
+        }
+
+        curHolder.changeClickedStatus();
     }
 }

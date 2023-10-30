@@ -15,10 +15,12 @@ import entities.Doctor;
 import entities.Patient;
 import entities.User;
 
-public class PendingAccounts extends AppCompatActivity {
+public class PendingAccounts extends AppCompatActivity implements RecyclerViewInterface {
 
     ArrayList<User> pendingUsersList = new ArrayList<>();
+    ArrayList<RecyclerViewHolder> clickedUsers = new ArrayList<>();
     ArrayList<RecyclerViewHolder> pendingUserViews = new ArrayList<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,7 +32,8 @@ public class PendingAccounts extends AppCompatActivity {
         (new Handler()).postDelayed(new Runnable() {
             @Override
             public void run() {
-                UserRecyclerViewAdapter adapter = new UserRecyclerViewAdapter(pendingUserViews);
+                UserRecyclerViewAdapter adapter = new UserRecyclerViewAdapter
+                        (pendingUserViews, this);
                 recyclerView.setLayoutManager(new LinearLayoutManager(context));
                 recyclerView.setAdapter(adapter);
             }
@@ -91,5 +94,20 @@ public class PendingAccounts extends AppCompatActivity {
             }
         }
 
+    }
+
+    @Override
+    public void onItemClick(int position) {
+        RecyclerViewHolder curHolder = pendingUserViews.get(position);
+
+        if (curHolder.getBeenClicked()) {
+            clickedUsers.remove(curHolder);
+        }
+
+        else {
+            clickedUsers.add(curHolder);
+        }
+
+        curHolder.changeClickedStatus();
     }
 }

@@ -59,7 +59,7 @@ public class Database {
                                 snap.child("phoneNumber").getValue(String.class),
                                 snap.child("address").getValue(String.class),
                                 snap.child("employeeNumber").getValue(Integer.class),
-                                snap.child("specialties").getValue(String.class).split(" "));
+                                snap.child("specialties").getValue(String.class));
                         break;
                     } else if (snap.child("Admin").child(user.getUid()).exists()) {
                         determineStatus(parent);
@@ -105,7 +105,7 @@ public class Database {
                                 dSnap.child("phoneNumber").getValue(String.class),
                                 dSnap.child("address").getValue(String.class),
                                 dSnap.child("employeeNumber").getValue(Integer.class),
-                                dSnap.child("specialties").getValue(String.class).split(" "))
+                                dSnap.child("specialties").getValue(String.class))
                             );
                 }
             }

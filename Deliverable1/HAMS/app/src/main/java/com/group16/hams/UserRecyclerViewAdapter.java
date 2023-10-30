@@ -14,6 +14,8 @@ import java.util.function.DoubleConsumer;
 
 import static com.group16.hams.UserRecyclerViewAdapter.PatientLayoutViewHolder;
 
+import entities.Patient;
+
 public class UserRecyclerViewAdapter extends RecyclerView.Adapter {
     ArrayList<RecyclerViewHolder> holders;
     public UserRecyclerViewAdapter(ArrayList<RecyclerViewHolder> holders) {
@@ -35,24 +37,32 @@ public class UserRecyclerViewAdapter extends RecyclerView.Adapter {
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        RecyclerView.ViewHolder result = null;
         switch (viewType) {
             case 0:
+                System.out.println("Case 0 works");
                 View patientLayout = LayoutInflater.from(parent.getContext())
                         .inflate(R.layout.recycler_view_row_patient, parent, false);
-                return new PatientLayoutViewHolder(patientLayout);
+                result = new PatientLayoutViewHolder(patientLayout);
+                break;
             case 1:
+                System.out.println("Case 1 works");
                 View doctorLayout = LayoutInflater.from(parent.getContext())
                         .inflate(R.layout.recycler_view_row_doctor, parent, false);
-                return new DoctorLayoutViewHolder(doctorLayout);
+                result = new DoctorLayoutViewHolder(doctorLayout);
+                break;
             default:
-                return null;
+                System.out.println("Case default works");
+                break;
         }
+        return result;
     }
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         switch (getItemViewType(position)) {
             case 0:
+                System.out.println("Case 0 works");
                 ((PatientLayoutViewHolder)holder).tvFullName.setText
                         ("Full Name: " + holders.get(position).getFullName());
                 ((PatientLayoutViewHolder)holder).tvEmail.setText
@@ -63,7 +73,9 @@ public class UserRecyclerViewAdapter extends RecyclerView.Adapter {
                         ("Phone Number: " + holders.get(position).getPhoneNumber());
                 ((PatientLayoutViewHolder)holder).tvHealthCardNumber.setText
                         ("Health Card Number: " + holders.get(position).getHealthCardNumber());
+                break;
             case 1:
+                System.out.println("Case 1 works");
                 ((DoctorLayoutViewHolder)holder).tvFullName.setText
                         ("Full Name: " + holders.get(position).getFullName());
                 ((DoctorLayoutViewHolder)holder).tvEmail.setText
@@ -76,8 +88,10 @@ public class UserRecyclerViewAdapter extends RecyclerView.Adapter {
                         ("Employee Number: " + holders.get(position).getEmployeeNumber());
                 ((DoctorLayoutViewHolder)holder).tvSpecialties.setText
                         ("Specialties: " + holders.get(position).getSpecialties());
+                break;
             default:
-                return;
+                System.out.println("Case default works");
+                break;
         }
     }
 

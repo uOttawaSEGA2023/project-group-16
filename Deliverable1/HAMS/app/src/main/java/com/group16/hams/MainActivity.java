@@ -101,7 +101,7 @@ public class MainActivity extends AppCompatActivity {
                             t.show();
                             FirebaseUser user = mAuth.getCurrentUser();
 
-                            Database.getUser(user);
+                            Database.getUser(user, Database.UserStatus.ACCEPTED);
                             (new Handler()).postDelayed(new Runnable() {
                                 @Override
                                 public void run() { updateUI(user); }

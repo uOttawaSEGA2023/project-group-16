@@ -30,9 +30,10 @@ public class Database {
         REJECTED,
         ACCEPTED;
     }
+    public static UserStatus currentUserStatus;
 
     //Adjust getUser for new status
-    public static void getUser(FirebaseUser user) {
+    public static void getUser(FirebaseUser user, UserStatus status) {
         ValueEventListener listener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -68,7 +69,21 @@ public class Database {
                 Log.w(TAG, "Failed to read value.", error.toException());
             }
         };
-        userRef.addValueEventListener(listener);
+        switch (status){
+            case PENDING:
+                pendingRef.addValueEventListener(listener);
+                currentUserStatus = UserStatus.PENDING;
+                break;
+            case REJECTED:
+                rejectedRef.addValueEventListener(listener);
+                currentUserStatus = UserStatus.REJECTED;
+                break;
+            case ACCEPTED:
+                userRef.addValueEventListener(listener);
+                currentUserStatus = UserStatus.ACCEPTED;
+                break;
+        }
+
     }
 
     public static void registerUser(FirebaseUser user, User u){

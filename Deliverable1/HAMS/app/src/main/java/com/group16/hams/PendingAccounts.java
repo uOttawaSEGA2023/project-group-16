@@ -46,16 +46,15 @@ public class PendingAccounts extends AppCompatActivity implements RecyclerViewIn
         finish();
     }
 
-    public void onClickAccept() {
-
+    public void onClickAccept(View view) {
+        //To add -- remove the actual xml row
         for (int i = 0; i < clickedUsers.size(); i++) {
             pendingUserViews.remove(clickedUsers.get(i));
         }
     }
 
-    public void onClickReject() {
-
-
+    public void onClickReject(View view) {
+        //To add -- remove the actual xml row
         for (int i = 0; i < clickedUsers.size(); i++) {
             pendingUserViews.remove(clickedUsers.get(i));
         }

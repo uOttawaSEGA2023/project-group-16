@@ -12,6 +12,7 @@
         android:id="@+id/pendingRecyclerView"
         android:layout_width="290dp"
         android:layout_height="482dp"
+        android:layout_marginTop="10dp"
         android:alpha="1"
         android:background="@color/white"
         android:scrollbars="vertical"

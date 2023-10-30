@@ -24,11 +24,13 @@ public class Database {
     private static DatabaseReference rejectedRef = myRef.child("Rejected");
     private static DatabaseReference userRef = myRef.child("Users");
     public static User currentUser;
-    public enum UserStatus{
+
+    public enum UserStatus {
         PENDING,
         REJECTED,
         ACCEPTED;
     }
+
     public static UserStatus currentUserStatus;
 
     //Adjust getUser for new status
@@ -36,7 +38,7 @@ public class Database {
         ValueEventListener listener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for (DataSnapshot snap: snapshot.getChildren()) { // Children of the database (Pending, Rejected, Users/Accepted)
+                for (DataSnapshot snap : snapshot.getChildren()) { // Children of the database (Pending, Rejected, Users/Accepted)
                     String parent = snap.getKey();
                     if (snap.child("Patients").child(user.getUid()).exists()) {
                         determineStatus(parent);
@@ -69,6 +71,7 @@ public class Database {
                     }
                 }
             }
+
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
                 Log.w(TAG, "Failed to read value.", error.toException());
@@ -99,14 +102,14 @@ public class Database {
                 }
                 for (DataSnapshot dSnap : snapshot.child("Doctors").getChildren()) {
                     totalUsers.add(new Doctor(dSnap.child("firstName").getValue(String.class),
-                                dSnap.child("lastName").getValue(String.class),
-                                dSnap.child("username").getValue(String.class),
-                                dSnap.child("password").getValue(String.class),
-                                dSnap.child("phoneNumber").getValue(String.class),
-                                dSnap.child("address").getValue(String.class),
-                                dSnap.child("employeeNumber").getValue(Integer.class),
-                                dSnap.child("specialties").getValue(String.class))
-                            );
+                            dSnap.child("lastName").getValue(String.class),
+                            dSnap.child("username").getValue(String.class),
+                            dSnap.child("password").getValue(String.class),
+                            dSnap.child("phoneNumber").getValue(String.class),
+                            dSnap.child("address").getValue(String.class),
+                            dSnap.child("employeeNumber").getValue(Integer.class),
+                            dSnap.child("specialties").getValue(String.class))
+                    );
                 }
             }
 
@@ -116,7 +119,7 @@ public class Database {
             }
         };
 
-        switch (status){
+        switch (status) {
             case PENDING:
                 pendingRef.addValueEventListener(listener);
                 break;
@@ -130,15 +133,15 @@ public class Database {
         return totalUsers;
     }
 
-    public static void registerUser(FirebaseUser user, User u){
-        if (u instanceof Doctor){
+    public static void registerUser(FirebaseUser user, User u) {
+        if (u instanceof Doctor) {
             pendingRef.child("Doctors").child(user.getUid()).setValue(u);
-        } else if (u instanceof Patient){
+        } else if (u instanceof Patient) {
             pendingRef.child("Patients").child(user.getUid()).setValue(u);
         }
     }
 
-    private static void determineStatus(String status){
+    private static void determineStatus(String status) {
         if (status.equals("Pending"))
             currentUserStatus = UserStatus.PENDING;
         else if (status.equals("Rejected"))
@@ -147,4 +150,40 @@ public class Database {
             currentUserStatus = UserStatus.ACCEPTED;
     }
 
+    private static DatabaseReference getStatusReference(UserStatus status) {
+        switch (status) {
+            case PENDING:
+                return pendingRef;
+            case REJECTED:
+                return rejectedRef;
+            case ACCEPTED:
+                return userRef;
+            default:
+                throw new IllegalArgumentException("Unknown status: " + status);
+        }
+    }
+
+    private static void removeUserFromCurrentStatus(FirebaseUser user) {
+        DatabaseReference ref = getStatusReference(currentUserStatus);
+        DatabaseReference patientRef = ref.child("Patients").child(user.getUid());
+        DatabaseReference doctorRef = ref.child("Doctors").child(user.getUid());
+
+        if (patientRef != null) {
+            patientRef.removeValue();
+        } else if (doctorRef != null) {
+            doctorRef.removeValue();
+        }
+    }
+
+    public static void changeStatus(FirebaseUser user, User u, UserStatus newStatus) {
+        removeUserFromCurrentStatus(user);
+        DatabaseReference newStatusRef = getStatusReference(newStatus);
+
+        //checks the type of user type and uses uid for the unique key
+        if (u instanceof Doctor) {
+            newStatusRef.child("Doctors").child(user.getUid()).setValue(u);
+        } else if (u instanceof Patient) {
+            newStatusRef.child("Patients").child(user.getUid()).setValue(u);
+        }
+    }
 }

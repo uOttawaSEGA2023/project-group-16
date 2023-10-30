@@ -1,13 +1,16 @@
 package com.group16.hams;
 
+import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.ColorStateListDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
@@ -79,18 +82,13 @@ public class UserRecyclerViewAdapter extends RecyclerView.Adapter<UserRecyclerVi
                 @Override
                 public void onClick(View view) {
                     if (recyclerViewInterface != null) {
+                        CardView card = view.findViewById(R.id.recycler_row);
 
-                        //THIS CAUSES THE PROGRAM TO CRASH SO I'M COMMENTING IT OUT
-                        /*
-                        if (((ColorDrawable)view.getBackground()).getColor() == Color.parseColor("#6750A4")) {
-                            view.setBackgroundColor(Color.parseColor("#187064"));
+                        if (card.getCardBackgroundColor().equals(ColorStateList.valueOf(Color.parseColor("#187064")))){
+                            card.setCardBackgroundColor(Color.parseColor("#6750A4"));
+                        } else {
+                            card.setCardBackgroundColor(Color.parseColor("#187064"));
                         }
-
-                        else {
-                            view.setBackgroundColor(Color.parseColor("#6750A4"));
-                        }
-
-                         */
 
                         int position = getAdapterPosition();
 

@@ -20,6 +20,7 @@ public class RejectedAccounts extends AppCompatActivity implements RecyclerViewI
     ArrayList<User> rejectedUsersList = new ArrayList<>();
     ArrayList<RecyclerViewHolder> clickedUsers = new ArrayList<>();
     ArrayList<RecyclerViewHolder> rejectedUserViews = new ArrayList<>();
+    UserRecyclerViewAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,7 +33,7 @@ public class RejectedAccounts extends AppCompatActivity implements RecyclerViewI
         (new Handler()).postDelayed(new Runnable() {
             @Override
             public void run() {
-                UserRecyclerViewAdapter adapter = new UserRecyclerViewAdapter
+                adapter = new UserRecyclerViewAdapter
                         (rejectedUserViews, RejectedAccounts.this);
                 recyclerView.setLayoutManager(new LinearLayoutManager(context));
                 recyclerView.setAdapter(adapter);
@@ -47,11 +48,18 @@ public class RejectedAccounts extends AppCompatActivity implements RecyclerViewI
     }
 
     public void onClickAcceptRejects() {
+        int index;
 
+        if (clickedUsers.size() != 0) {
+            for (int i = 0; i < clickedUsers.size(); i++) {
+                index = rejectedUserViews.indexOf(clickedUsers.get(i));
+                rejectedUserViews.remove(index);
+                adapter.notifyItemRemoved(index);
+            }
 
-        for (int i = 0; i < clickedUsers.size(); i++) {
-            rejectedUserViews.remove(clickedUsers.get(i));
+            clickedUsers.clear();
         }
+
     }
 
     private void setRejectedUsersList(){

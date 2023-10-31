@@ -20,6 +20,7 @@ public class PendingAccounts extends AppCompatActivity implements RecyclerViewIn
     ArrayList<User> pendingUsersList = new ArrayList<>();
     ArrayList<RecyclerViewHolder> clickedUsers = new ArrayList<>();
     ArrayList<RecyclerViewHolder> pendingUserViews = new ArrayList<>();
+    UserRecyclerViewAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,7 +33,7 @@ public class PendingAccounts extends AppCompatActivity implements RecyclerViewIn
         (new Handler()).postDelayed(new Runnable() {
             @Override
             public void run() {
-                UserRecyclerViewAdapter adapter = new UserRecyclerViewAdapter
+                adapter = new UserRecyclerViewAdapter
                         (pendingUserViews, PendingAccounts.this);
                 recyclerView.setLayoutManager(new LinearLayoutManager(context));
                 recyclerView.setAdapter(adapter);
@@ -47,17 +48,32 @@ public class PendingAccounts extends AppCompatActivity implements RecyclerViewIn
     }
 
     public void onClickAccept(View view) {
-        //To add -- remove the actual xml row
-        for (int i = 0; i < clickedUsers.size(); i++) {
-            pendingUserViews.remove(clickedUsers.get(i));
+        int index;
+
+        if (clickedUsers.size() != 0) {
+            for (int i = 0; i < clickedUsers.size(); i++) {
+                index = pendingUserViews.indexOf(clickedUsers.get(i));
+                pendingUserViews.remove(index);
+                adapter.notifyItemRemoved(index);
+            }
+
+            clickedUsers.clear();
         }
     }
 
     public void onClickReject(View view) {
-        //To add -- remove the actual xml row
-        for (int i = 0; i < clickedUsers.size(); i++) {
-            pendingUserViews.remove(clickedUsers.get(i));
+        int index;
+
+        if (clickedUsers.size() != 0) {
+            for (int i = 0; i < clickedUsers.size(); i++) {
+                index = pendingUserViews.indexOf(clickedUsers.get(i));
+                pendingUserViews.remove(index);
+                adapter.notifyItemRemoved(index);
+            }
+
+            clickedUsers.clear();
         }
+
     }
 
     private void setPendingUsersList(){

@@ -97,6 +97,7 @@ public class RejectedAccounts extends AppCompatActivity implements RecyclerViewI
 
             clickedUsers.clear();
 
+            /*
             mAuth.signInWithEmailAndPassword("admin@admin.com", "adminadmin")
                     .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                         @Override
@@ -113,6 +114,8 @@ public class RejectedAccounts extends AppCompatActivity implements RecyclerViewI
                             }
                         }
                     });
+                    
+             */
         }
     }
 

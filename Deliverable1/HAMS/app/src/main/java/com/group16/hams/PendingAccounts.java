@@ -103,6 +103,7 @@ public class PendingAccounts extends AppCompatActivity implements RecyclerViewIn
 
             clickedUsers.clear();
 
+            /*
             mAuth.signInWithEmailAndPassword("admin@admin.com", "adminadmin")
                     .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                         @Override
@@ -119,6 +120,8 @@ public class PendingAccounts extends AppCompatActivity implements RecyclerViewIn
                             }
                         }
                     });
+
+             */
         }
     }
 
@@ -163,6 +166,7 @@ public class PendingAccounts extends AppCompatActivity implements RecyclerViewIn
 
             clickedUsers.clear();
 
+            /*
             mAuth.signInWithEmailAndPassword("admin@admin.com", "adminadmin")
                     .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                         @Override
@@ -179,6 +183,8 @@ public class PendingAccounts extends AppCompatActivity implements RecyclerViewIn
                             }
                         }
                     });
+
+             */
         }
     }
 

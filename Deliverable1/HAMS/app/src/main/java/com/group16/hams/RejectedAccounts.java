@@ -9,6 +9,9 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
 import java.util.ArrayList;
 
 import entities.Doctor;
@@ -47,19 +50,28 @@ public class RejectedAccounts extends AppCompatActivity implements RecyclerViewI
         finish();
     }
 
-    public void onClickAcceptRejects() {
+    public void onClickAcceptRejects(View view) {
         int index;
+        RecyclerViewHolder curUserHolder;
+        User curUser;
+        FirebaseUser currentFirebaseUser;
 
         if (clickedUsers.size() != 0) {
             for (int i = 0; i < clickedUsers.size(); i++) {
-                index = rejectedUserViews.indexOf(clickedUsers.get(i));
+                curUserHolder = clickedUsers.get(i);
+                curUser = curUserHolder.getStoredUser();
+
+                index = rejectedUserViews.indexOf(curUserHolder);
+
+                Database.changeStatus(currentFirebaseUser, curUser, Database.UserStatus.REJECTED);
+
                 rejectedUserViews.remove(index);
+                rejectedUsersList.remove(curUser);
                 adapter.notifyItemRemoved(index);
             }
 
             clickedUsers.clear();
         }
-
     }
 
     private void setRejectedUsersList(){
@@ -98,7 +110,7 @@ public class RejectedAccounts extends AppCompatActivity implements RecyclerViewI
                 curHealthCardNumber = String.valueOf(((Patient) curUser).getHealthCardNumber());
 
                 rejectedUserViews.add(new RecyclerViewHolder(0, curName, curEmail, curAddress,
-                        curPhoneNumber, curHealthCardNumber, ""));
+                        curPhoneNumber, curHealthCardNumber, "", curUser));
             }
 
             else if (curUser instanceof Doctor) {
@@ -106,7 +118,7 @@ public class RejectedAccounts extends AppCompatActivity implements RecyclerViewI
                 curSpecialites = ((Doctor) curUser).getSpecialties();
 
                 rejectedUserViews.add(new RecyclerViewHolder(1, curName, curEmail, curAddress,
-                        curPhoneNumber, curEmployeeNumber, curSpecialites));
+                        curPhoneNumber, curEmployeeNumber, curSpecialites, curUser));
             }
         }
 

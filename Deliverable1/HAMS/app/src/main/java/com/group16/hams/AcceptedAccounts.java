@@ -82,7 +82,7 @@ public class AcceptedAccounts extends AppCompatActivity implements RecyclerViewI
                 curHealthCardNumber = String.valueOf(((Patient) curUser).getHealthCardNumber());
 
                 acceptedUserViews.add(new RecyclerViewHolder(0, curName, curEmail, curAddress,
-                        curPhoneNumber, curHealthCardNumber, ""));
+                        curPhoneNumber, curHealthCardNumber, "", curUser));
             }
 
             else if (curUser instanceof Doctor) {
@@ -90,7 +90,7 @@ public class AcceptedAccounts extends AppCompatActivity implements RecyclerViewI
                 curSpecialites = ((Doctor) curUser).getSpecialties();
 
                 acceptedUserViews.add(new RecyclerViewHolder(1, curName, curEmail, curAddress,
-                        curPhoneNumber, curEmployeeNumber, curSpecialites));
+                        curPhoneNumber, curEmployeeNumber, curSpecialites, curUser));
             }
         }
 

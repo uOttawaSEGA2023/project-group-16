@@ -9,6 +9,9 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
 import java.util.ArrayList;
 
 import entities.Doctor;
@@ -21,6 +24,8 @@ public class PendingAccounts extends AppCompatActivity implements RecyclerViewIn
     ArrayList<RecyclerViewHolder> clickedUsers = new ArrayList<>();
     ArrayList<RecyclerViewHolder> pendingUserViews = new ArrayList<>();
     UserRecyclerViewAdapter adapter;
+
+    Database database = new Database();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,11 +54,21 @@ public class PendingAccounts extends AppCompatActivity implements RecyclerViewIn
 
     public void onClickAccept(View view) {
         int index;
+        RecyclerViewHolder curUserHolder;
+        User curUser;
+        FirebaseUser currentFirebaseUser;
 
         if (clickedUsers.size() != 0) {
             for (int i = 0; i < clickedUsers.size(); i++) {
-                index = pendingUserViews.indexOf(clickedUsers.get(i));
+                curUserHolder = clickedUsers.get(i);
+                curUser = curUserHolder.getStoredUser();
+
+                index = pendingUserViews.indexOf(curUserHolder);
+
+                Database.changeStatus(currentFirebaseUser, curUser, Database.UserStatus.ACCEPTED);
+
                 pendingUserViews.remove(index);
+                pendingUsersList.remove(curUser);
                 adapter.notifyItemRemoved(index);
             }
 
@@ -63,17 +78,27 @@ public class PendingAccounts extends AppCompatActivity implements RecyclerViewIn
 
     public void onClickReject(View view) {
         int index;
+        RecyclerViewHolder curUserHolder;
+        User curUser;
+        FirebaseUser currentFirebaseUser;
 
         if (clickedUsers.size() != 0) {
             for (int i = 0; i < clickedUsers.size(); i++) {
-                index = pendingUserViews.indexOf(clickedUsers.get(i));
+                curUserHolder = clickedUsers.get(i);
+                curUser = curUserHolder.getStoredUser();
+
+
+                index = pendingUserViews.indexOf(curUserHolder);
+
+                Database.changeStatus(currentFirebaseUser, curUser, Database.UserStatus.REJECTED);
+
                 pendingUserViews.remove(index);
+                pendingUsersList.remove(curUser);
                 adapter.notifyItemRemoved(index);
             }
 
             clickedUsers.clear();
         }
-
     }
 
     private void setPendingUsersList(){
@@ -112,7 +137,7 @@ public class PendingAccounts extends AppCompatActivity implements RecyclerViewIn
                 curHealthCardNumber = String.valueOf(((Patient) curUser).getHealthCardNumber());
 
                 pendingUserViews.add(new RecyclerViewHolder(0, curName, curEmail, curAddress,
-                        curPhoneNumber, curHealthCardNumber, ""));
+                        curPhoneNumber, curHealthCardNumber, "", curUser));
             }
 
             else if (curUser instanceof Doctor) {
@@ -120,7 +145,7 @@ public class PendingAccounts extends AppCompatActivity implements RecyclerViewIn
                 curSpecialites = ((Doctor) curUser).getSpecialties();
 
                 pendingUserViews.add(new RecyclerViewHolder(1, curName, curEmail, curAddress,
-                        curPhoneNumber, curEmployeeNumber, curSpecialites));
+                        curPhoneNumber, curEmployeeNumber, curSpecialites, curUser));
             }
         }
 

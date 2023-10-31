@@ -1,5 +1,7 @@
 package com.group16.hams;
 
+import entities.User;
+
 public class RecyclerViewHolder {
     int type;
     String fullName;
@@ -9,9 +11,10 @@ public class RecyclerViewHolder {
     String healthOrEmployee;
     String specialties;
     boolean beenClicked = false;
+    User storedUser;
 
     public RecyclerViewHolder(int type, String fullName, String email, String address,
-                              String phoneNumber, String employeeNumber, String specialties) {
+                              String phoneNumber, String employeeNumber, String specialties, User storedUser) {
         this.type = type;
         this.fullName = fullName;
         this.email = email;
@@ -19,6 +22,7 @@ public class RecyclerViewHolder {
         this.phoneNumber = phoneNumber;
         this.healthOrEmployee = employeeNumber;
         this.specialties = specialties;
+        this.storedUser = storedUser;
     }
 
     public int getType() {
@@ -49,6 +53,10 @@ public class RecyclerViewHolder {
 
     public boolean getBeenClicked() {
         return beenClicked;
+    }
+
+    public User getStoredUser() {
+        return storedUser;
     }
 
     public void changeClickedStatus() {

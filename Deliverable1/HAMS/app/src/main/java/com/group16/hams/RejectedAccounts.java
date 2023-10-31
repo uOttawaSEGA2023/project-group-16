@@ -1,5 +1,8 @@
 package com.group16.hams;
 
+import static android.content.ContentValues.TAG;
+
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -7,8 +10,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -54,7 +61,8 @@ public class RejectedAccounts extends AppCompatActivity implements RecyclerViewI
         int index;
         RecyclerViewHolder curUserHolder;
         User curUser;
-        FirebaseUser currentFirebaseUser;
+
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
 
         if (clickedUsers.size() != 0) {
             for (int i = 0; i < clickedUsers.size(); i++) {
@@ -63,7 +71,24 @@ public class RejectedAccounts extends AppCompatActivity implements RecyclerViewI
 
                 index = rejectedUserViews.indexOf(curUserHolder);
 
-                Database.changeStatus(currentFirebaseUser, curUser, Database.UserStatus.REJECTED);
+                User finalCurUser = curUser;
+                mAuth.signInWithEmailAndPassword(curUser.getUsername(), curUser.getPassword())
+                        .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                            @Override
+                            public void onComplete(@NonNull Task<AuthResult> task) {
+
+                                if (task.isSuccessful()) {
+                                    // Sign in success, update UI with the signed-in user's information
+                                    FirebaseUser currentFirebaseUser = mAuth.getCurrentUser();
+                                    Database.getUser(currentFirebaseUser);
+                                    Database.changeStatus(currentFirebaseUser, finalCurUser, Database.UserStatus.ACCEPTED);
+
+                                    Log.d(TAG, "signInWithCustomToken:success");
+                                } else {
+                                    Log.w(TAG, "signInWithCustomToken:failure", task.getException());
+                                }
+                            }
+                        });
 
                 rejectedUserViews.remove(index);
                 rejectedUsersList.remove(curUser);
@@ -71,6 +96,23 @@ public class RejectedAccounts extends AppCompatActivity implements RecyclerViewI
             }
 
             clickedUsers.clear();
+
+            mAuth.signInWithEmailAndPassword("admin@admin.com", "adminadmin")
+                    .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+
+                            if (task.isSuccessful()) {
+                                // Sign in success, update UI with the signed-in user's information
+                                FirebaseUser currentFirebaseUser = mAuth.getCurrentUser();
+                                Database.getUser(currentFirebaseUser);
+
+                                Log.d(TAG, "signInWithCustomToken:success");
+                            } else {
+                                Log.w(TAG, "signInWithCustomToken:failure", task.getException());
+                            }
+                        }
+                    });
         }
     }
 

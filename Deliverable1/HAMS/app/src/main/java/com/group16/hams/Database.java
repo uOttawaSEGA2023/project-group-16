@@ -2,7 +2,13 @@ package com.group16.hams;
 
 import static android.content.ContentValues.TAG;
 
+import android.app.Dialog;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.os.Handler;
+import android.provider.ContactsContract;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
@@ -165,19 +171,30 @@ public class Database {
 
     private static void removeUserFromCurrentStatus(FirebaseUser user) {
         DatabaseReference ref = getStatusReference(currentUserStatus);
-        DatabaseReference patientRef = ref.child("Patients").child(user.getUid());
-        DatabaseReference doctorRef = ref.child("Doctors").child(user.getUid());
+        ref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                System.out.println("_________________Enter___________________");
+                if (snapshot.child("Patients").child(user.getUid()).exists()) {
+                    System.out.println("__________Patient___________--");
+                    ref.child("Patients").child(user.getUid()).removeValue();
 
-        if (patientRef != null) {
-            patientRef.removeValue();
-        } else if (doctorRef != null) {
-            doctorRef.removeValue();
-        }
+                }
+                else if(snapshot.child("Doctors").child(user.getUid()).exists()){
+                    System.out.println("__________Doctor___________--");
+                    ref.child("Doctors").child(user.getUid()).removeValue();
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {}
+        });
+
     }
 
     public static void changeStatus(FirebaseUser user, User u, UserStatus newStatus) {
         removeUserFromCurrentStatus(user);
         DatabaseReference newStatusRef = getStatusReference(newStatus);
+
 
         //checks the type of user type and uses uid for the unique key
         if (u instanceof Doctor) {

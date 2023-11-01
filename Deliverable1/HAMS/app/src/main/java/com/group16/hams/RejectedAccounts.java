@@ -81,7 +81,12 @@ public class RejectedAccounts extends AppCompatActivity implements RecyclerViewI
                                     // Sign in success, update UI with the signed-in user's information
                                     FirebaseUser currentFirebaseUser = mAuth.getCurrentUser();
                                     Database.getUser(currentFirebaseUser);
-                                    Database.changeStatus(currentFirebaseUser, finalCurUser, Database.UserStatus.ACCEPTED);
+                                    (new Handler()).postDelayed(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            Database.changeStatus(currentFirebaseUser, finalCurUser, Database.UserStatus.ACCEPTED);
+                                        }
+                                    }, 1000);
 
                                     Log.d(TAG, "signInWithCustomToken:success");
                                 } else {

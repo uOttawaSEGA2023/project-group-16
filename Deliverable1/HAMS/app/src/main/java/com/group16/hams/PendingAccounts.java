@@ -87,7 +87,12 @@ public class PendingAccounts extends AppCompatActivity implements RecyclerViewIn
                                     // Sign in success, update UI with the signed-in user's information
                                     FirebaseUser currentFirebaseUser = mAuth.getCurrentUser();
                                     Database.getUser(currentFirebaseUser);
-                                    Database.changeStatus(currentFirebaseUser, finalCurUser, Database.UserStatus.ACCEPTED);
+                                    (new Handler()).postDelayed(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            Database.changeStatus(currentFirebaseUser, finalCurUser, Database.UserStatus.ACCEPTED);
+                                        }
+                                    }, 1000);
 
                                     Log.d(TAG, "signInWithCustomToken:success");
                                 } else {
@@ -148,9 +153,15 @@ public class PendingAccounts extends AppCompatActivity implements RecyclerViewIn
 
                                 if (task.isSuccessful()) {
                                     // Sign in success, update UI with the signed-in user's information
+
                                     FirebaseUser currentFirebaseUser = mAuth.getCurrentUser();
                                     Database.getUser(currentFirebaseUser);
-                                    Database.changeStatus(currentFirebaseUser, finalCurUser, Database.UserStatus.REJECTED);
+                                    (new Handler()).postDelayed(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            Database.changeStatus(currentFirebaseUser, finalCurUser, Database.UserStatus.REJECTED);
+                                        }
+                                    }, 1000);
 
                                     Log.d(TAG, "signInWithCustomToken:success");
                                 } else {

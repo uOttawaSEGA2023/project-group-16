@@ -2,7 +2,7 @@ package com.group16.hams;
 
 import entities.User;
 
-public class RecyclerViewHolder {
+public class RecyclerViewHolderUser {
     int type;
     String fullName;
     String email;
@@ -13,8 +13,8 @@ public class RecyclerViewHolder {
     boolean beenClicked = false;
     User storedUser;
 
-    public RecyclerViewHolder(int type, String fullName, String email, String address,
-                              String phoneNumber, String employeeNumber, String specialties, User storedUser) {
+    public RecyclerViewHolderUser(int type, String fullName, String email, String address,
+                                  String phoneNumber, String employeeNumber, String specialties, User storedUser) {
         this.type = type;
         this.fullName = fullName;
         this.email = email;

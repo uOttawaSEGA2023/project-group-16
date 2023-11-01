@@ -39,13 +39,24 @@
             <Button
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
-                android:id="@+id/homepageButton"
-                android:text="Go to Homepage"
+                android:id="@+id/appointmentsButton"
+                android:text="View Appointments"
                 android:textSize="18sp"
                 android:textColor="@color/white"
                 android:layout_marginTop="20dp"
                 android:backgroundTint="@color/purple"
                 app:cornerRadius = "20dp"/>
+
+            <Button
+                android:id="@+id/shiftsButton"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:text="View / Book Shifts"
+                android:textSize="18sp"
+                android:textColor="@color/white"
+                android:layout_marginTop="20dp"
+                android:backgroundTint="@color/purple"
+                app:cornerRadius="20dp" />
 
             <Button
                 android:id="@+id/logoutButton"
@@ -57,6 +68,7 @@
                 android:text="Logout"
                 android:textSize="18sp"
                 app:cornerRadius="20dp" />
+
         </LinearLayout>
 
     </androidx.cardview.widget.CardView>

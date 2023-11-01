@@ -2,8 +2,6 @@ package com.group16.hams;
 
 import android.content.res.ColorStateList;
 import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.ColorStateListDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,14 +13,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
-import entities.Patient;
-import entities.User;
-
-public class UserRecyclerViewAdapter extends RecyclerView.Adapter<UserRecyclerViewAdapter.LayoutViewHolder> {
+public class RecyclerViewAdapterUser extends RecyclerView.Adapter<RecyclerViewAdapterUser.LayoutViewHolder> {
     private final RecyclerViewInterface recyclerViewInterface;
-    ArrayList<RecyclerViewHolder> holders;
+    ArrayList<RecyclerViewHolderUser> holders;
 
-    public UserRecyclerViewAdapter(ArrayList<RecyclerViewHolder> holders,
+    public RecyclerViewAdapterUser(ArrayList<RecyclerViewHolderUser> holders,
                                    RecyclerViewInterface recyclerViewInterface) {
         this.holders = holders;
         this.recyclerViewInterface = recyclerViewInterface;
@@ -32,7 +27,7 @@ public class UserRecyclerViewAdapter extends RecyclerView.Adapter<UserRecyclerVi
     @Override
     public LayoutViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View userLayout = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.recycler_view_row, parent, false);
+                .inflate(R.layout.recycler_view_row_user, parent, false);
         return new LayoutViewHolder(userLayout, recyclerViewInterface);
     }
 

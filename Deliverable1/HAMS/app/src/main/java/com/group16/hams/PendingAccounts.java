@@ -7,15 +7,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.app.Dialog;
 import android.content.Context;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
-import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -32,9 +28,9 @@ import entities.User;
 public class PendingAccounts extends AppCompatActivity implements RecyclerViewInterface {
 
     ArrayList<User> pendingUsersList = new ArrayList<>();
-    ArrayList<RecyclerViewHolder> clickedUsers = new ArrayList<>();
-    ArrayList<RecyclerViewHolder> pendingUserViews = new ArrayList<>();
-    UserRecyclerViewAdapter adapter;
+    ArrayList<RecyclerViewHolderUser> clickedUsers = new ArrayList<>();
+    ArrayList<RecyclerViewHolderUser> pendingUserViews = new ArrayList<>();
+    RecyclerViewAdapterUser adapter;
 
     Database database = new Database();
 
@@ -49,7 +45,7 @@ public class PendingAccounts extends AppCompatActivity implements RecyclerViewIn
         (new Handler()).postDelayed(new Runnable() {
             @Override
             public void run() {
-                adapter = new UserRecyclerViewAdapter
+                adapter = new RecyclerViewAdapterUser
                         (pendingUserViews, PendingAccounts.this);
                 recyclerView.setLayoutManager(new LinearLayoutManager(context));
                 recyclerView.setAdapter(adapter);
@@ -65,7 +61,7 @@ public class PendingAccounts extends AppCompatActivity implements RecyclerViewIn
 
     public void onClickAccept(View view) {
         int index;
-        RecyclerViewHolder curUserHolder;
+        RecyclerViewHolderUser curUserHolder;
         User curUser;
 
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
@@ -132,7 +128,7 @@ public class PendingAccounts extends AppCompatActivity implements RecyclerViewIn
 
     public void onClickReject(View view) {
         int index;
-        RecyclerViewHolder curUserHolder;
+        RecyclerViewHolderUser curUserHolder;
         User curUser;
 
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
@@ -234,7 +230,7 @@ public class PendingAccounts extends AppCompatActivity implements RecyclerViewIn
             if (curUser instanceof Patient) {
                 curHealthCardNumber = String.valueOf(((Patient) curUser).getHealthCardNumber());
 
-                pendingUserViews.add(new RecyclerViewHolder(0, curName, curEmail, curAddress,
+                pendingUserViews.add(new RecyclerViewHolderUser(0, curName, curEmail, curAddress,
                         curPhoneNumber, curHealthCardNumber, "", curUser));
             }
 
@@ -242,7 +238,7 @@ public class PendingAccounts extends AppCompatActivity implements RecyclerViewIn
                 curEmployeeNumber = String.valueOf(((Doctor) curUser).getEmployeeNumber());
                 curSpecialites = ((Doctor) curUser).getSpecialties();
 
-                pendingUserViews.add(new RecyclerViewHolder(1, curName, curEmail, curAddress,
+                pendingUserViews.add(new RecyclerViewHolderUser(1, curName, curEmail, curAddress,
                         curPhoneNumber, curEmployeeNumber, curSpecialites, curUser));
             }
         }
@@ -252,7 +248,7 @@ public class PendingAccounts extends AppCompatActivity implements RecyclerViewIn
 
     @Override
     public void onItemClick(int position) {
-        RecyclerViewHolder curHolder = pendingUserViews.get(position);
+        RecyclerViewHolderUser curHolder = pendingUserViews.get(position);
 
         if (curHolder.getBeenClicked()) {
             clickedUsers.remove(curHolder);

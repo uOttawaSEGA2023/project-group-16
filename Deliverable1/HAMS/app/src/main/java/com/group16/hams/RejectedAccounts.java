@@ -28,9 +28,9 @@ import entities.User;
 public class RejectedAccounts extends AppCompatActivity implements RecyclerViewInterface{
 
     ArrayList<User> rejectedUsersList = new ArrayList<>();
-    ArrayList<RecyclerViewHolder> clickedUsers = new ArrayList<>();
-    ArrayList<RecyclerViewHolder> rejectedUserViews = new ArrayList<>();
-    UserRecyclerViewAdapter adapter;
+    ArrayList<RecyclerViewHolderUser> clickedUsers = new ArrayList<>();
+    ArrayList<RecyclerViewHolderUser> rejectedUserViews = new ArrayList<>();
+    RecyclerViewAdapterUser adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +43,7 @@ public class RejectedAccounts extends AppCompatActivity implements RecyclerViewI
         (new Handler()).postDelayed(new Runnable() {
             @Override
             public void run() {
-                adapter = new UserRecyclerViewAdapter
+                adapter = new RecyclerViewAdapterUser
                         (rejectedUserViews, RejectedAccounts.this);
                 recyclerView.setLayoutManager(new LinearLayoutManager(context));
                 recyclerView.setAdapter(adapter);
@@ -59,7 +59,7 @@ public class RejectedAccounts extends AppCompatActivity implements RecyclerViewI
 
     public void onClickAcceptRejects(View view) {
         int index;
-        RecyclerViewHolder curUserHolder;
+        RecyclerViewHolderUser curUserHolder;
         User curUser;
 
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
@@ -159,7 +159,7 @@ public class RejectedAccounts extends AppCompatActivity implements RecyclerViewI
             if (curUser instanceof Patient) {
                 curHealthCardNumber = String.valueOf(((Patient) curUser).getHealthCardNumber());
 
-                rejectedUserViews.add(new RecyclerViewHolder(0, curName, curEmail, curAddress,
+                rejectedUserViews.add(new RecyclerViewHolderUser(0, curName, curEmail, curAddress,
                         curPhoneNumber, curHealthCardNumber, "", curUser));
             }
 
@@ -167,7 +167,7 @@ public class RejectedAccounts extends AppCompatActivity implements RecyclerViewI
                 curEmployeeNumber = String.valueOf(((Doctor) curUser).getEmployeeNumber());
                 curSpecialites = ((Doctor) curUser).getSpecialties();
 
-                rejectedUserViews.add(new RecyclerViewHolder(1, curName, curEmail, curAddress,
+                rejectedUserViews.add(new RecyclerViewHolderUser(1, curName, curEmail, curAddress,
                         curPhoneNumber, curEmployeeNumber, curSpecialites, curUser));
             }
         }
@@ -176,7 +176,7 @@ public class RejectedAccounts extends AppCompatActivity implements RecyclerViewI
 
     @Override
     public void onItemClick(int position) {
-        RecyclerViewHolder curHolder = rejectedUserViews.get(position);
+        RecyclerViewHolderUser curHolder = rejectedUserViews.get(position);
 
         if (curHolder.getBeenClicked()) {
             clickedUsers.remove(curHolder);

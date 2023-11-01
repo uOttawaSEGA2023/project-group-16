@@ -12,7 +12,6 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -20,14 +19,9 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.FirebaseException;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.FirebaseFirestore;
-
-import org.checkerframework.common.subtyping.qual.Bottom;
 
 import entities.*;
 
@@ -113,7 +107,7 @@ public class MainActivity extends AppCompatActivity {
                                             break;
                                         case REJECTED:
                                             popUp = new Dialog(MainActivity.this);
-                                            popUp.setContentView(R.layout.message_popup);
+                                            popUp.setContentView(R.layout.rejected_message_popup);
                                             popUp.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                                             popUp.show();
                                             break;

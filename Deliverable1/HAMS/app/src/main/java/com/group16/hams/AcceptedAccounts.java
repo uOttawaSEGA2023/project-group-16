@@ -18,8 +18,8 @@ import entities.User;
 public class AcceptedAccounts extends AppCompatActivity implements RecyclerViewInterface{
 
     ArrayList<User> acceptedUsersList = new ArrayList<>();
-    ArrayList<RecyclerViewHolder> clickedUsers = new ArrayList<>();
-    ArrayList<RecyclerViewHolder> acceptedUserViews = new ArrayList<>();
+    ArrayList<RecyclerViewHolderUser> clickedUsers = new ArrayList<>();
+    ArrayList<RecyclerViewHolderUser> acceptedUserViews = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,7 +32,7 @@ public class AcceptedAccounts extends AppCompatActivity implements RecyclerViewI
         (new Handler()).postDelayed(new Runnable() {
             @Override
             public void run() {
-                UserRecyclerViewAdapter adapter = new UserRecyclerViewAdapter
+                RecyclerViewAdapterUser adapter = new RecyclerViewAdapterUser
                         (acceptedUserViews, AcceptedAccounts.this);
                 recyclerView.setLayoutManager(new LinearLayoutManager(context));
                 recyclerView.setAdapter(adapter);
@@ -81,7 +81,7 @@ public class AcceptedAccounts extends AppCompatActivity implements RecyclerViewI
             if (curUser instanceof Patient) {
                 curHealthCardNumber = String.valueOf(((Patient) curUser).getHealthCardNumber());
 
-                acceptedUserViews.add(new RecyclerViewHolder(0, curName, curEmail, curAddress,
+                acceptedUserViews.add(new RecyclerViewHolderUser(0, curName, curEmail, curAddress,
                         curPhoneNumber, curHealthCardNumber, "", curUser));
             }
 
@@ -89,7 +89,7 @@ public class AcceptedAccounts extends AppCompatActivity implements RecyclerViewI
                 curEmployeeNumber = String.valueOf(((Doctor) curUser).getEmployeeNumber());
                 curSpecialites = ((Doctor) curUser).getSpecialties();
 
-                acceptedUserViews.add(new RecyclerViewHolder(1, curName, curEmail, curAddress,
+                acceptedUserViews.add(new RecyclerViewHolderUser(1, curName, curEmail, curAddress,
                         curPhoneNumber, curEmployeeNumber, curSpecialites, curUser));
             }
         }
@@ -98,7 +98,7 @@ public class AcceptedAccounts extends AppCompatActivity implements RecyclerViewI
 
     @Override
     public void onItemClick(int position) {
-        RecyclerViewHolder curHolder = acceptedUserViews.get(position);
+        RecyclerViewHolderUser curHolder = acceptedUserViews.get(position);
 
         if (curHolder.getBeenClicked()) {
             clickedUsers.remove(curHolder);

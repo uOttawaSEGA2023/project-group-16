@@ -247,7 +247,7 @@ public class PendingAccounts extends AppCompatActivity implements RecyclerViewIn
 
 
     @Override
-    public void onItemClick(int position) {
+    public void onItemClick(int type, int position) {
         RecyclerViewHolderUser curHolder = pendingUserViews.get(position);
 
         if (curHolder.getBeenClicked()) {

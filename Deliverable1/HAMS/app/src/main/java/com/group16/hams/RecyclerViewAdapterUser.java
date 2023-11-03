@@ -88,7 +88,7 @@ public class RecyclerViewAdapterUser extends RecyclerView.Adapter<RecyclerViewAd
                         int position = getAdapterPosition();
 
                         if (position != RecyclerView.NO_POSITION) {
-                            recyclerViewInterface.onItemClick(position);
+                            recyclerViewInterface.onItemClick(0, position);
                         }
                     }
                 }

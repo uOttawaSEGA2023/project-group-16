@@ -11,7 +11,7 @@ import java.util.ArrayList;
 
 import entities.*;
 
-public class AppointmentsDoctor extends AppCompatActivity {
+public class AppointmentsDoctor extends AppCompatActivity implements RecyclerViewInterface{
 
     ArrayList<RecyclerViewHolderAppointment> upcomingAppointmentHolders = new ArrayList<>();
     ArrayList<RecyclerViewHolderAppointment> pastAppointmentHolders = new ArrayList<>();
@@ -28,9 +28,9 @@ public class AppointmentsDoctor extends AppCompatActivity {
         setUpPastAppointmentHolders();
 
         RecyclerViewAdapterAppointment upcomingAdapter = new
-                RecyclerViewAdapterAppointment(this, upcomingAppointmentHolders);
+                RecyclerViewAdapterAppointment(this, upcomingAppointmentHolders, this);
         RecyclerViewAdapterAppointment pastAdapter = new
-                RecyclerViewAdapterAppointment(this, pastAppointmentHolders);
+                RecyclerViewAdapterAppointment(this, pastAppointmentHolders, this);
 
         upcomingView.setAdapter(upcomingAdapter);
         pastView.setAdapter(pastAdapter);
@@ -50,5 +50,16 @@ public class AppointmentsDoctor extends AppCompatActivity {
         //WILL NEED TO FINISH THIS PROPERLY ONCE THE APPOINTMENT CLASS IS COMPLETE
     }
 
+    @Override
+    public void onItemClick(int type, int position) {
+        RecyclerViewHolderAppointment curHolder;
 
+        if (type == RecyclerViewHolderAppointment.PAST_APPOINTMENT) {
+            curHolder = pastAppointmentHolders.get(position);
+        }
+
+        else {
+            curHolder = upcomingAppointmentHolders.get(position);
+        }
+    }
 }

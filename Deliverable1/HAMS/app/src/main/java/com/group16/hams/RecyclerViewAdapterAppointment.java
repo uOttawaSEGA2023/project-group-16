@@ -7,18 +7,22 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
 public class RecyclerViewAdapterAppointment extends RecyclerView.Adapter<RecyclerViewAdapterAppointment.MyViewHolder> {
+    private final RecyclerViewInterface recyclerViewInterface;
     Context context;
     ArrayList<RecyclerViewHolderAppointment> appointmentHolders;
 
     public RecyclerViewAdapterAppointment(Context context,
-                                          ArrayList<RecyclerViewHolderAppointment> appointmentHolders) {
+                                          ArrayList<RecyclerViewHolderAppointment> appointmentHolders,
+                                          RecyclerViewInterface recyclerViewInterface) {
         this.context = context;
         this.appointmentHolders = appointmentHolders;
+        this.recyclerViewInterface = recyclerViewInterface;
     }
 
     @NonNull
@@ -27,7 +31,7 @@ public class RecyclerViewAdapterAppointment extends RecyclerView.Adapter<Recycle
         LayoutInflater inflater = LayoutInflater.from(context);
         View view = inflater.inflate(R.layout.recycler_view_row_appointment, parent, false);
 
-        return new MyViewHolder(view);
+        return new MyViewHolder(view, recyclerViewInterface);
     }
 
     @Override
@@ -39,6 +43,14 @@ public class RecyclerViewAdapterAppointment extends RecyclerView.Adapter<Recycle
         holder.tvAppointmentApproval.setText(appointmentHolders.get(position)
                 .getAppointmentApproval());
 
+        if (appointmentHolders.get(position).getPastOrUpcoming() ==
+                RecyclerViewHolderAppointment.PAST_APPOINTMENT) {
+            holder.type = RecyclerViewHolderAppointment.PAST_APPOINTMENT;
+        }
+
+        else {
+            holder.type = RecyclerViewHolderAppointment.UPCOMING_APPOINTMENT;
+        }
     }
 
     @Override
@@ -50,13 +62,26 @@ public class RecyclerViewAdapterAppointment extends RecyclerView.Adapter<Recycle
 
         TextView tvAppointmentDate, tvAppointmentTime, tvAppointmentPatientName,
                 tvAppointmentApproval;
-        public MyViewHolder(@NonNull View itemView) {
+
+        int type;
+        public MyViewHolder(@NonNull View itemView, RecyclerViewInterface recyclerViewInterface) {
             super(itemView);
 
             tvAppointmentDate = itemView.findViewById(R.id.textAppointmentDate);
             tvAppointmentTime = itemView.findViewById(R.id.textAppointmentTime);
             tvAppointmentPatientName = itemView.findViewById(R.id.textAppointmentPatientName);
             tvAppointmentApproval = itemView.findViewById(R.id.textAppointmentApproval);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    int position = getAdapterPosition();
+
+                    if (position != RecyclerView.NO_POSITION) {
+                        recyclerViewInterface.onItemClick(type, position);
+                    }
+                }
+            });
         }
     }
 }

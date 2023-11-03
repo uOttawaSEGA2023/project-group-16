@@ -97,7 +97,7 @@ public class AcceptedAccounts extends AppCompatActivity implements RecyclerViewI
     }
 
     @Override
-    public void onItemClick(int position) {
+    public void onItemClick(int tyep, int position) {
         RecyclerViewHolderUser curHolder = acceptedUserViews.get(position);
 
         if (curHolder.getBeenClicked()) {

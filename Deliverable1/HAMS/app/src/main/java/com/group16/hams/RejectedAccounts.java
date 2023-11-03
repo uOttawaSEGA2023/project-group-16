@@ -175,7 +175,7 @@ public class RejectedAccounts extends AppCompatActivity implements RecyclerViewI
     }
 
     @Override
-    public void onItemClick(int position) {
+    public void onItemClick(int type, int position) {
         RecyclerViewHolderUser curHolder = rejectedUserViews.get(position);
 
         if (curHolder.getBeenClicked()) {

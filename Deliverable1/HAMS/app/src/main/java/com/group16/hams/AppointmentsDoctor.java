@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
@@ -61,5 +62,11 @@ public class AppointmentsDoctor extends AppCompatActivity implements RecyclerVie
         else {
             curHolder = upcomingAppointmentHolders.get(position);
         }
+
+        Intent intent = new Intent(this, AppointmentClicked.class);
+
+        //SEND APPOINTMENT INFORMATION TO THE INTENT SO THAT IT CAN DISPLAY IT
+
+        startActivity(intent);
     }
 }

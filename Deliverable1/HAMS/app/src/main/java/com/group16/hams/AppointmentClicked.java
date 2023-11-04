@@ -2,16 +2,22 @@ package com.group16.hams;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
 public class AppointmentClicked extends AppCompatActivity {
 
+    RecyclerViewHolderAppointment curHolder;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.appointment_clicked);
+
+        Intent intent = getIntent();
+        curHolder = intent.getParcelableExtra("Appointment Holder");
     }
 
     public void onClickCancelAppointmentButton(View view) {

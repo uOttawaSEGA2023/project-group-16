@@ -65,7 +65,7 @@ public class AppointmentsDoctor extends AppCompatActivity implements RecyclerVie
 
         Intent intent = new Intent(this, AppointmentClicked.class);
 
-        //SEND APPOINTMENT INFORMATION TO THE INTENT SO THAT IT CAN DISPLAY IT
+        intent.putExtra("Appointment Holder", curHolder);
 
         startActivity(intent);
     }

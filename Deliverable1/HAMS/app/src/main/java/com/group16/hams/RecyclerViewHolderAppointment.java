@@ -5,6 +5,8 @@ import android.os.Parcelable;
 
 import androidx.annotation.NonNull;
 
+import entities.*;
+
 public class RecyclerViewHolderAppointment implements Parcelable {
 
     public static final int PAST_APPOINTMENT = 0;
@@ -15,14 +17,18 @@ public class RecyclerViewHolderAppointment implements Parcelable {
     String appointmentApproval;
     int pastOrUpcoming;
 
+    Appointment appointment;
+
     public RecyclerViewHolderAppointment(String appointmentDate, String appointmentTime,
                                          String appointmentPatientName,
-                                         String appointmentApproval, int pastOrUpcoming) {
+                                         String appointmentApproval, int pastOrUpcoming,
+                                         Appointment appointment) {
         this.appointmentDate = appointmentDate;
         this.appointmentTime = appointmentTime;
         this.appointmentPatientName = appointmentPatientName;
         this.appointmentApproval = appointmentApproval;
         this.pastOrUpcoming = pastOrUpcoming;
+        this.appointment = appointment;
     }
 
     protected RecyclerViewHolderAppointment(Parcel in) {

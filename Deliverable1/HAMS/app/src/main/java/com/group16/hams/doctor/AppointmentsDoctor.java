@@ -31,8 +31,7 @@ public class AppointmentsDoctor extends AppCompatActivity implements RecyclerVie
         RecyclerView upcomingView = findViewById(R.id.upcomingAppointmentsView);
         RecyclerView pastView = findViewById(R.id.pastAppointmentsView);
 
-        setUpUpcomingAppointmentHolders();
-        setUpPastAppointmentHolders();
+        setUpAppointmentHolders();
 
         RecyclerViewAdapterAppointment upcomingAdapter = new
                 RecyclerViewAdapterAppointment(this, upcomingAppointmentHolders, this);
@@ -49,11 +48,7 @@ public class AppointmentsDoctor extends AppCompatActivity implements RecyclerVie
         finish();
     }
 
-    private void setUpUpcomingAppointmentHolders() {
-        //WILL NEED TO FINISH THIS PROPERLY ONCE THE APPOINTMENT CLASS IS COMPLETE
-    }
-
-    private void setUpPastAppointmentHolders() {
+    private void setUpAppointmentHolders() {
         //WILL NEED TO FINISH THIS PROPERLY ONCE THE APPOINTMENT CLASS IS COMPLETE
     }
 

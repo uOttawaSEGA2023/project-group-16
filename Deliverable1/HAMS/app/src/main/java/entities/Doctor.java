@@ -1,5 +1,9 @@
 package entities;
 
+import android.os.Parcel;
+
+import androidx.annotation.NonNull;
+
 public class Doctor extends User{
 	
 	private int employeeNumber;
@@ -16,6 +20,12 @@ public class Doctor extends User{
 		super(firstName, lastName, username, password, phoneNumber, address);
 		this.employeeNumber = employeeNumber;
 		this.specialties = specialties;
+	}
+
+	protected Doctor(Parcel in) {
+		super(in);
+		employeeNumber = in.readInt();
+		specialties = in.readString();
 	}
 	
 	public int getEmployeeNumber() {
@@ -57,5 +67,17 @@ public class Doctor extends User{
 				", employeeNumber=" + employeeNumber +
 				", specialties='" + specialties + '\'' +
 				'}';
+	}
+
+	@Override
+	public void writeToParcel(@NonNull Parcel parcel, int i) {
+		parcel.writeString(firstName);
+		parcel.writeString(lastName);
+		parcel.writeString(username);
+		parcel.writeString(password);
+		parcel.writeString(phoneNumber);
+		parcel.writeString(address);
+		parcel.writeInt(employeeNumber);
+		parcel.writeString(specialties);
 	}
 }

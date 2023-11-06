@@ -8,7 +8,7 @@
     android:orientation="vertical"
     android:gravity="center"
     android:background="@drawable/homepage"
-    tools:context=".LoggedInPatient">
+    tools:context=".patient.LoggedInPatient">
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"

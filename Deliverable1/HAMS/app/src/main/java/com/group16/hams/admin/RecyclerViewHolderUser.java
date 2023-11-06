@@ -1,4 +1,4 @@
-package com.group16.hams;
+package com.group16.hams.admin;
 
 import entities.User;
 

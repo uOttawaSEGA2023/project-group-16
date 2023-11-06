@@ -1,4 +1,4 @@
-package com.group16.hams;
+package com.group16.hams.admin;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -9,13 +9,17 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
 
+import com.group16.hams.Database;
+import com.group16.hams.R;
+import com.group16.hams.RecyclerViewInterface;
+
 import java.util.ArrayList;
 
 import entities.Doctor;
 import entities.Patient;
 import entities.User;
 
-public class AcceptedAccounts extends AppCompatActivity implements RecyclerViewInterface{
+public class AcceptedAccounts extends AppCompatActivity implements RecyclerViewInterface {
 
     ArrayList<User> acceptedUsersList = new ArrayList<>();
     ArrayList<RecyclerViewHolderUser> clickedUsers = new ArrayList<>();

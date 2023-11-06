@@ -1,4 +1,4 @@
-package com.group16.hams;
+package com.group16.hams.admin;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -9,10 +9,9 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.group16.hams.R;
 
-import entities.*;
-
-public class LoggedInPatient extends AppCompatActivity {
+public class LoggedInAdmin extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
     private Button logoutButton;
@@ -20,7 +19,7 @@ public class LoggedInPatient extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.logged_in_patient);
+        setContentView(R.layout.logged_in_admin);
 
         mAuth = FirebaseAuth.getInstance();
         logoutButton = findViewById(R.id.logoutButton);
@@ -31,5 +30,20 @@ public class LoggedInPatient extends AppCompatActivity {
         mAuth.signOut();
         finish();
         Toast.makeText(this, "Logout Successful", Toast.LENGTH_SHORT).show();
+    }
+
+    public void onClickPending(View view) {
+        Intent intent = new Intent(this, PendingAccounts.class);
+        startActivity(intent);
+    }
+
+    public void onClickAccepted(View view) {
+        Intent intent = new Intent(this, AcceptedAccounts.class);
+        startActivity(intent);
+    }
+
+    public void onClickRejected(View view) {
+        Intent intent = new Intent(this, RejectedAccounts.class);
+        startActivity(intent);
     }
 }

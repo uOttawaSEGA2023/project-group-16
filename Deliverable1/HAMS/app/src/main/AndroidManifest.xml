@@ -16,37 +16,37 @@
             android:name=".AppointmentClicked"
             android:exported="false" />
         <activity
-            android:name=".AppointmentsDoctor"
+            android:name=".doctor.AppointmentsDoctor"
             android:exported="false" />
         <activity
-            android:name=".RejectedAccounts"
+            android:name=".admin.RejectedAccounts"
             android:exported="false" />
         <activity
-            android:name=".AcceptedAccounts"
+            android:name=".admin.AcceptedAccounts"
             android:exported="false" />
         <activity
-            android:name=".PendingAccounts"
+            android:name=".admin.PendingAccounts"
             android:exported="false" />
         <activity
-            android:name=".LoggedInAdmin"
+            android:name=".admin.LoggedInAdmin"
             android:exported="false" />
         <activity
-            android:name=".LoggedInPatient"
+            android:name=".patient.LoggedInPatient"
             android:exported="false" />
         <activity
-            android:name=".LoggedInDoctor"
+            android:name=".doctor.LoggedInDoctor"
             android:exported="false" />
         <activity
-            android:name=".RegisterPatient"
+            android:name=".register.RegisterPatient"
             android:exported="false" />
         <activity
-            android:name=".RegisterDoctor"
+            android:name=".register.RegisterDoctor"
             android:exported="false" />
         <activity
-            android:name=".ChooseType"
+            android:name=".register.ChooseType"
             android:exported="false" />
         <activity
-            android:name=".MainActivity"
+            android:name=".LoginMenu"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

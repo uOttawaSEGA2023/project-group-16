@@ -1,4 +1,4 @@
-package com.group16.hams;
+package com.group16.hams.admin;
 
 import android.content.res.ColorStateList;
 import android.graphics.Color;
@@ -10,6 +10,9 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.group16.hams.R;
+import com.group16.hams.RecyclerViewInterface;
 
 import java.util.ArrayList;
 

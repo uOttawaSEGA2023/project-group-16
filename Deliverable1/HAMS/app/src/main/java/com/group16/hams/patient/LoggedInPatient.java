@@ -1,4 +1,4 @@
-package com.group16.hams;
+package com.group16.hams.patient;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -6,15 +6,14 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.FirebaseFirestore;
+import com.group16.hams.R;
 
 import entities.*;
 
-public class LoggedInDoctor extends AppCompatActivity {
+public class LoggedInPatient extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
     private Button logoutButton;
@@ -22,7 +21,7 @@ public class LoggedInDoctor extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.logged_in_doctor);
+        setContentView(R.layout.logged_in_patient);
 
         mAuth = FirebaseAuth.getInstance();
         logoutButton = findViewById(R.id.logoutButton);
@@ -33,10 +32,5 @@ public class LoggedInDoctor extends AppCompatActivity {
         mAuth.signOut();
         finish();
         Toast.makeText(this, "Logout Successful", Toast.LENGTH_SHORT).show();
-    }
-
-    public void onClickAppointments(View view) {
-        Intent intent = new Intent(this, AppointmentsDoctor.class);
-        startActivity(intent);
     }
 }

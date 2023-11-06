@@ -1,4 +1,4 @@
-package com.group16.hams;
+package com.group16.hams.register;
 
 import static android.content.ContentValues.TAG;
 
@@ -7,7 +7,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -19,6 +18,9 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.group16.hams.Database;
+import com.group16.hams.LoginMenu;
+import com.group16.hams.R;
 
 import java.util.regex.Pattern;
 
@@ -90,7 +92,7 @@ public class RegisterPatient extends AppCompatActivity {
 
                 if (validFlag == true){
                     // Save data
-                    Intent intent = new Intent(RegisterPatient.this, MainActivity.class);
+                    Intent intent = new Intent(RegisterPatient.this, LoginMenu.class);
                     mAuth = FirebaseAuth.getInstance();
                     mAuth.createUserWithEmailAndPassword(usernameText, passwordText)
                             .addOnCompleteListener(RegisterPatient.this, new OnCompleteListener<AuthResult>() {

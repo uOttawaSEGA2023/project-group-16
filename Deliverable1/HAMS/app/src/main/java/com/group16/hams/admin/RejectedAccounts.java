@@ -1,4 +1,4 @@
-package com.group16.hams;
+package com.group16.hams.admin;
 
 import static android.content.ContentValues.TAG;
 
@@ -18,6 +18,9 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.group16.hams.Database;
+import com.group16.hams.R;
+import com.group16.hams.RecyclerViewInterface;
 
 import java.util.ArrayList;
 
@@ -25,28 +28,26 @@ import entities.Doctor;
 import entities.Patient;
 import entities.User;
 
-public class PendingAccounts extends AppCompatActivity implements RecyclerViewInterface {
+public class RejectedAccounts extends AppCompatActivity implements RecyclerViewInterface {
 
-    ArrayList<User> pendingUsersList = new ArrayList<>();
+    ArrayList<User> rejectedUsersList = new ArrayList<>();
     ArrayList<RecyclerViewHolderUser> clickedUsers = new ArrayList<>();
-    ArrayList<RecyclerViewHolderUser> pendingUserViews = new ArrayList<>();
+    ArrayList<RecyclerViewHolderUser> rejectedUserViews = new ArrayList<>();
     RecyclerViewAdapterUser adapter;
-
-    Database database = new Database();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.pending_accounts);
-        RecyclerView recyclerView = findViewById(R.id.pendingRecyclerView);
-        setPendingUsersList();
+        setContentView(R.layout.rejected_accounts);
+        RecyclerView recyclerView = findViewById(R.id.rejectedRecyclerView);
+        setRejectedUsersList();
 
         Context context = this;
         (new Handler()).postDelayed(new Runnable() {
             @Override
             public void run() {
                 adapter = new RecyclerViewAdapterUser
-                        (pendingUserViews, PendingAccounts.this);
+                        (rejectedUserViews, RejectedAccounts.this);
                 recyclerView.setLayoutManager(new LinearLayoutManager(context));
                 recyclerView.setAdapter(adapter);
             }
@@ -59,7 +60,7 @@ public class PendingAccounts extends AppCompatActivity implements RecyclerViewIn
         finish();
     }
 
-    public void onClickAccept(View view) {
+    public void onClickAcceptRejects(View view) {
         int index;
         RecyclerViewHolderUser curUserHolder;
         User curUser;
@@ -71,7 +72,7 @@ public class PendingAccounts extends AppCompatActivity implements RecyclerViewIn
                 curUserHolder = clickedUsers.get(i);
                 curUser = curUserHolder.getStoredUser();
 
-                index = pendingUserViews.indexOf(curUserHolder);
+                index = rejectedUserViews.indexOf(curUserHolder);
 
                 User finalCurUser = curUser;
                 mAuth.signInWithEmailAndPassword(curUser.getUsername(), curUser.getPassword())
@@ -97,8 +98,8 @@ public class PendingAccounts extends AppCompatActivity implements RecyclerViewIn
                             }
                         });
 
-                pendingUserViews.remove(index);
-                pendingUsersList.remove(curUser);
+                rejectedUserViews.remove(index);
+                rejectedUsersList.remove(curUser);
                 adapter.notifyItemRemoved(index);
             }
 
@@ -121,83 +122,14 @@ public class PendingAccounts extends AppCompatActivity implements RecyclerViewIn
                             }
                         }
                     });
-
+                    
              */
         }
     }
 
-    public void onClickReject(View view) {
-        int index;
-        RecyclerViewHolderUser curUserHolder;
-        User curUser;
+    private void setRejectedUsersList(){
 
-        FirebaseAuth mAuth = FirebaseAuth.getInstance();
-
-        if (clickedUsers.size() != 0) {
-            for (int i = 0; i < clickedUsers.size(); i++) {
-                curUserHolder = clickedUsers.get(i);
-                curUser = curUserHolder.getStoredUser();
-
-
-                index = pendingUserViews.indexOf(curUserHolder);
-
-                User finalCurUser = curUser;
-                mAuth.signInWithEmailAndPassword(curUser.getUsername(), curUser.getPassword())
-                        .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                            @Override
-                            public void onComplete(@NonNull Task<AuthResult> task) {
-
-                                if (task.isSuccessful()) {
-                                    // Sign in success, update UI with the signed-in user's information
-
-                                    FirebaseUser currentFirebaseUser = mAuth.getCurrentUser();
-                                    Database.getUser(currentFirebaseUser);
-                                    (new Handler()).postDelayed(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            Database.changeStatus(currentFirebaseUser, finalCurUser, Database.UserStatus.REJECTED);
-                                        }
-                                    }, 1000);
-
-                                    Log.d(TAG, "signInWithCustomToken:success");
-                                } else {
-                                    Log.w(TAG, "signInWithCustomToken:failure", task.getException());
-                                }
-                            }
-                        });
-
-                pendingUserViews.remove(index);
-                pendingUsersList.remove(curUser);
-                adapter.notifyItemRemoved(index);
-            }
-
-            clickedUsers.clear();
-
-            /*
-            mAuth.signInWithEmailAndPassword("admin@admin.com", "adminadmin")
-                    .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                        @Override
-                        public void onComplete(@NonNull Task<AuthResult> task) {
-
-                            if (task.isSuccessful()) {
-                                // Sign in success, update UI with the signed-in user's information
-                                FirebaseUser currentFirebaseUser = mAuth.getCurrentUser();
-                                Database.getUser(currentFirebaseUser);
-
-                                Log.d(TAG, "signInWithCustomToken:success");
-                            } else {
-                                Log.w(TAG, "signInWithCustomToken:failure", task.getException());
-                            }
-                        }
-                    });
-
-             */
-        }
-    }
-
-    private void setPendingUsersList(){
-
-        pendingUsersList = Database.getAllUsers(Database.UserStatus.PENDING);
+        rejectedUsersList = Database.getAllUsers(Database.UserStatus.REJECTED);
 
 
         (new Handler()).postDelayed(new Runnable() {
@@ -220,8 +152,8 @@ public class PendingAccounts extends AppCompatActivity implements RecyclerViewIn
         String curEmployeeNumber;
         String curSpecialites;
 
-        for (int i = 0; i < pendingUsersList.size(); i++) {
-            curUser = pendingUsersList.get(i);
+        for (int i = 0; i < rejectedUsersList.size(); i++) {
+            curUser = rejectedUsersList.get(i);
             curName = curUser.getFirstName() + " " + curUser.getLastName();
             curEmail = curUser.getUsername();
             curAddress = curUser.getAddress();
@@ -230,7 +162,7 @@ public class PendingAccounts extends AppCompatActivity implements RecyclerViewIn
             if (curUser instanceof Patient) {
                 curHealthCardNumber = String.valueOf(((Patient) curUser).getHealthCardNumber());
 
-                pendingUserViews.add(new RecyclerViewHolderUser(0, curName, curEmail, curAddress,
+                rejectedUserViews.add(new RecyclerViewHolderUser(0, curName, curEmail, curAddress,
                         curPhoneNumber, curHealthCardNumber, "", curUser));
             }
 
@@ -238,17 +170,16 @@ public class PendingAccounts extends AppCompatActivity implements RecyclerViewIn
                 curEmployeeNumber = String.valueOf(((Doctor) curUser).getEmployeeNumber());
                 curSpecialites = ((Doctor) curUser).getSpecialties();
 
-                pendingUserViews.add(new RecyclerViewHolderUser(1, curName, curEmail, curAddress,
+                rejectedUserViews.add(new RecyclerViewHolderUser(1, curName, curEmail, curAddress,
                         curPhoneNumber, curEmployeeNumber, curSpecialites, curUser));
             }
         }
 
     }
 
-
     @Override
     public void onItemClick(int type, int position) {
-        RecyclerViewHolderUser curHolder = pendingUserViews.get(position);
+        RecyclerViewHolderUser curHolder = rejectedUserViews.get(position);
 
         if (curHolder.getBeenClicked()) {
             clickedUsers.remove(curHolder);

@@ -1,4 +1,4 @@
-package com.group16.hams;
+package com.group16.hams.register;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -6,7 +6,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
-import entities.*;
+import com.group16.hams.R;
+import com.group16.hams.register.RegisterDoctor;
+import com.group16.hams.register.RegisterPatient;
 
 public class ChooseType extends AppCompatActivity {
 

@@ -1,4 +1,4 @@
-package com.group16.hams;
+package com.group16.hams.doctor;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -8,11 +8,17 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
+import com.group16.hams.AppointmentClicked;
+import com.group16.hams.R;
+import com.group16.hams.RecyclerViewAdapterAppointment;
+import com.group16.hams.RecyclerViewHolderAppointment;
+import com.group16.hams.RecyclerViewInterface;
+
 import java.util.ArrayList;
 
 import entities.*;
 
-public class AppointmentsDoctor extends AppCompatActivity implements RecyclerViewInterface{
+public class AppointmentsDoctor extends AppCompatActivity implements RecyclerViewInterface {
 
     ArrayList<RecyclerViewHolderAppointment> upcomingAppointmentHolders = new ArrayList<>();
     ArrayList<RecyclerViewHolderAppointment> pastAppointmentHolders = new ArrayList<>();

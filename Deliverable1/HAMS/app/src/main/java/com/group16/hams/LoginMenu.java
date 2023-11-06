@@ -22,10 +22,14 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.group16.hams.admin.LoggedInAdmin;
+import com.group16.hams.doctor.LoggedInDoctor;
+import com.group16.hams.patient.LoggedInPatient;
+import com.group16.hams.register.ChooseType;
 
 import entities.*;
 
-public class MainActivity extends AppCompatActivity {
+public class LoginMenu extends AppCompatActivity {
 
     private Button sign_in;
     private EditText email, password;
@@ -71,17 +75,17 @@ public class MainActivity extends AppCompatActivity {
         String email = this.email.getText().toString();
         String password = this.password.getText().toString();
 
-        Toast t = new Toast(MainActivity.this);
+        Toast t = new Toast(LoginMenu.this);
         if(email.isEmpty() && password.isEmpty()){
-            t.makeText(MainActivity.this, "Both fields are empty",
+            t.makeText(LoginMenu.this, "Both fields are empty",
                     Toast.LENGTH_SHORT).show();
             return;
         } else if (email.isEmpty()){
-            t.makeText(MainActivity.this, "Email field is empty",
+            t.makeText(LoginMenu.this, "Email field is empty",
                     Toast.LENGTH_SHORT).show();
             return;
         } else if (password.isEmpty()){
-            t.makeText(MainActivity.this, "Password field is empty",
+            t.makeText(LoginMenu.this, "Password field is empty",
                     Toast.LENGTH_SHORT).show();
             return;
         }
@@ -106,7 +110,7 @@ public class MainActivity extends AppCompatActivity {
                                             message = "Pending for admin approval";
                                             break;
                                         case REJECTED:
-                                            popUp = new Dialog(MainActivity.this);
+                                            popUp = new Dialog(LoginMenu.this);
                                             popUp.setContentView(R.layout.rejected_message_popup);
                                             popUp.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                                             popUp.show();
@@ -117,7 +121,7 @@ public class MainActivity extends AppCompatActivity {
                                             break;
                                     }
                                     if (!message.isEmpty()) {
-                                        Toast t = Toast.makeText(MainActivity.this, message,
+                                        Toast t = Toast.makeText(LoginMenu.this, message,
                                                 Toast.LENGTH_SHORT);
                                         t.show();
                                     }
@@ -126,7 +130,7 @@ public class MainActivity extends AppCompatActivity {
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithCustomToken:failure", task.getException());
-                            Toast t = Toast.makeText(MainActivity.this, "Wrong Email or Password",
+                            Toast t = Toast.makeText(LoginMenu.this, "Wrong Email or Password",
                                     Toast.LENGTH_SHORT);
                             t.show();
 

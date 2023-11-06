@@ -34,4 +34,9 @@ public class LoggedInDoctor extends AppCompatActivity {
         finish();
         Toast.makeText(this, "Logout Successful", Toast.LENGTH_SHORT).show();
     }
+
+    public void onClickAppointments(View view) {
+        Intent intent = new Intent(this, AppointmentsDoctor.class);
+        startActivity(intent);
+    }
 }

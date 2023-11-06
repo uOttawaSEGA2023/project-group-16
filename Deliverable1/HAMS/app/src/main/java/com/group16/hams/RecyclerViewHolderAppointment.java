@@ -17,11 +17,12 @@ public class RecyclerViewHolderAppointment implements Parcelable {
 
     public RecyclerViewHolderAppointment(String appointmentDate, String appointmentTime,
                                          String appointmentPatientName,
-                                         String appointmentApproval) {
+                                         String appointmentApproval, int pastOrUpcoming) {
         this.appointmentDate = appointmentDate;
         this.appointmentTime = appointmentTime;
         this.appointmentPatientName = appointmentPatientName;
         this.appointmentApproval = appointmentApproval;
+        this.pastOrUpcoming = pastOrUpcoming;
     }
 
     protected RecyclerViewHolderAppointment(Parcel in) {

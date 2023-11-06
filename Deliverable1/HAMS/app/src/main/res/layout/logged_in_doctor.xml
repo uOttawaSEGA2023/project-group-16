@@ -37,15 +37,16 @@
                 android:textColor="@color/purple"/>
 
             <Button
+                android:id="@+id/appointmentsButton"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
-                android:id="@+id/appointmentsButton"
-                android:text="View Appointments"
-                android:textSize="18sp"
-                android:textColor="@color/white"
                 android:layout_marginTop="20dp"
                 android:backgroundTint="@color/purple"
-                app:cornerRadius = "20dp"/>
+                android:onClick="onClickAppointments"
+                android:text="View Appointments"
+                android:textColor="@color/white"
+                android:textSize="18sp"
+                app:cornerRadius="20dp" />
 
             <Button
                 android:id="@+id/shiftsButton"

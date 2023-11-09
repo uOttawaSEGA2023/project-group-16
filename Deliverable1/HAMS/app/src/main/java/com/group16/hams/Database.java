@@ -39,6 +39,37 @@ public class Database {
 
     public static UserStatus currentUserStatus;
 
+    public static void getPatient(String email, MyCallBack m) {
+        DatabaseReference patientRef = userRef.child("Patients");
+        patientRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                Patient p = null;
+                for (DataSnapshot s : snapshot.getChildren()){
+                    if (s.child("username").getValue(String.class).equals(email)) {
+                        p = new Patient(s.child("firstName").getValue(String.class),
+                                s.child("lastName").getValue(String.class),
+                                s.child("username").getValue(String.class),
+                                s.child("password").getValue(String.class),
+                                s.child("phoneNumber").getValue(String.class),
+                                s.child("address").getValue(String.class),
+                                s.child("healthCardNumber").getValue(Integer.class));
+                        break;
+                    }
+                }
+                m.onCallBack(p);
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                System.out.println("error");
+            }
+        });
+    }
+
+    public interface MyCallBack{
+        void onCallBack(Patient p);
+    }
+
     //Adjust getUser for new status
     public static void getUser(FirebaseUser user) {
         ValueEventListener listener = new ValueEventListener() {
@@ -75,8 +106,7 @@ public class Database {
                         currentUser = new Administrator();
                         break;
                     }
-                }
-            }
+                }            }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
@@ -184,6 +214,7 @@ public class Database {
                     System.out.println("__________Doctor___________--");
                     ref.child("Doctors").child(user.getUid()).removeValue();
                 }
+
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {}

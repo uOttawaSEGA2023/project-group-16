@@ -72,6 +72,8 @@ public class LoginMenu extends AppCompatActivity {
     }
 
     public void onLoginAttempt(View view) {
+
+        System.out.println();
         String email = this.email.getText().toString();
         String password = this.password.getText().toString();
 

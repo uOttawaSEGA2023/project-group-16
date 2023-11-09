@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.group16.hams.AppointmentClicked;
+import com.group16.hams.Database;
 import com.group16.hams.R;
 import com.group16.hams.RecyclerViewAdapterAppointment;
 import com.group16.hams.RecyclerViewHolderAppointment;

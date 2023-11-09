@@ -1,13 +1,19 @@
 package entities;
 
+import android.os.Build;
 import android.os.Parcel;
 
 import androidx.annotation.NonNull;
+
+import java.util.ArrayList;
 
 public class Doctor extends User{
 	
 	private int employeeNumber;
 	private String specialties;
+	private ArrayList<Appointment> appointments;
+
+	private boolean autoApprove;
 	
 	public Doctor(String firstName, 
 				String lastName, 
@@ -20,12 +26,34 @@ public class Doctor extends User{
 		super(firstName, lastName, username, password, phoneNumber, address);
 		this.employeeNumber = employeeNumber;
 		this.specialties = specialties;
+
+		appointments = new ArrayList<Appointment>();
+		autoApprove = false;
+	}
+
+	public Doctor(String firstName,
+				  String lastName,
+				  String username,
+				  String password,
+				  String phoneNumber,
+				  String address,
+				  int employeeNumber,
+				  String specialties,
+				  ArrayList<Appointment> appointments,
+				  boolean autoApprove) {
+		super(firstName, lastName, username, password, phoneNumber, address);
+		this.employeeNumber = employeeNumber;
+		this.specialties = specialties;
+		this.appointments = appointments;
+		this.autoApprove = autoApprove;
 	}
 
 	protected Doctor(Parcel in) {
 		super(in);
 		employeeNumber = in.readInt();
 		specialties = in.readString();
+		appointments = in.readArrayList(null);
+		autoApprove = in.readByte() != 0;
 	}
 	
 	public int getEmployeeNumber() {
@@ -56,6 +84,25 @@ public class Doctor extends User{
 		specialties = s;
 	}
 
+	public ArrayList<Appointment> getAppointments() {
+		return appointments;
+	}
+
+	public boolean getAutoApprove() {
+		return autoApprove;
+	}
+
+	public void setAutoApprove(boolean autoApprove) {
+		this.autoApprove = autoApprove;
+	}
+
+	public void addAppointment(Appointment newAppointment) {
+		if (autoApprove) {
+			newAppointment.setStatus(Appointment.APPROVED_APPOINTMENT);
+		}
+		appointments.add(newAppointment);
+	}
+
 	@Override
 	public String toString() {
 		return "Doctor{" +
@@ -79,5 +126,7 @@ public class Doctor extends User{
 		parcel.writeString(address);
 		parcel.writeInt(employeeNumber);
 		parcel.writeString(specialties);
+		parcel.writeList(appointments);
+		parcel.writeByte((byte) (autoApprove ? 1 : 0));
 	}
 }

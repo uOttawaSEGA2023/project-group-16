@@ -7,8 +7,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 
+import com.google.firebase.auth.FirebaseUser;
 import com.group16.hams.AppointmentClicked;
+import com.group16.hams.Database;
 import com.group16.hams.R;
 import com.group16.hams.RecyclerViewAdapterAppointment;
 import com.group16.hams.RecyclerViewHolderAppointment;
@@ -42,14 +45,67 @@ public class AppointmentsDoctor extends AppCompatActivity implements RecyclerVie
         pastView.setAdapter(pastAdapter);
         upcomingView.setLayoutManager(new LinearLayoutManager(this));
         pastView.setLayoutManager(new LinearLayoutManager(this));
+
+        Button autoApproveButton = findViewById(R.id.autoApproveButton);
+
+        if (((Doctor)Database.currentUser).getAutoApprove()) {
+            autoApproveButton.setText("Disable Auto Approve");
+        }
+
+        else {
+            autoApproveButton.setText("Enable Auto Approve");
+        }
     }
 
     public void onClickAppointmentsListReturnButton(View view) {
         finish();
     }
 
+    public void onClickAutoApprove(View view) {
+        Button autoApproveButton = findViewById(R.id.autoApproveButton);
+
+        if (((Doctor)Database.currentUser).getAutoApprove()) {
+            autoApproveButton.setText("Enable Auto Approve");
+            ((Doctor)Database.currentUser).setAutoApprove(false);
+        }
+
+        else {
+            autoApproveButton.setText("Disable Auto Approve");
+            ((Doctor)Database.currentUser).setAutoApprove(true);
+        }
+
+        //IF WHEN THEY HIT AUTO APPROVE WE WANT TO AUTOMATICALLY APPROVE ALL CURRENT UPCOMING APPOINTMENTS
+        //THEN WE CAN ADD IT HERE BUT I DON'T THINK THAT IS NECESSARY
+    }
+
     private void setUpAppointmentHolders() {
-        //WILL NEED TO FINISH THIS PROPERLY ONCE THE APPOINTMENT CLASS IS COMPLETE
+        ArrayList<Appointment> appointments = ((Doctor)Database.currentUser).getAppointments();
+        Appointment curAppointment;
+
+        String[] dateAndTime;
+        String patientName;
+
+        for (int i = 0; i < appointments.size(); i++) {
+            curAppointment = appointments.get(i);
+            curAppointment.checkIfPast();
+
+            dateAndTime = curAppointment.getStartDateAndTimeString().split(" ");
+            patientName = curAppointment.getAppointmentPatient().getFirstName() + " " +
+                    curAppointment.getAppointmentPatient().getLastName();
+
+            if (curAppointment.isUpcoming()) {
+                upcomingAppointmentHolders.add(new RecyclerViewHolderAppointment(dateAndTime[0],
+                        dateAndTime[1], patientName, curAppointment.getStatus(),
+                        RecyclerViewHolderAppointment.UPCOMING_APPOINTMENT, curAppointment));
+            }
+
+            else {
+                pastAppointmentHolders.add(new RecyclerViewHolderAppointment(dateAndTime[0],
+                        dateAndTime[1], patientName, curAppointment.getStatus(),
+                        RecyclerViewHolderAppointment.PAST_APPOINTMENT, curAppointment));
+            }
+        }
+
     }
 
     @Override

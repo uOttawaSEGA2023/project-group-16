@@ -5,6 +5,8 @@ import android.os.Parcelable;
 
 import androidx.annotation.NonNull;
 
+import com.group16.hams.Database;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -34,7 +36,20 @@ public class Appointment implements Parcelable {
         this.startDateAndTimeString = startDateAndTimeString;
         status = PENDING_APPOINTMENT;
 
-        //ADD A METHOD HERE THAT GETS THE PATIENT FROM A METHOD IN DATABASE THAT FINDS THE PATIENT USING THE EMAIL
+        Database.getPatient(appointmentPatientEmail, new Database.MyCallBack() {
+            @Override
+            public void onCallBack(Patient p) {
+                if (p == null) {
+                    //Might have to add more precautions here in case the patient gets deleted
+                    //after the appointment has already been created. Otherwise this should never occur
+                    System.out.println("Patient is not in database.");
+                }
+
+                else {
+                    appointmentPatient = p;
+                }
+            }
+        });
 
         try {
             startDateAndTime = sdf.parse(startDateAndTimeString);
@@ -53,7 +68,20 @@ public class Appointment implements Parcelable {
         this.startDateAndTimeString = startDateAndTimeString;
         this.status = status;
 
-        //ADD A METHOD HERE THAT GETS THE PATIENT FROM A METHOD IN DATABASE THAT FINDS THE PATIENT USING THE EMAIL
+        Database.getPatient(appointmentPatientEmail, new Database.MyCallBack() {
+            @Override
+            public void onCallBack(Patient p) {
+                if (p == null) {
+                    //Might have to add more precautions here in case the patient gets deleted
+                    //after the appointment has already been created. Otherwise this should never occur
+                    System.out.println("Patient is not in database.");
+                }
+
+                else {
+                    appointmentPatient = p;
+                }
+            }
+        });
 
         try {
             startDateAndTime = sdf.parse(startDateAndTimeString);

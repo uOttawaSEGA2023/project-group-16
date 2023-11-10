@@ -17,19 +17,16 @@ public class Appointment implements Parcelable {
     public static final int REJECTED_APPOINTMENT = -1;
 
     Patient appointmentPatient;
-
     String appointmentPatientEmail;
     //This should be in the following format: "2023/11/07 14:28"
     //The space is important
     String startDateAndTimeString;
-
     Date startDateAndTime;
 
     SimpleDateFormat sdf = new SimpleDateFormat("dd/mm/yyyyHH:mm");
 
     boolean upcoming;
     int status;
-
 
     public Appointment(String appointmentPatientEmail, String startDateAndTimeString) {
         this.appointmentPatientEmail = appointmentPatientEmail;
@@ -184,7 +181,6 @@ public class Appointment implements Parcelable {
             //THIS SHOULD NEVER BE REACHED SO I WASN'T SURE WHAT TO PUT HERE, BUT I STILL FELT IT WAS NECESSARY
             System.out.println("Not a valid status");
         }
-
         else {
             this.status = status;
         }

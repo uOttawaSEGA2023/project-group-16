@@ -45,9 +45,6 @@ public class LoginMenu extends AppCompatActivity {
         sign_in = findViewById(R.id.sign_in);
         email = findViewById(R.id.email_login);
         password = findViewById(R.id.password_login);
-
-        //Button registerButton = findViewById(R.id.sign_up);
-        //registerButton.setOnClickListener(this);
     }
 
     public void onStart() {
@@ -72,7 +69,6 @@ public class LoginMenu extends AppCompatActivity {
     }
 
     public void onLoginAttempt(View view) {
-
         System.out.println();
         String email = this.email.getText().toString();
         String password = this.password.getText().toString();

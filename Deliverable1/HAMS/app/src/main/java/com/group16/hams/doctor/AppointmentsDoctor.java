@@ -126,4 +126,10 @@ public class AppointmentsDoctor extends AppCompatActivity implements RecyclerVie
 
         startActivity(intent);
     }
+
+
+    public void onClickTest(View view){
+        ((Doctor) Database.currentUser).addAppointment(new Appointment("uaroha@gmail.com", "2023/11/07 14:28"));
+        Database.appointmentToDatabase(((Doctor) Database.currentUser).getAppointments());
+    }
 }

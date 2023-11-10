@@ -5,6 +5,8 @@ import android.os.Parcel;
 
 import androidx.annotation.NonNull;
 
+import com.google.firebase.database.Exclude;
+
 import java.util.ArrayList;
 
 public class Doctor extends User{
@@ -88,19 +90,19 @@ public class Doctor extends User{
 		return appointments;
 	}
 
+	public void addAppointment(Appointment newAppointment) {
+		if (autoApprove) {
+			newAppointment.setStatus(Appointment.APPROVED_APPOINTMENT);
+		}
+		appointments.add(newAppointment);
+	}
+
 	public boolean getAutoApprove() {
 		return autoApprove;
 	}
 
 	public void setAutoApprove(boolean autoApprove) {
 		this.autoApprove = autoApprove;
-	}
-
-	public void addAppointment(Appointment newAppointment) {
-		if (autoApprove) {
-			newAppointment.setStatus(Appointment.APPROVED_APPOINTMENT);
-		}
-		appointments.add(newAppointment);
 	}
 
 	@Override

@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Handler;
 import android.provider.ContactsContract;
+import android.provider.Settings;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -22,21 +23,24 @@ import com.google.firebase.database.ValueEventListener;
 import entities.*;
 
 import java.util.ArrayList;
+import java.util.EventListener;
 
 public class Database {
-    private static FirebaseDatabase database = FirebaseDatabase.getInstance();
-    private static DatabaseReference myRef = database.getReference();
-    private static DatabaseReference pendingRef = myRef.child("Pending");
-    private static DatabaseReference rejectedRef = myRef.child("Rejected");
-    private static DatabaseReference userRef = myRef.child("Users");
-    public static User currentUser;
+    // Instance Variables
+    static FirebaseDatabase database = FirebaseDatabase.getInstance();
 
+    static DatabaseReference myRef = database.getReference();
+    static DatabaseReference pendingRef = myRef.child("Pending");
+    static DatabaseReference rejectedRef = myRef.child("Rejected");
+    static DatabaseReference userRef = myRef.child("Users");
+
+    public static User currentUser;
+    public static DatabaseReference currentUserRef;
     public enum UserStatus {
         PENDING,
         REJECTED,
         ACCEPTED;
     }
-
     public static UserStatus currentUserStatus;
 
     public static void getPatient(String email, MyCallBack m) {
@@ -61,7 +65,7 @@ public class Database {
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                System.out.println("error");
+                System.out.println("ERROR: getPatient()");
             }
         });
     }
@@ -70,7 +74,6 @@ public class Database {
         void onCallBack(Patient p);
     }
 
-    //Adjust getUser for new status
     public static void getUser(FirebaseUser user) {
         ValueEventListener listener = new ValueEventListener() {
             @Override
@@ -80,6 +83,7 @@ public class Database {
                     if (snap.child("Patients").child(user.getUid()).exists()) {
                         determineStatus(parent);
                         snap = snap.child("Patients").child(user.getUid());
+                        currentUserRef = snap.getRef();
                         currentUser = new Patient(snap.child("firstName").getValue(String.class),
                                 snap.child("lastName").getValue(String.class),
                                 snap.child("username").getValue(String.class),
@@ -91,6 +95,7 @@ public class Database {
                     } else if (snap.child("Doctors").child(user.getUid()).exists()) {
                         snap = snap.child("Doctors").child(user.getUid());
                         determineStatus(parent);
+                        currentUserRef = snap.getRef();
                         currentUser = new Doctor(snapshot.child("firstName").getValue(String.class),
                                 snap.child("lastName").getValue(String.class),
                                 snap.child("username").getValue(String.class),
@@ -124,9 +129,6 @@ public class Database {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for (DataSnapshot pSnap : snapshot.child("Patients").getChildren()) { // Snapshot of Patients
-//                    System.out.println("Key: " + pSnap.getKey());
-//                    System.out.println("Children: " + pSnap.getChildren());
-
                     totalUsers.add(new Patient(pSnap.child("firstName").getValue(String.class),
                             pSnap.child("lastName").getValue(String.class),
                             pSnap.child("username").getValue(String.class),
@@ -177,6 +179,18 @@ public class Database {
         }
     }
 
+    public static void changeStatus(FirebaseUser user, User u, UserStatus newStatus) {
+        removeUserFromCurrentStatus(user);
+        DatabaseReference newStatusRef = getStatusReference(newStatus);
+
+        //checks the type of user type and uses uid for the unique key
+        if (u instanceof Doctor) {
+            newStatusRef.child("Doctors").child(user.getUid()).setValue(u);
+        } else if (u instanceof Patient) {
+            newStatusRef.child("Patients").child(user.getUid()).setValue(u);
+        }
+    }
+
     private static void determineStatus(String status) {
         if (status.equals("Pending"))
             currentUserStatus = UserStatus.PENDING;
@@ -204,34 +218,34 @@ public class Database {
         ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                System.out.println("_________________Enter___________________");
                 if (snapshot.child("Patients").child(user.getUid()).exists()) {
-                    System.out.println("__________Patient___________--");
                     ref.child("Patients").child(user.getUid()).removeValue();
 
                 }
                 else if(snapshot.child("Doctors").child(user.getUid()).exists()){
-                    System.out.println("__________Doctor___________--");
                     ref.child("Doctors").child(user.getUid()).removeValue();
                 }
 
             }
             @Override
-            public void onCancelled(@NonNull DatabaseError error) {}
+            public void onCancelled(@NonNull DatabaseError error) {
+                System.out.println("ERROR: removeUserFromCurrentStatus");
+            }
         });
 
     }
 
-    public static void changeStatus(FirebaseUser user, User u, UserStatus newStatus) {
-        removeUserFromCurrentStatus(user);
-        DatabaseReference newStatusRef = getStatusReference(newStatus);
+    public static void appointmentToDatabase(ArrayList<Appointment> appointments){
+        if (!(currentUser instanceof Doctor))
+            return;
 
+        DatabaseReference temp = currentUserRef.child("appointments");
 
-        //checks the type of user type and uses uid for the unique key
-        if (u instanceof Doctor) {
-            newStatusRef.child("Doctors").child(user.getUid()).setValue(u);
-        } else if (u instanceof Patient) {
-            newStatusRef.child("Patients").child(user.getUid()).setValue(u);
+        for (Appointment a : appointments){
+            temp = temp.child(a.getStartDateAndTimeString());
+            temp.setValue(a.getAppointmentPatientEmail());
         }
+
     }
+
 }

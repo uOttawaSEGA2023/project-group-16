@@ -23,7 +23,7 @@ public class Appointment implements Parcelable {
     String startDateAndTimeString;
     Date startDateAndTime;
 
-    SimpleDateFormat sdf = new SimpleDateFormat("dd/mm/yyyyHH:mm");
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/ddHH:mm");
 
     boolean upcoming;
     int status;
@@ -141,10 +141,12 @@ public class Appointment implements Parcelable {
 
         if (currentTime.after(startDateAndTime)) {
             upcoming = false;
+            System.out.println(startDateAndTime);
         }
 
         else {
             upcoming = true;
+            System.out.println(startDateAndTime);
         }
     }
 

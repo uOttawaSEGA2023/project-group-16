@@ -96,14 +96,27 @@ public class Database {
                         snap = snap.child("Doctors").child(user.getUid());
                         determineStatus(parent);
                         currentUserRef = snap.getRef();
-                        currentUser = new Doctor(snapshot.child("firstName").getValue(String.class),
-                                snap.child("lastName").getValue(String.class),
-                                snap.child("username").getValue(String.class),
-                                snap.child("password").getValue(String.class),
-                                snap.child("phoneNumber").getValue(String.class),
-                                snap.child("address").getValue(String.class),
-                                snap.child("employeeNumber").getValue(Integer.class),
-                                snap.child("specialties").getValue(String.class));
+                        if (snap.child("appointments").hasChildren()) {
+                            currentUser = new Doctor(snapshot.child("firstName").getValue(String.class),
+                                    snap.child("lastName").getValue(String.class),
+                                    snap.child("username").getValue(String.class),
+                                    snap.child("password").getValue(String.class),
+                                    snap.child("phoneNumber").getValue(String.class),
+                                    snap.child("address").getValue(String.class),
+                                    snap.child("employeeNumber").getValue(Integer.class),
+                                    snap.child("specialties").getValue(String.class),
+                                    getAppointmentsFromDatabase(currentUserRef),
+                                    false);
+                        } else {
+                            currentUser = new Doctor(snapshot.child("firstName").getValue(String.class),
+                                    snap.child("lastName").getValue(String.class),
+                                    snap.child("username").getValue(String.class),
+                                    snap.child("password").getValue(String.class),
+                                    snap.child("phoneNumber").getValue(String.class),
+                                    snap.child("address").getValue(String.class),
+                                    snap.child("employeeNumber").getValue(Integer.class),
+                                    snap.child("specialties").getValue(String.class));
+                        }
                         break;
                     } else if (snap.child("Admin").child(user.getUid()).exists()) {
                         determineStatus(parent);
@@ -246,6 +259,44 @@ public class Database {
             temp.setValue(a.getAppointmentPatientEmail());
         }
 
+    }
+
+    public static ArrayList<Appointment> getAppointmentsFromDatabase(DatabaseReference c){
+        ArrayList<Appointment> dApps = new ArrayList<>();
+
+        ValueEventListener listener = new ValueEventListener() {
+
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                String [] date = {"Year", "Month", "Day",  "Space",  "Hour","Minute"};
+
+                for (DataSnapshot year : snapshot.getChildren()){
+                    date[0] = year.getKey() + "/";
+                    System.out.println(date[0]);
+                    for (DataSnapshot month : year.getChildren()) {
+                        date[1] = month.getKey() + "/";
+                        System.out.println(date[1]);
+                        for (DataSnapshot dayAndHour: month.getChildren()){
+                            String [] temp = dayAndHour.getKey().split(" ");
+                            System.out.println(temp[0]);
+                            date[2] = temp[0];
+                            date[4] = temp[1].split(":")[0] + ":";
+                            date[5] = temp[1].split(":")[1];
+                            dApps.add(new Appointment(dayAndHour.getValue(String.class),date[0] + date[1] + date[2] + " " + date[4] + date[5] ));
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        };
+
+        c.child("appointments").addValueEventListener(listener);
+
+        return dApps;
     }
 
 }

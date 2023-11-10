@@ -18,7 +18,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/pastAppointmentsText" />
+        app:layout_constraintTop_toBottomOf="@+id/pastAppointmentsText"
+        tools:listitem="@layout/recycler_view_row_appointment" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/upcomingAppointmentsView"
@@ -29,7 +30,8 @@
         android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/upcomingAppointmentsText" />
+        app:layout_constraintTop_toBottomOf="@+id/upcomingAppointmentsText"
+        tools:listitem="@layout/recycler_view_row_appointment" />
 
     <Button
         android:id="@+id/appointmentsListReturnButton"

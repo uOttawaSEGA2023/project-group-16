@@ -80,6 +80,7 @@ public class AppointmentsDoctor extends AppCompatActivity implements RecyclerVie
 
     private void setUpAppointmentHolders() {
         ArrayList<Appointment> appointments = ((Doctor)Database.currentUser).getAppointments();
+        System.out.println(appointments.size());
         Appointment curAppointment;
 
         String[] dateAndTime;
@@ -94,12 +95,14 @@ public class AppointmentsDoctor extends AppCompatActivity implements RecyclerVie
                     curAppointment.getAppointmentPatient().getLastName();
 
             if (curAppointment.isUpcoming()) {
+                System.out.println("Wroking upcoming");
                 upcomingAppointmentHolders.add(new RecyclerViewHolderAppointment(dateAndTime[0],
                         dateAndTime[1], patientName, curAppointment.getStatus(),
                         RecyclerViewHolderAppointment.UPCOMING_APPOINTMENT, curAppointment));
             }
 
             else {
+                System.out.println("Wroking past");
                 pastAppointmentHolders.add(new RecyclerViewHolderAppointment(dateAndTime[0],
                         dateAndTime[1], patientName, curAppointment.getStatus(),
                         RecyclerViewHolderAppointment.PAST_APPOINTMENT, curAppointment));
@@ -129,7 +132,7 @@ public class AppointmentsDoctor extends AppCompatActivity implements RecyclerVie
 
 
     public void onClickTest(View view){
-        ((Doctor) Database.currentUser).addAppointment(new Appointment("uaroha@gmail.com", "2023/11/07 14:28"));
+        ((Doctor) Database.currentUser).addAppointment(new Appointment("uaroha@gmail.com", "2023/12/07 14:28"));
         Database.appointmentToDatabase(((Doctor) Database.currentUser).getAppointments());
     }
 }

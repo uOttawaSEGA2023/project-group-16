@@ -16,16 +16,33 @@ public class AppointmentClicked extends AppCompatActivity {
 
     TextView appointmentDate, appointmentTime, curApprovalStatus, patientName, patientUsername,
             patientPhoneNumber, patientAddress, patientHealthCard;
+    Patient curPatient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        System.out.println("REACHED");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.appointment_clicked);
 
         Intent intent = getIntent();
         curHolder = intent.getParcelableExtra("Appointment Holder");
 
-        Patient curPatient = curHolder.getAppointment().getAppointmentPatient();
+        System.out.println(curHolder.getAppointment().getAppointmentPatientEmail());
+
+        Database.getPatient(curHolder.getAppointment().getAppointmentPatientEmail(), new Database.MyCallBack() {
+            @Override
+            public void onCallBack(Patient p) {
+                if (p == null) {
+                    //Might have to add more precautions here in case the patient gets deleted
+                    //after the appointment has already been created. Otherwise this should never occur
+                    System.out.println("Patient is not in database.");
+                }
+
+                else {
+                    curPatient = p;
+                }
+            }
+        });
 
         appointmentDate = findViewById(R.id.appointmentDate);
         appointmentTime = findViewById(R.id.appointmentTime);
@@ -40,10 +57,12 @@ public class AppointmentClicked extends AppCompatActivity {
         appointmentTime.setText("Appointment Time: " + curHolder.getAppointmentTime());
         curApprovalStatus.setText("Current Approval Status: " + curHolder.getAppointmentApproval());
         patientName.setText("Patient Name: " + curHolder.getAppointmentPatientName());
-        patientUsername.setText("Patient Username: " + curPatient.getUsername());
-        patientPhoneNumber.setText("Patient Phone Number: " + curPatient.getPhoneNumber());
-        patientAddress.setText("Patient Address: " + curPatient.getAddress());
-        patientHealthCard.setText("Patient Health Card Number: " + curPatient.getHealthCardNumber());
+
+        //These are causing it to crash
+        //patientUsername.setText("Patient Username: " + curPatient.getUsername());
+        //patientPhoneNumber.setText("Patient Phone Number: " + curPatient.getPhoneNumber());
+        //patientAddress.setText("Patient Address: " + curPatient.getAddress());
+        //patientHealthCard.setText("Patient Health Card Number: " + curPatient.getHealthCardNumber());
     }
 
     public void onClickCancelAppointmentButton(View view) {
@@ -52,11 +71,11 @@ public class AppointmentClicked extends AppCompatActivity {
 
         //Do this once the appointment class is finalised (not sure what's left to do)
 
-        Button approveButton = view.findViewById(R.id.approveAppointmentButton);
-        Button cancleButton = view.findViewById(R.id.cancelAppointmentButton);
+        Button approveButton = (Button)findViewById(R.id.approveAppointmentButton);
+        Button cancelButton = (Button)findViewById(R.id.cancelAppointmentButton);
 
         approveButton.setVisibility(View.VISIBLE);
-        cancleButton.setVisibility(View.GONE);
+        cancelButton.setVisibility(View.GONE);
 
         curApprovalStatus.setText("Current Approval Status: " + curHolder.getAppointmentApproval());
     }
@@ -67,8 +86,8 @@ public class AppointmentClicked extends AppCompatActivity {
 
         //Do this once the appointment class is finalised (not sure what's left to do)
 
-        Button approveButton = view.findViewById(R.id.approveAppointmentButton);
-        Button cancelButton = view.findViewById(R.id.cancelAppointmentButton);
+        Button approveButton = (Button)view.findViewById(R.id.approveAppointmentButton);
+        Button cancelButton = (Button)view.findViewById(R.id.cancelAppointmentButton);
 
         approveButton.setVisibility(View.GONE);
         cancelButton.setVisibility(View.VISIBLE);

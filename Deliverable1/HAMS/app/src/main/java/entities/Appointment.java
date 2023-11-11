@@ -96,7 +96,21 @@ public class Appointment implements Parcelable {
         appointmentPatientEmail = in.readString();
         startDateAndTimeString = in.readString();
         status = in.readInt();
-        appointmentPatient = in.readParcelable(Patient.class.getClassLoader());
+
+        Database.getPatient(appointmentPatientEmail, new Database.MyCallBack() {
+            @Override
+            public void onCallBack(Patient p) {
+                if (p == null) {
+                    //Might have to add more precautions here in case the patient gets deleted
+                    //after the appointment has already been created. Otherwise this should never occur
+                    System.out.println("Patient is not in database.");
+                }
+
+                else {
+                    appointmentPatient = p;
+                }
+            }
+        });
 
         try {
             startDateAndTime = sdf.parse(startDateAndTimeString);
@@ -133,7 +147,6 @@ public class Appointment implements Parcelable {
         parcel.writeString(appointmentPatientEmail);
         parcel.writeString(startDateAndTimeString);
         parcel.writeInt(status);
-        parcel.writeParcelable(appointmentPatient, i);
     }
 
     public void checkIfPast() {

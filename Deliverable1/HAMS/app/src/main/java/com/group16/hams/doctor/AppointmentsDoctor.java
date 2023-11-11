@@ -95,14 +95,12 @@ public class AppointmentsDoctor extends AppCompatActivity implements RecyclerVie
                     curAppointment.getAppointmentPatient().getLastName();
 
             if (curAppointment.isUpcoming()) {
-                System.out.println("Wroking upcoming");
                 upcomingAppointmentHolders.add(new RecyclerViewHolderAppointment(dateAndTime[0],
                         dateAndTime[1], patientName, curAppointment.getStatus(),
                         RecyclerViewHolderAppointment.UPCOMING_APPOINTMENT, curAppointment));
             }
 
             else {
-                System.out.println("Wroking past");
                 pastAppointmentHolders.add(new RecyclerViewHolderAppointment(dateAndTime[0],
                         dateAndTime[1], patientName, curAppointment.getStatus(),
                         RecyclerViewHolderAppointment.PAST_APPOINTMENT, curAppointment));

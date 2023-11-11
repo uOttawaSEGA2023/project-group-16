@@ -69,7 +69,6 @@ public class Database {
             }
         });
     }
-
     public interface MyCallBack{
         void onCallBack(Patient p);
     }

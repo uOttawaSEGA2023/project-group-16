@@ -39,7 +39,14 @@ public class AppointmentClicked extends AppCompatActivity {
                 }
 
                 else {
+                    //MOVED HERE.... WAITS FOR DATABASE TO RETRIEVE INFO
+                    System.out.println("P: " + p);
                     curPatient = p;
+                    patientUsername.setText("Patient Username: " + curPatient.getUsername());
+                    patientPhoneNumber.setText("Patient Phone Number: " + curPatient.getPhoneNumber());
+                    patientAddress.setText("Patient Address: " + curPatient.getAddress());
+                    patientHealthCard.setText("Patient Health Card Number: " + curPatient.getHealthCardNumber());
+
                 }
             }
         });
@@ -58,11 +65,6 @@ public class AppointmentClicked extends AppCompatActivity {
         curApprovalStatus.setText("Current Approval Status: " + curHolder.getAppointmentApproval());
         patientName.setText("Patient Name: " + curHolder.getAppointmentPatientName());
 
-        //These are causing it to crash
-        //patientUsername.setText("Patient Username: " + curPatient.getUsername());
-        //patientPhoneNumber.setText("Patient Phone Number: " + curPatient.getPhoneNumber());
-        //patientAddress.setText("Patient Address: " + curPatient.getAddress());
-        //patientHealthCard.setText("Patient Health Card Number: " + curPatient.getHealthCardNumber());
     }
 
     public void onClickCancelAppointmentButton(View view) {

@@ -14,7 +14,6 @@ public class RecyclerViewHolderAppointment implements Parcelable {
     String appointmentDate;
     String appointmentTime;
     String appointmentPatientName;
-    int appointmentApproval;
     int pastOrUpcoming;
 
     Appointment appointment;
@@ -26,7 +25,6 @@ public class RecyclerViewHolderAppointment implements Parcelable {
         this.appointmentDate = appointmentDate;
         this.appointmentTime = appointmentTime;
         this.appointmentPatientName = appointmentPatientName;
-        this.appointmentApproval = appointmentApproval;
         this.pastOrUpcoming = pastOrUpcoming;
         this.appointment = appointment;
     }
@@ -35,7 +33,6 @@ public class RecyclerViewHolderAppointment implements Parcelable {
         appointmentDate = in.readString();
         appointmentTime = in.readString();
         appointmentPatientName = in.readString();
-        appointmentApproval = in.readInt();
         pastOrUpcoming = in.readInt();
         appointment = in.readParcelable(Appointment.class.getClassLoader());
     }
@@ -65,11 +62,11 @@ public class RecyclerViewHolderAppointment implements Parcelable {
     }
 
     public String getAppointmentApproval() {
-        if (appointmentApproval == Appointment.APPROVED_APPOINTMENT) {
+        if (appointment.getStatus() == Appointment.APPROVED_APPOINTMENT) {
             return "Approved";
         }
 
-        else if (appointmentApproval == Appointment.PENDING_APPOINTMENT) {
+        else if (appointment.getStatus() == Appointment.PENDING_APPOINTMENT) {
             return "Pending";
         }
 
@@ -100,7 +97,6 @@ public class RecyclerViewHolderAppointment implements Parcelable {
         parcel.writeString(appointmentDate);
         parcel.writeString(appointmentTime);
         parcel.writeString(appointmentPatientName);
-        parcel.writeInt(appointmentApproval);
         parcel.writeInt(pastOrUpcoming);
         parcel.writeParcelable(appointment, i);
 

@@ -65,6 +65,31 @@ public class AppointmentClicked extends AppCompatActivity {
         curApprovalStatus.setText("Current Approval Status: " + curHolder.getAppointmentApproval());
         patientName.setText("Patient Name: " + curHolder.getAppointmentPatientName());
 
+        Button approveButton = (Button)findViewById(R.id.approveAppointmentButton);
+        Button cancelButton = (Button)findViewById(R.id.cancelAppointmentButton);
+
+        if (!curHolder.getAppointment().isUpcoming()) {
+            approveButton.setVisibility(View.GONE);
+            cancelButton.setVisibility(View.GONE);
+        }
+
+        else {
+            if (curHolder.getAppointment().getStatus() == Appointment.APPROVED_APPOINTMENT) {
+                approveButton.setVisibility(View.GONE);
+                cancelButton.setVisibility(View.VISIBLE);
+            }
+
+            else if (curHolder.getAppointment().getStatus() == Appointment.REJECTED_APPOINTMENT) {
+                approveButton.setVisibility(View.VISIBLE);
+                cancelButton.setVisibility(View.GONE);
+            }
+
+            else {
+                approveButton.setVisibility(View.VISIBLE);
+                cancelButton.setVisibility(View.VISIBLE);
+            }
+        }
+
     }
 
     public void onClickCancelAppointmentButton(View view) {
@@ -79,6 +104,7 @@ public class AppointmentClicked extends AppCompatActivity {
         approveButton.setVisibility(View.VISIBLE);
         cancelButton.setVisibility(View.GONE);
 
+        curApprovalStatus = findViewById(R.id.currentApprovalStatus);
         curApprovalStatus.setText("Current Approval Status: " + curHolder.getAppointmentApproval());
     }
 
@@ -94,6 +120,7 @@ public class AppointmentClicked extends AppCompatActivity {
         approveButton.setVisibility(View.GONE);
         cancelButton.setVisibility(View.VISIBLE);
 
+        curApprovalStatus = findViewById(R.id.currentApprovalStatus);
         curApprovalStatus.setText("Current Approval Status: " + curHolder.getAppointmentApproval());
     }
 

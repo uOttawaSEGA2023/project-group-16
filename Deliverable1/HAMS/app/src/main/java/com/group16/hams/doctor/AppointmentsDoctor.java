@@ -72,10 +72,15 @@ public class AppointmentsDoctor extends AppCompatActivity implements RecyclerVie
         else {
             autoApproveButton.setText("Disable Auto Approve");
             ((Doctor)Database.currentUser).setAutoApprove(true);
-        }
 
-        //IF WHEN THEY HIT AUTO APPROVE WE WANT TO AUTOMATICALLY APPROVE ALL CURRENT UPCOMING APPOINTMENTS
-        //THEN WE CAN ADD IT HERE BUT I DON'T THINK THAT IS NECESSARY
+            ArrayList<Appointment> existingAppointments = ((Doctor)Database.currentUser).getAppointments();
+
+            for (int i = 0; i < existingAppointments.size(); i++) {
+                if (existingAppointments.get(i).isUpcoming()) {
+                    existingAppointments.get(i).setStatus(Appointment.APPROVED_APPOINTMENT);
+                }
+            }
+        }
     }
 
     private void setUpAppointmentHolders() {
@@ -130,7 +135,13 @@ public class AppointmentsDoctor extends AppCompatActivity implements RecyclerVie
 
 
     public void onClickTest(View view){
-        ((Doctor) Database.currentUser).addAppointment(new Appointment("uaroha@gmail.com", "2023/12/07 14:28"));
-        Database.appointmentToDatabase(((Doctor) Database.currentUser).getAppointments());
+        ((Doctor) Database.currentUser).addAppointment(new Appointment("example1@example.com", "2021/02/23 3:45"));
+        ((Doctor) Database.currentUser).addAppointment(new Appointment("example1@example.com", "2022/05/10 19:27"));
+        ((Doctor) Database.currentUser).addAppointment(new Appointment("example1@example.com", "2021/09/30 12:36"));
+        ((Doctor) Database.currentUser).addAppointment(new Appointment("example2@example.com", "2023/11/11 4:00"));
+        ((Doctor) Database.currentUser).addAppointment(new Appointment("example2@example.com", "2024/01/27 15:55"));
+        ((Doctor) Database.currentUser).addAppointment(new Appointment("example2@example.com", "2025/10/01 23:00", Appointment.REJECTED_APPOINTMENT));
+        ((Doctor) Database.currentUser).addAppointment(new Appointment("uaroha@gmail.com", "2024/07/07 20:12"));
+        //Database.appointmentToDatabase(((Doctor) Database.currentUser).getAppointments());
     }
 }

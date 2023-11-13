@@ -18,6 +18,8 @@ public class AppointmentClicked extends AppCompatActivity {
             patientPhoneNumber, patientAddress, patientHealthCard;
     Patient curPatient;
 
+    String email;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         System.out.println("REACHED");
@@ -27,9 +29,10 @@ public class AppointmentClicked extends AppCompatActivity {
         Intent intent = getIntent();
         curHolder = intent.getParcelableExtra("Appointment Holder");
 
-        System.out.println(curHolder.getAppointment().getAppointmentPatientEmail());
+        this.email = curHolder.getAppointment().getAppointmentPatientEmail();
+        System.out.println(email + "This is da email");
 
-        Database.getPatient(curHolder.getAppointment().getAppointmentPatientEmail(), new Database.MyCallBack() {
+        Database.getPatient(email, new Database.MyCallBack() {
             @Override
             public void onCallBack(Patient p) {
                 if (p == null) {
@@ -106,6 +109,7 @@ public class AppointmentClicked extends AppCompatActivity {
 
         curApprovalStatus = findViewById(R.id.currentApprovalStatus);
         curApprovalStatus.setText("Current Approval Status: " + curHolder.getAppointmentApproval());
+        Database.changeAppointmentStatus(curHolder.getAppointment(), Appointment.REJECTED_APPOINTMENT);
     }
 
     public void onClickApproveAppointmentButton(View view) {
@@ -122,6 +126,8 @@ public class AppointmentClicked extends AppCompatActivity {
 
         curApprovalStatus = findViewById(R.id.currentApprovalStatus);
         curApprovalStatus.setText("Current Approval Status: " + curHolder.getAppointmentApproval());
+        Database.changeAppointmentStatus(curHolder.getAppointment(), Appointment.APPROVED_APPOINTMENT);
+
     }
 
     public void onClickReturnToAppointmentsButton(View view) {

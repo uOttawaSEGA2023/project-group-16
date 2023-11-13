@@ -5,7 +5,6 @@ import static android.content.ContentValues.TAG;
 import android.app.Dialog;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.os.Handler;
 import android.provider.ContactsContract;
 import android.provider.Settings;
 import android.util.Log;
@@ -251,11 +250,12 @@ public class Database {
         if (!(currentUser instanceof Doctor))
             return;
 
-        DatabaseReference temp = currentUserRef.child("appointments");
+        DatabaseReference temp;
 
         for (Appointment a : appointments){
-            temp = temp.child(a.getStartDateAndTimeString());
-            temp.setValue(a.getAppointmentPatientEmail());
+            temp = currentUserRef.child("appointments").child(a.getStartDateAndTimeString());
+            temp.child("username").setValue(a.getAppointmentPatientEmail());
+            temp.child("status").setValue(a.getStatus());
         }
 
     }
@@ -281,7 +281,9 @@ public class Database {
                             date[2] = temp[0];
                             date[4] = temp[1].split(":")[0] + ":";
                             date[5] = temp[1].split(":")[1];
-                            dApps.add(new Appointment(dayAndHour.getValue(String.class),date[0] + date[1] + date[2] + " " + date[4] + date[5] ));
+                            String email = dayAndHour.child("username").getValue(String.class);
+                            int status = dayAndHour.child("status").getValue(Integer.class);
+                            dApps.add(new Appointment(email,date[0] + date[1] + date[2] + " " + date[4] + date[5], status));
                         }
                     }
                 }
@@ -298,4 +300,7 @@ public class Database {
         return dApps;
     }
 
+    public static void changeAppointmentStatus(Appointment a, int status){
+        currentUserRef.child("appointments").child(a.getStartDateAndTimeString()).child("status").setValue(status);
+    }
 }

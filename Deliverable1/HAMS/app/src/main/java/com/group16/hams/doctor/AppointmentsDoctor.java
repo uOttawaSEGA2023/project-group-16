@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import android.widget.Button;
 
@@ -25,6 +26,7 @@ public class AppointmentsDoctor extends AppCompatActivity implements RecyclerVie
 
     ArrayList<RecyclerViewHolderAppointment> upcomingAppointmentHolders = new ArrayList<>();
     ArrayList<RecyclerViewHolderAppointment> pastAppointmentHolders = new ArrayList<>();
+    ArrayList<Appointment> appointments;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +57,7 @@ public class AppointmentsDoctor extends AppCompatActivity implements RecyclerVie
         else {
             autoApproveButton.setText("Enable Auto Approve");
         }
+
     }
 
     public void onClickAppointmentsListReturnButton(View view) {
@@ -142,6 +145,14 @@ public class AppointmentsDoctor extends AppCompatActivity implements RecyclerVie
         ((Doctor) Database.currentUser).addAppointment(new Appointment("example2@example.com", "2024/01/27 15:55"));
         ((Doctor) Database.currentUser).addAppointment(new Appointment("example2@example.com", "2025/10/01 23:00", Appointment.REJECTED_APPOINTMENT));
         ((Doctor) Database.currentUser).addAppointment(new Appointment("uaroha@gmail.com", "2024/07/07 20:12"));
-        //Database.appointmentToDatabase(((Doctor) Database.currentUser).getAppointments());
+        System.out.println(((Doctor) Database.currentUser).getAppointments());
+
+        (new Handler()).postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                Database.appointmentToDatabase(((Doctor) Database.currentUser).getAppointments());
+            }
+        },1000);
+
     }
 }

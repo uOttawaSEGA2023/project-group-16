@@ -36,4 +36,9 @@ public class LoggedInDoctor extends AppCompatActivity {
         Intent intent = new Intent(this, AppointmentsDoctor.class);
         startActivity(intent);
     }
+
+    public void onClickShifts(View view){
+        Intent intent = new Intent(this, ShiftsDoctor.class);
+        startActivity(intent);
+    }
 }

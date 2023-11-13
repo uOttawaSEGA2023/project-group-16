@@ -46,6 +46,12 @@
             android:name=".register.ChooseType"
             android:exported="false" />
         <activity
+            android:name=".doctor.ShiftsDoctor"
+            android:exported="false" />
+        <activity
+            android:name=".doctor.AddShift"
+            android:exported="false" />
+        <activity
             android:name=".LoginMenu"
             android:exported="true">
             <intent-filter>

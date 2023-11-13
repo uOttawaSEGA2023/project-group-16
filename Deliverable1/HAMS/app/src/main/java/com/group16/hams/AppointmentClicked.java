@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import entities.*;
 
@@ -77,57 +78,44 @@ public class AppointmentClicked extends AppCompatActivity {
         }
 
         else {
-            if (curHolder.getAppointment().getStatus() == Appointment.APPROVED_APPOINTMENT) {
-                approveButton.setVisibility(View.GONE);
-                cancelButton.setVisibility(View.VISIBLE);
-            }
-
-            else if (curHolder.getAppointment().getStatus() == Appointment.REJECTED_APPOINTMENT) {
-                approveButton.setVisibility(View.VISIBLE);
-                cancelButton.setVisibility(View.GONE);
-            }
-
-            else {
-                approveButton.setVisibility(View.VISIBLE);
-                cancelButton.setVisibility(View.VISIBLE);
-            }
+            approveButton.setVisibility(View.VISIBLE);
+            cancelButton.setVisibility(View.VISIBLE);
         }
 
     }
 
     public void onClickCancelAppointmentButton(View view) {
         //Change the status of the appointment to CANCELLED
-        curHolder.getAppointment().setStatus(Appointment.REJECTED_APPOINTMENT);
+        if (curHolder.getAppointment().getStatus() == Appointment.REJECTED_APPOINTMENT) {
+            Toast t = new Toast(AppointmentClicked.this);
+            t.makeText(AppointmentClicked.this, "Appointment had already been cancelled",
+                    Toast.LENGTH_SHORT).show();
+        }
 
-        //Do this once the appointment class is finalised (not sure what's left to do)
+        else {
+            curHolder.getAppointment().setStatus(Appointment.REJECTED_APPOINTMENT);
 
-        Button approveButton = (Button)findViewById(R.id.approveAppointmentButton);
-        Button cancelButton = (Button)findViewById(R.id.cancelAppointmentButton);
-
-        approveButton.setVisibility(View.VISIBLE);
-        cancelButton.setVisibility(View.GONE);
-
-        curApprovalStatus = findViewById(R.id.currentApprovalStatus);
-        curApprovalStatus.setText("Current Approval Status: " + curHolder.getAppointmentApproval());
-        Database.changeAppointmentStatus(curHolder.getAppointment(), Appointment.REJECTED_APPOINTMENT);
+            curApprovalStatus = findViewById(R.id.currentApprovalStatus);
+            curApprovalStatus.setText("Current Approval Status: " + curHolder.getAppointmentApproval());
+            Database.changeAppointmentStatus(curHolder.getAppointment(), Appointment.REJECTED_APPOINTMENT);
+        }
     }
 
     public void onClickApproveAppointmentButton(View view) {
         //Change the status of the appointment to APPROVED
-        curHolder.getAppointment().setStatus(Appointment.APPROVED_APPOINTMENT);
+        if (curHolder.getAppointment().getStatus() == Appointment.APPROVED_APPOINTMENT) {
+            Toast t = new Toast(AppointmentClicked.this);
+            t.makeText(AppointmentClicked.this, "Appointment had already been approved",
+                    Toast.LENGTH_SHORT).show();
+        }
 
-        //Do this once the appointment class is finalised (not sure what's left to do)
+        else {
+            curHolder.getAppointment().setStatus(Appointment.APPROVED_APPOINTMENT);
 
-        Button approveButton = (Button)view.findViewById(R.id.approveAppointmentButton);
-        Button cancelButton = (Button)view.findViewById(R.id.cancelAppointmentButton);
-
-        approveButton.setVisibility(View.GONE);
-        cancelButton.setVisibility(View.VISIBLE);
-
-        curApprovalStatus = findViewById(R.id.currentApprovalStatus);
-        curApprovalStatus.setText("Current Approval Status: " + curHolder.getAppointmentApproval());
-        Database.changeAppointmentStatus(curHolder.getAppointment(), Appointment.APPROVED_APPOINTMENT);
-
+            curApprovalStatus = findViewById(R.id.currentApprovalStatus);
+            curApprovalStatus.setText("Current Approval Status: " + curHolder.getAppointmentApproval());
+            Database.changeAppointmentStatus(curHolder.getAppointment(), Appointment.APPROVED_APPOINTMENT);
+        }
     }
 
     public void onClickReturnToAppointmentsButton(View view) {

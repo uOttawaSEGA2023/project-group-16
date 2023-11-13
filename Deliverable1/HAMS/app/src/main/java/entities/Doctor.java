@@ -1,21 +1,29 @@
 package entities;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import com.group16.hams.*;
+
 public class Doctor extends User{
 	
 	private int employeeNumber;
 	private String specialties;
-	
+
+	private ArrayList<Shift> shifts;
+
 	public Doctor(String firstName, 
 				String lastName, 
 				String username, 
 				String password, 
 				String phoneNumber, 
-				String address, 
+				String address,
 				int employeeNumber,
-				String specialties) {
+				String specialties,
+				ArrayList<Shift> shifts) {
 		super(firstName, lastName, username, password, phoneNumber, address);
 		this.employeeNumber = employeeNumber;
 		this.specialties = specialties;
+		this.shifts = shifts;
 	}
 	
 	public int getEmployeeNumber() {
@@ -46,6 +54,12 @@ public class Doctor extends User{
 		specialties = s;
 	}
 
+	public ArrayList<Shift> getShifts() {
+		return this.shifts;
+	}
+
+	public void setShifts(ArrayList<Shift> newShifts) {shifts = newShifts; }
+
 	@Override
 	public String toString() {
 		return "Doctor{" +
@@ -58,4 +72,5 @@ public class Doctor extends User{
 				", specialties='" + specialties + '\'' +
 				'}';
 	}
+
 }

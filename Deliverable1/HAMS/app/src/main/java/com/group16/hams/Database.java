@@ -1,4 +1,5 @@
 package com.group16.hams;
+import java.util.ArrayList;
 
 import static android.content.ContentValues.TAG;
 
@@ -67,7 +68,8 @@ public class Database {
                                 snap.child("phoneNumber").getValue(String.class),
                                 snap.child("address").getValue(String.class),
                                 snap.child("employeeNumber").getValue(Integer.class),
-                                snap.child("specialties").getValue(String.class));
+                                snap.child("specialties").getValue(String.class),
+                                snap.child("shifts").getValue(ArrayList<Shift>.class));
                         break;
                     } else if (snap.child("Admin").child(user.getUid()).exists()) {
                         determineStatus(parent);
@@ -114,7 +116,8 @@ public class Database {
                             dSnap.child("phoneNumber").getValue(String.class),
                             dSnap.child("address").getValue(String.class),
                             dSnap.child("employeeNumber").getValue(Integer.class),
-                            dSnap.child("specialties").getValue(String.class))
+                            dSnap.child("specialties").getValue(String.class),
+                            dSnap.child("Shifts").getValue(ArrayList<Shift>.class))
                     );
                 }
             }

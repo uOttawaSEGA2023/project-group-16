@@ -36,10 +36,10 @@ public class AppointmentsDoctor extends AppCompatActivity implements RecyclerVie
         super.onCreate(savedInstanceState);
         setContentView(R.layout.appointments_doctor);
 
+        System.out.println("BEING CREATED!!!!!!!!!!!!");
+
         RecyclerView upcomingView = findViewById(R.id.upcomingAppointmentsView);
         RecyclerView pastView = findViewById(R.id.pastAppointmentsView);
-
-        setUpAppointmentHolders();
 
         upcomingAdapter = new
                 RecyclerViewAdapterAppointment(this, upcomingAppointmentHolders, this);
@@ -73,6 +73,8 @@ public class AppointmentsDoctor extends AppCompatActivity implements RecyclerVie
     @Override
     public void onStart() {
         super.onStart();
+        upcomingAppointmentHolders.clear();
+        setUpAppointmentHolders();
         refresh();
     }
     @Override

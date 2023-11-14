@@ -10,12 +10,9 @@ import android.os.Handler;
 import android.view.View;
 import android.widget.Button;
 
-import com.google.firebase.auth.FirebaseUser;
 import com.group16.hams.AppointmentClicked;
 import com.group16.hams.Database;
 import com.group16.hams.R;
-import com.group16.hams.RecyclerViewAdapterAppointment;
-import com.group16.hams.RecyclerViewHolderAppointment;
 import com.group16.hams.RecyclerViewInterface;
 
 import java.util.ArrayList;
@@ -73,13 +70,12 @@ public class AppointmentsDoctor extends AppCompatActivity implements RecyclerVie
 
         if (((Doctor)Database.currentUser).getAutoApprove()) {
             autoApproveButton.setText("Enable Auto Approve");
-            ((Doctor)Database.currentUser).setAutoApprove(false);
+            Database.changeAutoApprove(false);
         }
 
         else {
             autoApproveButton.setText("Disable Auto Approve");
-            ((Doctor)Database.currentUser).setAutoApprove(true);
-
+            Database.changeAutoApprove(true);
             ArrayList<Appointment> existingAppointments = ((Doctor)Database.currentUser).getAppointments();
 
             for (int i = 0; i < existingAppointments.size(); i++) {
@@ -87,6 +83,7 @@ public class AppointmentsDoctor extends AppCompatActivity implements RecyclerVie
                     existingAppointments.get(i).setStatus(Appointment.APPROVED_APPOINTMENT);
                 }
             }
+            Database.appointmentToDatabase(existingAppointments);
         }
     }
 

@@ -303,4 +303,13 @@ public class Database {
     public static void changeAppointmentStatus(Appointment a, int status){
         currentUserRef.child("appointments").child(a.getStartDateAndTimeString()).child("status").setValue(status);
     }
+
+    public static void changeAutoApprove(Boolean b){
+        if (!(currentUser instanceof Doctor))
+            return;
+
+        ((Doctor) currentUser).setAutoApprove(b);
+        currentUserRef.child("autoApprove").setValue(b);
+
+    }
 }

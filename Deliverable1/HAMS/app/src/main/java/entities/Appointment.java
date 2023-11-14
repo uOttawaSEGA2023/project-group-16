@@ -154,12 +154,12 @@ public class Appointment implements Parcelable {
 
         if (currentTime.after(startDateAndTime)) {
             upcoming = false;
-            System.out.println(startDateAndTime);
+            //System.out.println(startDateAndTime);
         }
 
         else {
             upcoming = true;
-            System.out.println(startDateAndTime);
+            //System.out.println(startDateAndTime);
         }
     }
 

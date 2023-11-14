@@ -95,7 +95,7 @@ public class Database {
                         determineStatus(parent);
                         currentUserRef = snap.getRef();
                         if (snap.child("appointments").hasChildren()) {
-                            currentUser = new Doctor(snapshot.child("firstName").getValue(String.class),
+                            currentUser = new Doctor(snap.child("firstName").getValue(String.class),
                                     snap.child("lastName").getValue(String.class),
                                     snap.child("username").getValue(String.class),
                                     snap.child("password").getValue(String.class),
@@ -106,7 +106,7 @@ public class Database {
                                     getAppointmentsFromDatabase(currentUserRef),
                                     false);
                         } else {
-                            currentUser = new Doctor(snapshot.child("firstName").getValue(String.class),
+                            currentUser = new Doctor(snap.child("firstName").getValue(String.class),
                                     snap.child("lastName").getValue(String.class),
                                     snap.child("username").getValue(String.class),
                                     snap.child("password").getValue(String.class),
@@ -271,13 +271,10 @@ public class Database {
 
                 for (DataSnapshot year : snapshot.getChildren()){
                     date[0] = year.getKey() + "/";
-                    System.out.println(date[0]);
                     for (DataSnapshot month : year.getChildren()) {
                         date[1] = month.getKey() + "/";
-                        System.out.println(date[1]);
                         for (DataSnapshot dayAndHour: month.getChildren()){
                             String [] temp = dayAndHour.getKey().split(" ");
-                            System.out.println(temp[0]);
                             date[2] = temp[0];
                             date[4] = temp[1].split(":")[0] + ":";
                             date[5] = temp[1].split(":")[1];
@@ -308,8 +305,9 @@ public class Database {
         if (!(currentUser instanceof Doctor))
             return;
 
-        ((Doctor) currentUser).setAutoApprove(b);
         currentUserRef.child("autoApprove").setValue(b);
-
+        ((Doctor) currentUser).setAutoApprove(b);
+        System.out.println(currentUser);
+        System.out.println(((Doctor) currentUser).getAutoApprove());
     }
 }

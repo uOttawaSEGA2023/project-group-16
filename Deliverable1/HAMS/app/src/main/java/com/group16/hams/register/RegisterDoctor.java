@@ -125,9 +125,7 @@ public class RegisterDoctor extends AppCompatActivity {
                                                 Integer.parseInt(employeeNumberText),
                                                 specialtiesText
                                                 );
-
-                                       // ((Doctor) u).addAppointment(new Appointment("uaroha@gmail.com","2023/11/07 14:28"));
-
+                                        ((Doctor) u).setAutoApprove(false);
                                         Database.registerUser(user, u);
 
                                         Toast.makeText(RegisterDoctor.this, "Success! Please log in.",

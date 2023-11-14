@@ -9,11 +9,14 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.group16.hams.doctor.AppointmentsDoctor;
+
 import entities.*;
 
 public class AppointmentClicked extends AppCompatActivity {
 
     RecyclerViewHolderAppointment curHolder;
+    int index;
 
     TextView appointmentDate, appointmentTime, curApprovalStatus, patientName, patientUsername,
             patientPhoneNumber, patientAddress, patientHealthCard;
@@ -29,6 +32,7 @@ public class AppointmentClicked extends AppCompatActivity {
 
         Intent intent = getIntent();
         curHolder = intent.getParcelableExtra("Appointment Holder");
+        index = intent.getIntExtra("index",-1);
 
         this.email = curHolder.getAppointment().getAppointmentPatientEmail();
         System.out.println(email + "This is da email");
@@ -98,6 +102,14 @@ public class AppointmentClicked extends AppCompatActivity {
             curApprovalStatus = findViewById(R.id.currentApprovalStatus);
             curApprovalStatus.setText("Current Approval Status: " + curHolder.getAppointmentApproval());
             Database.changeAppointmentStatus(curHolder.getAppointment(), Appointment.REJECTED_APPOINTMENT);
+
+            if (index != -1) {
+                if (curHolder.getAppointment().isUpcoming())
+                    AppointmentsDoctor.upcomingAdapter.notifyItemChanged(this.index);
+                else
+                    AppointmentsDoctor.pastAdapter.notifyItemChanged(this.index);
+            }
+
         }
     }
 
@@ -115,6 +127,12 @@ public class AppointmentClicked extends AppCompatActivity {
             curApprovalStatus = findViewById(R.id.currentApprovalStatus);
             curApprovalStatus.setText("Current Approval Status: " + curHolder.getAppointmentApproval());
             Database.changeAppointmentStatus(curHolder.getAppointment(), Appointment.APPROVED_APPOINTMENT);
+            if (index != -1) {
+                if (curHolder.getAppointment().isUpcoming())
+                    AppointmentsDoctor.upcomingAdapter.notifyItemChanged(this.index);
+                else
+                    AppointmentsDoctor.pastAdapter.notifyItemChanged(this.index);
+            }
         }
     }
 

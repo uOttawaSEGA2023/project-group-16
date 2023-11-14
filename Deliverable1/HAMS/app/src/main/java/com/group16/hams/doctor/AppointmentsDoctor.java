@@ -28,6 +28,9 @@ public class AppointmentsDoctor extends AppCompatActivity implements RecyclerVie
     ArrayList<RecyclerViewHolderAppointment> pastAppointmentHolders = new ArrayList<>();
     ArrayList<Appointment> appointments;
 
+    public static RecyclerViewAdapterAppointment upcomingAdapter;
+    public static RecyclerViewAdapterAppointment pastAdapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,10 +41,11 @@ public class AppointmentsDoctor extends AppCompatActivity implements RecyclerVie
 
         setUpAppointmentHolders();
 
-        RecyclerViewAdapterAppointment upcomingAdapter = new
+        upcomingAdapter = new
                 RecyclerViewAdapterAppointment(this, upcomingAppointmentHolders, this);
-        RecyclerViewAdapterAppointment pastAdapter = new
+        pastAdapter = new
                 RecyclerViewAdapterAppointment(this, pastAppointmentHolders, this);
+
 
         upcomingView.setAdapter(upcomingAdapter);
         pastView.setAdapter(pastAdapter);
@@ -132,6 +136,7 @@ public class AppointmentsDoctor extends AppCompatActivity implements RecyclerVie
         Intent intent = new Intent(this, AppointmentClicked.class);
 
         intent.putExtra("Appointment Holder", curHolder);
+        intent.putExtra("index",position);
 
         startActivity(intent);
     }

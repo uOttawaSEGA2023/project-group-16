@@ -26,8 +26,8 @@ public class AppointmentsDoctor extends AppCompatActivity implements RecyclerVie
     ArrayList<RecyclerViewHolderAppointment> pastAppointmentHolders = new ArrayList<>();
     ArrayList<Appointment> appointments;
 
-    public static RecyclerViewAdapterAppointment upcomingAdapter;
-    public static RecyclerViewAdapterAppointment pastAdapter;
+    public RecyclerViewAdapterAppointment upcomingAdapter;
+    public RecyclerViewAdapterAppointment pastAdapter;
 
     boolean autoApprove;
 
@@ -74,6 +74,7 @@ public class AppointmentsDoctor extends AppCompatActivity implements RecyclerVie
     public void onStart() {
         super.onStart();
         upcomingAppointmentHolders.clear();
+        pastAppointmentHolders.clear();
         setUpAppointmentHolders();
         refresh();
     }
@@ -183,7 +184,7 @@ public class AppointmentsDoctor extends AppCompatActivity implements RecyclerVie
 
     }
 
-    public static void refresh(){
+    public void refresh(){
         upcomingAdapter.notifyDataSetChanged();
         pastAdapter.notifyDataSetChanged();
     }

@@ -104,13 +104,6 @@ public class AppointmentClicked extends AppCompatActivity {
             curApprovalStatus.setText("Current Approval Status: " + curHolder.getAppointmentApproval());
             Database.changeAppointmentStatus(curHolder.getAppointment(), Appointment.REJECTED_APPOINTMENT);
 
-            if (index != -1) {
-                if (curHolder.getAppointment().isUpcoming())
-                    AppointmentsDoctor.upcomingAdapter.notifyItemChanged(this.index);
-                else
-                    AppointmentsDoctor.pastAdapter.notifyItemChanged(this.index);
-            }
-
         }
     }
 
@@ -128,12 +121,6 @@ public class AppointmentClicked extends AppCompatActivity {
             curApprovalStatus = findViewById(R.id.currentApprovalStatus);
             curApprovalStatus.setText("Current Approval Status: " + curHolder.getAppointmentApproval());
             Database.changeAppointmentStatus(curHolder.getAppointment(), Appointment.APPROVED_APPOINTMENT);
-            if (index != -1) {
-                if (curHolder.getAppointment().isUpcoming())
-                    AppointmentsDoctor.upcomingAdapter.notifyItemChanged(this.index);
-                else
-                    AppointmentsDoctor.pastAdapter.notifyItemChanged(this.index);
-            }
         }
     }
 

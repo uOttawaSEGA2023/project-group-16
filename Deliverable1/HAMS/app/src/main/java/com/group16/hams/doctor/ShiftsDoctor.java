@@ -9,28 +9,91 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.group16.hams.AppointmentClicked;
+import com.group16.hams.Database;
 import com.group16.hams.R;
 import com.group16.hams.RecyclerViewAdapterAppointment;
+import com.group16.hams.RecyclerViewAdapterShift;
 import com.group16.hams.RecyclerViewHolderAppointment;
+import com.group16.hams.RecyclerViewHolderShift;
 import com.group16.hams.RecyclerViewInterface;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+
+import entities.Doctor;
+import entities.Shift;
 
 public class ShiftsDoctor extends AppCompatActivity implements RecyclerViewInterface {
 
-    ArrayList<RecyclerViewHolderAppointment> shifts = new ArrayList<>();
+    ArrayList<RecyclerViewHolderShift> upcomingShiftsHolders = new ArrayList<>();
+    ArrayList<Shift> shifts;
 
+    public RecyclerViewAdapterShift upcomingAdapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.shifts_doctor);
 
-        //RecyclerView shiftsView = findViewById(R.id.upcomingShiftsView);
+        RecyclerView shiftsView = findViewById(R.id.upcomingShiftsView);
 
+        upcomingAdapter = new RecyclerViewAdapterShift(this, upcomingShiftsHolders, this);
 
+        shiftsView.setAdapter(upcomingAdapter);
+        shiftsView.setLayoutManager(new LinearLayoutManager(this));
     }
 
+    public void refresh(){
+        upcomingAdapter.notifyDataSetChanged();
+    }
+    @Override
+    public void onPause() {
+        super.onPause();
+        refresh();
+    }
+    @Override
+    public void onStart() {
+        super.onStart();
+        upcomingShiftsHolders.clear();
+        setUpAppointmentHolders();
+        refresh();
+    }
+    @Override
+    public void onResume() {
+        super.onResume();
+        refresh();
+    }
 
+    public void setUpAppointmentHolders() {
+        /**
+        ArrayList<Shift> appointments = ((Doctor) Database.currentUser).getAppointments();
+        System.out.println(appointments.size());
+        Appointment curAppointment;
+
+        String[] dateAndTime;
+        String patientName;
+
+        for (int i = 0; i < appointments.size(); i++) {
+            curAppointment = appointments.get(i);
+            curAppointment.checkIfPast();
+
+            dateAndTime = curAppointment.getStartDateAndTimeString().split(" ");
+            patientName = curAppointment.getAppointmentPatient().getFirstName() + " " +
+                    curAppointment.getAppointmentPatient().getLastName();
+
+            if (curAppointment.isUpcoming()) {
+                upcomingAppointmentHolders.add(new RecyclerViewHolderAppointment(dateAndTime[0],
+                        dateAndTime[1], patientName, curAppointment.getStatus(),
+                        RecyclerViewHolderAppointment.UPCOMING_APPOINTMENT, curAppointment));
+            }
+
+            else {
+                pastAppointmentHolders.add(new RecyclerViewHolderAppointment(dateAndTime[0],
+                        dateAndTime[1], patientName, curAppointment.getStatus(),
+                        RecyclerViewHolderAppointment.PAST_APPOINTMENT, curAppointment));
+            }
+        }
+*/
+    }
     @Override
     public void onItemClick(int type, int position) {
         /**

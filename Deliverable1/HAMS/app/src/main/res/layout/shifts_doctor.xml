@@ -43,7 +43,9 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/upcomingShiftsText" />
+        app:layout_constraintTop_toBottomOf="@+id/upcomingShiftsText"
+        tools:listitem="@layout/recycler_view_row_shift" />
+
 
     <Button
         android:id="@+id/addShift"

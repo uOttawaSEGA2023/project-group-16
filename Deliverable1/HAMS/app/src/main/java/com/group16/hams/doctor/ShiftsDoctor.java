@@ -11,15 +11,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.group16.hams.AppointmentClicked;
 import com.group16.hams.Database;
 import com.group16.hams.R;
-import com.group16.hams.RecyclerViewAdapterAppointment;
-import com.group16.hams.RecyclerViewAdapterShift;
-import com.group16.hams.RecyclerViewHolderAppointment;
-import com.group16.hams.RecyclerViewHolderShift;
 import com.group16.hams.RecyclerViewInterface;
+import com.group16.hams.ShiftClicked;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
+import entities.Appointment;
 import entities.Doctor;
 import entities.Shift;
 
@@ -64,55 +61,33 @@ public class ShiftsDoctor extends AppCompatActivity implements RecyclerViewInter
     }
 
     public void setUpAppointmentHolders() {
-        /**
-        ArrayList<Shift> appointments = ((Doctor) Database.currentUser).getAppointments();
-        System.out.println(appointments.size());
-        Appointment curAppointment;
+        ArrayList<Shift> shifts = ((Doctor) Database.currentUser).getShifts();
+        System.out.println(shifts.size());
+        Shift curShift;
 
-        String[] dateAndTime;
-        String patientName;
+        for (int i = 0; i < shifts.size(); i++) {
+            curShift = shifts.get(i);
 
-        for (int i = 0; i < appointments.size(); i++) {
-            curAppointment = appointments.get(i);
-            curAppointment.checkIfPast();
-
-            dateAndTime = curAppointment.getStartDateAndTimeString().split(" ");
-            patientName = curAppointment.getAppointmentPatient().getFirstName() + " " +
-                    curAppointment.getAppointmentPatient().getLastName();
-
-            if (curAppointment.isUpcoming()) {
-                upcomingAppointmentHolders.add(new RecyclerViewHolderAppointment(dateAndTime[0],
-                        dateAndTime[1], patientName, curAppointment.getStatus(),
-                        RecyclerViewHolderAppointment.UPCOMING_APPOINTMENT, curAppointment));
-            }
-
-            else {
-                pastAppointmentHolders.add(new RecyclerViewHolderAppointment(dateAndTime[0],
-                        dateAndTime[1], patientName, curAppointment.getStatus(),
-                        RecyclerViewHolderAppointment.PAST_APPOINTMENT, curAppointment));
+            if (curShift.isFuture()) {
+                upcomingShiftsHolders.add(new RecyclerViewHolderShift(curShift.getDate(),
+                        curShift.getStartTime(), curShift.getEndTime(), 1, curShift));
             }
         }
-*/
+
     }
     @Override
     public void onItemClick(int type, int position) {
-        /**
-        RecyclerViewHolderAppointment curHolder;
+        RecyclerViewHolderShift curHolder;
 
-        if (type == RecyclerViewHolderAppointment.PAST_APPOINTMENT) {
-            curHolder = pastAppointmentHolders.get(position);
-        }
+        curHolder = upcomingShiftsHolders.get(position);
 
-        else {
-            curHolder = upcomingAppointmentHolders.get(position);
-        }
 
-        Intent intent = new Intent(this, AppointmentClicked.class);
+        Intent intent = new Intent(this, ShiftClicked.class);
 
-        intent.putExtra("Appointment Holder", curHolder);
+        intent.putExtra("Shift Holder", curHolder);
+        intent.putExtra("index",position);
 
         startActivity(intent);
-         **/
     }
 
     public void onClickShiftsDoctorReturnButton(View view){

@@ -104,7 +104,8 @@ public class Database {
                                     snap.child("employeeNumber").getValue(Integer.class),
                                     snap.child("specialties").getValue(String.class),
                                     getAppointmentsFromDatabase(currentUserRef),
-                                    false);
+                                    false,
+                                    );
                         } else {
                             currentUser = new Doctor(snap.child("firstName").getValue(String.class),
                                     snap.child("lastName").getValue(String.class),
@@ -296,6 +297,8 @@ public class Database {
 
         return dApps;
     }
+
+
 
     public static void changeAppointmentStatus(Appointment a, int status){
         currentUserRef.child("appointments").child(a.getStartDateAndTimeString()).child("status").setValue(status);

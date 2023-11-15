@@ -7,6 +7,9 @@ import androidx.annotation.NonNull;
 
 import com.google.firebase.database.Exclude;
 
+import org.checkerframework.checker.units.qual.A;
+
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class Doctor extends User{
@@ -14,6 +17,7 @@ public class Doctor extends User{
 	private int employeeNumber;
 	private String specialties;
 	private ArrayList<Appointment> appointments;
+	private ArrayList<Shift> shifts;
 
 	private boolean autoApprove;
 	
@@ -31,6 +35,7 @@ public class Doctor extends User{
 
 		appointments = new ArrayList<Appointment>();
 		autoApprove = false;
+		shifts = new ArrayList<Shift>();
 	}
 
 	public Doctor(String firstName,
@@ -42,12 +47,13 @@ public class Doctor extends User{
 				  int employeeNumber,
 				  String specialties,
 				  ArrayList<Appointment> appointments,
-				  boolean autoApprove) {
+				  boolean autoApprove, ArrayList<Shift> shifts) {
 		super(firstName, lastName, username, password, phoneNumber, address);
 		this.employeeNumber = employeeNumber;
 		this.specialties = specialties;
 		this.appointments = appointments;
 		this.autoApprove = autoApprove;
+		this.shifts = shifts;
 	}
 
 	protected Doctor(Parcel in) {
@@ -56,6 +62,7 @@ public class Doctor extends User{
 		specialties = in.readString();
 		appointments = in.readArrayList(null);
 		autoApprove = in.readByte() != 0;
+		shifts = in.readArrayList(null);
 	}
 	
 	public int getEmployeeNumber() {
@@ -105,6 +112,14 @@ public class Doctor extends User{
 		this.autoApprove = autoApprove;
 	}
 
+	public ArrayList<Shift> getShifts() {
+		return shifts;
+	}
+
+	public void addShift(Shift newShift) {
+		shifts.add(newShift);
+	}
+
 	@Override
 	public String toString() {
 		return "Doctor{" +
@@ -130,5 +145,6 @@ public class Doctor extends User{
 		parcel.writeString(specialties);
 		parcel.writeList(appointments);
 		parcel.writeByte((byte) (autoApprove ? 1 : 0));
+		parcel.writeList(shifts);
 	}
 }

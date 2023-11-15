@@ -1,9 +1,11 @@
-package com.group16.hams;
+package com.group16.hams.doctor;
 
 import android.os.Parcel;
 import android.os.Parcelable;
 
 import androidx.annotation.NonNull;
+
+import entities.*;
 
 public class RecyclerViewHolderAppointment implements Parcelable {
 
@@ -12,25 +14,27 @@ public class RecyclerViewHolderAppointment implements Parcelable {
     String appointmentDate;
     String appointmentTime;
     String appointmentPatientName;
-    String appointmentApproval;
     int pastOrUpcoming;
+
+    Appointment appointment;
 
     public RecyclerViewHolderAppointment(String appointmentDate, String appointmentTime,
                                          String appointmentPatientName,
-                                         String appointmentApproval, int pastOrUpcoming) {
+                                         int appointmentApproval, int pastOrUpcoming,
+                                         Appointment appointment) {
         this.appointmentDate = appointmentDate;
         this.appointmentTime = appointmentTime;
         this.appointmentPatientName = appointmentPatientName;
-        this.appointmentApproval = appointmentApproval;
         this.pastOrUpcoming = pastOrUpcoming;
+        this.appointment = appointment;
     }
 
     protected RecyclerViewHolderAppointment(Parcel in) {
         appointmentDate = in.readString();
         appointmentTime = in.readString();
         appointmentPatientName = in.readString();
-        appointmentApproval = in.readString();
         pastOrUpcoming = in.readInt();
+        appointment = in.readParcelable(Appointment.class.getClassLoader());
     }
 
     public static final Creator<RecyclerViewHolderAppointment> CREATOR = new Creator<RecyclerViewHolderAppointment>() {
@@ -58,11 +62,25 @@ public class RecyclerViewHolderAppointment implements Parcelable {
     }
 
     public String getAppointmentApproval() {
-        return appointmentApproval;
+        if (appointment.getStatus() == Appointment.APPROVED_APPOINTMENT) {
+            return "Approved";
+        }
+
+        else if (appointment.getStatus() == Appointment.PENDING_APPOINTMENT) {
+            return "Pending";
+        }
+
+        else {
+            return "Rejected";
+        }
     }
 
     public int getPastOrUpcoming() {
         return pastOrUpcoming;
+    }
+
+    public Appointment getAppointment() {
+        return appointment;
     }
 
     public void setPastOrUpcoming(int pastOrUpcoming) {
@@ -79,8 +97,8 @@ public class RecyclerViewHolderAppointment implements Parcelable {
         parcel.writeString(appointmentDate);
         parcel.writeString(appointmentTime);
         parcel.writeString(appointmentPatientName);
-        parcel.writeString(appointmentApproval);
         parcel.writeInt(pastOrUpcoming);
+        parcel.writeParcelable(appointment, i);
 
     }
 }

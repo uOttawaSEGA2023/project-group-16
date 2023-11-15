@@ -1,5 +1,11 @@
 package entities;
-public class User{
+
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import androidx.annotation.NonNull;
+
+public class User implements Parcelable {
 	
 	//Instance Variables******************************
 	protected String firstName;
@@ -25,7 +31,28 @@ public class User{
 		}
 	
 	//Instance Methods********************************
-	
+
+	protected User(Parcel in) {
+		firstName = in.readString();
+		lastName = in.readString();
+		username = in.readString();
+		password = in.readString();
+		phoneNumber = in.readString();
+		address = in.readString();
+	}
+
+	public static final Creator<User> CREATOR = new Creator<User>() {
+		@Override
+		public User createFromParcel(Parcel in) {
+			return new User(in);
+		}
+
+		@Override
+		public User[] newArray(int size) {
+			return new User[size];
+		}
+	};
+
 	// Getters //
 	public String getFirstName() {
 		return this.firstName;
@@ -82,5 +109,20 @@ public class User{
 				+ getPhoneNumber()
 				+ "\nAddress: "
 				+ getAddress();
+	}
+
+	@Override
+	public int describeContents() {
+		return 0;
+	}
+
+	@Override
+	public void writeToParcel(@NonNull Parcel parcel, int i) {
+		parcel.writeString(firstName);
+		parcel.writeString(lastName);
+		parcel.writeString(username);
+		parcel.writeString(password);
+		parcel.writeString(phoneNumber);
+		parcel.writeString(address);
 	}
 }

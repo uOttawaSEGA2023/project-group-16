@@ -30,7 +30,8 @@ public class RegisterDoctor extends AppCompatActivity {
 
     private Button join;
     private FirebaseAuth mAuth;
-    private EditText firstName, lastName, username, password, phoneNumber, address, employeeNumber, specialtiesEditText;
+    private EditText firstName, lastName, username, password, phoneNumber, address,
+            employeeNumber, specialtiesEditText;
 
     private User u;
     private String[] specialties;
@@ -66,23 +67,23 @@ public class RegisterDoctor extends AppCompatActivity {
                 String specialtiesText = specialtiesEditText.getText().toString();
 
 
-                if (validateName(firstNameText) == false) {
+                if (!validateName(firstNameText)) {
                     firstName.setError("Invalid Input!");
                     validFlag = false;
                 }
-                if (validateName(lastNameText) == false) {
+                if (!validateName(lastNameText)) {
                     lastName.setError("Invalid Input!");
                     validFlag = false;
                 }
-                if (validateUsername(usernameText) == false) {
+                if (!validateUsername(usernameText)) {
                     username.setError("Invalid Input!");
                     validFlag = false;
                 }
-                if (validatePhoneNumber(phoneNumberText) == false) {
+                if (!validatePhoneNumber(phoneNumberText)) {
                     phoneNumber.setError("Invalid Number!");
                     validFlag = false;
                 }
-                if (validateAddress(addressText) == false) {
+                if (!validateAddress(addressText)) {
                     address.setError("Invalid Address!");
                     validFlag = false;
                 }
@@ -91,7 +92,7 @@ public class RegisterDoctor extends AppCompatActivity {
                     validFlag = false;
                 }
 
-                if (validateEmployeeNumber(employeeNumberText) == false) {
+                if (!validateEmployeeNumber(employeeNumberText)) {
                     employeeNumber.setError("Invalid Number!");
                     validFlag = false;
                 }
@@ -122,9 +123,9 @@ public class RegisterDoctor extends AppCompatActivity {
                                                 phoneNumberText,
                                                 addressText,
                                                 Integer.parseInt(employeeNumberText),
-                                                specialtiesText);
-
-
+                                                specialtiesText
+                                                );
+                                        ((Doctor) u).setAutoApprove(false);
                                         Database.registerUser(user, u);
 
                                         Toast.makeText(RegisterDoctor.this, "Success! Please log in.",
@@ -173,10 +174,10 @@ public class RegisterDoctor extends AppCompatActivity {
         return pattern.matcher(address).matches();
     }
 
-
     private boolean validateEmployeeNumber(String employeeNumber) {
         return employeeNumber != null && !employeeNumber.isEmpty();
     }
+
     private boolean validateString(String input) {
         return input != null && !input.isEmpty();
     }

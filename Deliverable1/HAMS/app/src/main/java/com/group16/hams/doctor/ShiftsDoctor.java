@@ -50,7 +50,7 @@ public class ShiftsDoctor extends AppCompatActivity implements RecyclerViewInter
     public void onStart() {
         super.onStart();
         upcomingShiftsHolders.clear();
-        setUpAppointmentHolders();
+        //setUpAppointmentHolders();
         refresh();
     }
     @Override

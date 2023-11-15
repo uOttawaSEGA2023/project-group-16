@@ -321,8 +321,8 @@ public class Database {
         DatabaseReference temp;
 
         for (Shift a : shifts){
-            temp = currentUserRef.child("shifts");
-            temp.child("Shift Date:").setValue(a.getDate());
+            String date = a.getDate()
+            temp = currentUserRef.child("shifts").child(a.getDate());
             temp.child("Start Time").setValue(a.getStartTime());
             temp.child("End Time").setValue(a.getEndTime());
         }
@@ -333,11 +333,10 @@ public class Database {
         ArrayList<Shift> shifts = new ArrayList<>();
 
         ValueEventListener listener = new ValueEventListener() {
-
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for (DataSnapshot shiftSnapshot : snapshot.getChildren()){
-                    String date = shiftSnapshot.child("Shift Date:").getValue(String.class);
+                    String date = shiftSnapshot.getKey();
                     String startTime = shiftSnapshot.child("Start Time").getValue(String.class);
                     String endTime = shiftSnapshot.child("End Time").getValue(String.class);
 

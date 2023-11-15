@@ -38,9 +38,9 @@ public class RecyclerViewAdapterShift extends RecyclerView.Adapter<RecyclerViewA
     @Override
     public void onBindViewHolder(@NonNull RecyclerViewAdapterShift.MyViewHolder holder, int position) {
 
-        holder.tvShiftDate.setText(shiftHolders.get(position).getShiftDate());
-        holder.tvShiftStartTime.setText(shiftHolders.get(position).getShiftStartTime());
-        holder.tvShiftEndTime.setText(shiftHolders.get(position).getShiftEndTime());
+        holder.tvShiftDate.setText("Shift Date: "+ shiftHolders.get(position).getShiftDate());
+        holder.tvShiftStartTime.setText("Start Time: " + shiftHolders.get(position).getShiftStartTime());
+        holder.tvShiftEndTime.setText("End Time: " + shiftHolders.get(position).getShiftEndTime());
 
         if (shiftHolders.get(position).getPastOrUpcoming() == RecyclerViewHolderAppointment.PAST_APPOINTMENT) {
             holder.type = RecyclerViewHolderAppointment.PAST_APPOINTMENT;

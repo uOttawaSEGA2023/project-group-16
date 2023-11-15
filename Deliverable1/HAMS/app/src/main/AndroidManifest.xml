@@ -49,6 +49,9 @@
             android:name=".doctor.ShiftsDoctor"
             android:exported="false" />
         <activity
+            android:name=".ShiftClicked"
+            android:exported="false" />
+        <activity
             android:name=".doctor.AddShift"
             android:exported="false" />
         <activity

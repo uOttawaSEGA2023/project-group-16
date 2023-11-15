@@ -16,7 +16,6 @@ import com.group16.hams.ShiftClicked;
 
 import java.util.ArrayList;
 
-import entities.Appointment;
 import entities.Doctor;
 import entities.Shift;
 

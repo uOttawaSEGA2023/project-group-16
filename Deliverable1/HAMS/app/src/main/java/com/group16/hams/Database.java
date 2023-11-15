@@ -105,7 +105,7 @@ public class Database {
                                     snap.child("specialties").getValue(String.class),
                                     getAppointmentsFromDatabase(currentUserRef),
                                     false,
-                                    );
+                                    getShiftsFromDatabase(currentUserRef));
                         } else {
                             currentUser = new Doctor(snap.child("firstName").getValue(String.class),
                                     snap.child("lastName").getValue(String.class),
@@ -312,5 +312,48 @@ public class Database {
         ((Doctor) currentUser).setAutoApprove(b);
         System.out.println(currentUser);
         System.out.println(((Doctor) currentUser).getAutoApprove());
+    }
+
+    public static void shiftToDatabase(ArrayList<Shift> shifts){
+        if (!(currentUser instanceof Doctor))
+            return;
+
+        DatabaseReference temp;
+
+        for (Shift a : shifts){
+            temp = currentUserRef.child("shifts");
+            temp.child("Shift Date:").setValue(a.getDate());
+            temp.child("Start Time").setValue(a.getStartTime());
+            temp.child("End Time").setValue(a.getEndTime());
+        }
+
+    }
+
+    public static ArrayList<Shift> getShiftsFromDatabase(DatabaseReference c){
+        ArrayList<Shift> shifts = new ArrayList<>();
+
+        ValueEventListener listener = new ValueEventListener() {
+
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot shiftSnapshot : snapshot.getChildren()){
+                    String date = shiftSnapshot.child("Shift Date:").getValue(String.class);
+                    String startTime = shiftSnapshot.child("Start Time").getValue(String.class);
+                    String endTime = shiftSnapshot.child("End Time").getValue(String.class);
+
+                    shifts.add(new Shift(date, startTime, endTime));
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                // Handle potential errors.
+            }
+        };
+
+
+        c.child("shifts").addValueEventListener(listener);
+
+        return shifts;
     }
 }

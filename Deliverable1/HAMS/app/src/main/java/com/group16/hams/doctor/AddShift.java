@@ -2,6 +2,7 @@ package com.group16.hams.doctor;
 
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
@@ -10,6 +11,7 @@ import android.widget.Toast;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.group16.hams.Database;
 import com.group16.hams.R;
 import com.group16.hams.register.RegisterDoctor;
 
@@ -19,6 +21,10 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import entities.Appointment;
+import entities.Doctor;
+import entities.Shift;
 
 public class AddShift extends AppCompatActivity {
 
@@ -81,7 +87,16 @@ public class AddShift extends AppCompatActivity {
         }
         if (validFlag == true){
             // Add the shift to the doctor's DB
+            ((Doctor) Database.currentUser).addShift(new Shift(addShiftDateText, addShiftStartTimeText, addShiftEndTimeText));
+            (new Handler()).postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    Database.shiftToDatabase(((Doctor) Database.currentUser).getShifts());
+                }
+            },1000);
+
             Toast.makeText(AddShift.this, "Success!", Toast.LENGTH_SHORT).show();
+            finish();
         }
     }
 

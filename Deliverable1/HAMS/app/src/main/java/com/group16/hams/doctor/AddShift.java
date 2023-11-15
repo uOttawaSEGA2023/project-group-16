@@ -17,8 +17,10 @@ import com.group16.hams.register.RegisterDoctor;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -82,6 +84,13 @@ public class AddShift extends AppCompatActivity {
                     addShiftStartTime.setError("Not 30min Increment");
                     addShiftEndTime.setError("Not 30min Increment");
                     validFlag = false;
+                }
+                else{
+                    if (isShiftConflict(addShiftDateText, addShiftStartTimeText, addShiftEndTimeText) == true){
+                        addShiftStartTime.setError("Conflicting Time");
+                        addShiftEndTime.setError("Conflicting Time");
+                        validFlag = false;
+                    }
                 }
             }
         }
@@ -168,5 +177,30 @@ public class AddShift extends AppCompatActivity {
             return false;
         }
         return convertedStartMinutes % 30 == 0 && convertedEndMinutes % 30 == 0;
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public boolean isShiftConflict(String date, String startTime, String endTime){
+        ArrayList<Shift> existingShifts = ((Doctor) Database.currentUser).getShifts();
+        Shift curShift;
+        LocalTime newShiftStart = LocalTime.parse(startTime);
+        LocalTime newShiftEnd = LocalTime.parse(endTime);
+
+        for (int i = 0; i < existingShifts.size(); i++) {
+            curShift = existingShifts.get(i);
+            if (curShift.getDate().equals(date)){
+
+                LocalTime curShiftStart = LocalTime.parse(curShift.getStartTime());
+                LocalTime curShiftEnd = LocalTime.parse(curShift.getEndTime());
+
+                if ((newShiftStart.isBefore(curShiftEnd) && newShiftStart.isAfter(curShiftStart)) ||
+                        (newShiftEnd.isAfter(curShiftStart) && newShiftEnd.isBefore(curShiftEnd)) ||
+                        (newShiftStart.equals(curShiftStart) || newShiftEnd.equals(curShiftEnd))) {
+                    return true;
+                }
+            }
+
+        }
+        return false;
     }
 }

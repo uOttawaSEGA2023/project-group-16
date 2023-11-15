@@ -76,6 +76,9 @@ public class ShiftsDoctor extends AppCompatActivity implements RecyclerViewInter
                 upcomingShiftsHolders.add(new RecyclerViewHolderShift(curShift.getDate(),
                         curShift.getStartTime(), curShift.getEndTime(), 1, curShift));
             }
+            else{
+                //Delete it
+            }
         }
 
     }

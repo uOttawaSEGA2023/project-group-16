@@ -325,7 +325,7 @@ public class Database {
             String day = date[0];
             String month = date[1];
             String year = date[2];
-            String newDate = year + "/" + month + "/" + day;
+            String newDate = year + "/" + month + "/" + day + " " + a.getStartTime();
             temp = currentUserRef.child("shifts").child(newDate);
             temp.child("Start Time").setValue(a.getStartTime());
             temp.child("End Time").setValue(a.getEndTime());
@@ -334,55 +334,21 @@ public class Database {
     }
 
     public static ArrayList<Shift> getShiftsFromDatabase(DatabaseReference c){
-        /**
-        ArrayList<Shift> shifts = new ArrayList<>();
-
-        ValueEventListener listener = new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for (DataSnapshot shiftSnapshot : snapshot.getChildren()){
-                    String date = shiftSnapshot.getKey();
-                    /*String[] newDate = date.split("/");
-                    String day = newDate[2];
-                    String month = newDate[1];
-                    String year = newDate[0];
-*
-                    String startTime = shiftSnapshot.child("Start Time").getValue(String.class);
-                    String endTime = shiftSnapshot.child("End Time").getValue(String.class);
-
-                    shifts.add(new Shift("hi", startTime, endTime));
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                // Handle potential errors.
-            }
-        };
-
-
-        c.child("shifts").addValueEventListener(listener);
-        System.out.println(shifts);
-        return shifts;
-        */
         ArrayList<Shift> shifts = new ArrayList<>();
 
         DatabaseReference shiftsRef = currentUserRef.child("shifts");
         shiftsRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                // Iterate over each year node
                 for (DataSnapshot yearSnapshot : dataSnapshot.getChildren()) {
                     String year = yearSnapshot.getKey();
 
-                    // Iterate over each month node within the year
                     for (DataSnapshot monthSnapshot : yearSnapshot.getChildren()) {
                         String month = monthSnapshot.getKey();
 
-                        // Iterate over each day node within the month
                         for (DataSnapshot daySnapshot : monthSnapshot.getChildren()) {
-                            String day = daySnapshot.getKey();
-                            String date = day + "/" + month + "/" + year;
+                            String[] day = daySnapshot.getKey().split(" ");
+                            String date = day[0] + "/" + month + "/" + year;
 
                             String startTime = daySnapshot.child("Start Time").getValue(String.class);
                             String endTime = daySnapshot.child("End Time").getValue(String.class);

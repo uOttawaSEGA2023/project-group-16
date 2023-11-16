@@ -367,4 +367,36 @@ public class Database {
 
         return shifts;
     }
+
+    public static void deleteShift(Shift shift) {
+        if (!(currentUser instanceof Doctor)) {
+            System.out.println("Current user is not a Doctor.");
+            return;
+        }
+
+        String[] dateParts = shift.getDate().split("/");
+        String day = dateParts[0];
+        String month = dateParts[1];
+        String year = dateParts[2];
+        String formattedDate = year + "/" + month + "/" + day + " " + shift.getStartTime();
+
+        DatabaseReference shiftRef = currentUserRef.child("shifts").child(formattedDate);
+
+        shiftRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    dataSnapshot.getRef().removeValue();
+                    System.out.println("Shift deleted successfully.");
+                } else {
+                    System.out.println("Shift not found in database.");
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                System.out.println("Failed to delete shift: " + databaseError.getMessage());
+            }
+        });
+    }
 }

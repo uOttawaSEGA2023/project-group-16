@@ -120,6 +120,10 @@ public class Doctor extends User{
 		shifts.add(newShift);
 	}
 
+	public void removeShift(Shift delShift){
+		shifts.remove(delShift);
+	}
+
 	@Override
 	public String toString() {
 		return "Doctor{" +

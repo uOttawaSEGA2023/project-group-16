@@ -3,6 +3,7 @@ package com.group16.hams.doctor;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 
 import androidx.annotation.RequiresApi;
@@ -68,7 +69,7 @@ public class ShiftsDoctor extends AppCompatActivity implements RecyclerViewInter
         System.out.println(shifts.size());
         System.out.println("Shift: " + shifts);
         Shift curShift;
-
+        ArrayList<Shift> shiftsToDelete = new ArrayList<>();
         for (int i = 0; i < shifts.size(); i++) {
             curShift = shifts.get(i);
 
@@ -77,10 +78,19 @@ public class ShiftsDoctor extends AppCompatActivity implements RecyclerViewInter
                         curShift.getStartTime(), curShift.getEndTime(), 1, curShift));
             }
             else{
-                //Delete it
+                Shift delShift = new Shift(curShift.getDate(), curShift.getStartTime(), curShift.getEndTime());
+                shiftsToDelete.add(delShift);
             }
         }
-
+        for (Shift delShift : shiftsToDelete) {
+            ((Doctor) Database.currentUser).removeShift(delShift);
+            (new Handler()).postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    Database.deleteShift(delShift);
+                }
+            }, 1000);
+        }
     }
     @Override
     public void onItemClick(int type, int position) {

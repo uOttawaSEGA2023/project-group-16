@@ -47,15 +47,16 @@ public class ShiftsDoctor extends AppCompatActivity implements RecyclerViewInter
     @Override
     public void onPause() {
         super.onPause();
+        System.out.println("Paused..");
         refresh();
     }
-    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void onStart() {
         super.onStart();
         upcomingShiftsHolders.clear();
-        setUpAppointmentHolders();
+        setUpShiftHolders();
         refresh();
+        System.out.println("Starting..");
     }
     @Override
     public void onResume() {
@@ -63,8 +64,9 @@ public class ShiftsDoctor extends AppCompatActivity implements RecyclerViewInter
         refresh();
     }
 
+
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public void setUpAppointmentHolders() {
+    public void setUpShiftHolders() {
         ArrayList<Shift> shifts = ((Doctor) Database.currentUser).getShifts();
         System.out.println(shifts.size());
         System.out.println("Shift: " + shifts);
@@ -82,15 +84,15 @@ public class ShiftsDoctor extends AppCompatActivity implements RecyclerViewInter
                 shiftsToDelete.add(delShift);
             }
         }
-        for (Shift delShift : shiftsToDelete) {
-            ((Doctor) Database.currentUser).removeShift(delShift);
-            (new Handler()).postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    Database.deleteShift(delShift);
-                }
-            }, 1000);
-        }
+//        for (Shift delShift : shiftsToDelete) {
+//            ((Doctor) Database.currentUser).removeShift(delShift);
+//            (new Handler()).postDelayed(new Runnable() {
+//                @Override
+//                public void run() {
+//                    Database.deleteShift(delShift);
+//                }
+//            }, 1000);
+//        }
     }
     @Override
     public void onItemClick(int type, int position) {

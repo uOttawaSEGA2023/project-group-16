@@ -13,14 +13,16 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class Doctor extends User{
-	
+
+	// Instance Variables
 	private int employeeNumber;
 	private String specialties;
 	private ArrayList<Appointment> appointments;
 	private ArrayList<Shift> shifts;
-
 	private boolean autoApprove;
-	
+
+
+	// Constructors with 4 variants
 	public Doctor(String firstName, 
 				String lastName, 
 				String username, 
@@ -38,21 +40,17 @@ public class Doctor extends User{
 		shifts = new ArrayList<Shift>();
 	}
 
-	public Doctor(String firstName,
-				  String lastName,
-				  String username,
-				  String password,
-				  String phoneNumber,
-				  String address,
-				  int employeeNumber,
-				  String specialties,
+	public Doctor(String firstName, String lastName, String username, String password, String phoneNumber, String address, int employeeNumber, String specialties,
 				  ArrayList<Appointment> appointments,
-				  boolean autoApprove, ArrayList<Shift> shifts) {
-		super(firstName, lastName, username, password, phoneNumber, address);
-		this.employeeNumber = employeeNumber;
-		this.specialties = specialties;
+				  boolean autoApprove) {
+		this(firstName, lastName, username, password, phoneNumber, address, employeeNumber, specialties);
 		this.appointments = appointments;
 		this.autoApprove = autoApprove;
+	}
+
+	public Doctor(String firstName, String lastName, String username, String password, String phoneNumber, String address, int employeeNumber, String specialties, ArrayList<Appointment> appointments, boolean autoApprove,
+				  ArrayList<Shift> shifts) {
+		this(firstName, lastName, username, password, phoneNumber, address, employeeNumber, specialties, appointments, autoApprove);
 		this.shifts = shifts;
 	}
 
@@ -64,7 +62,8 @@ public class Doctor extends User{
 		autoApprove = in.readByte() != 0;
 		shifts = in.readArrayList(null);
 	}
-	
+
+	// Instance Methods
 	public int getEmployeeNumber() {
 		return this.employeeNumber;
 	}
@@ -126,15 +125,10 @@ public class Doctor extends User{
 
 	@Override
 	public String toString() {
-		return "Doctor{" +
-				"firstName='" + getFirstName() + '\'' +
-				", lastName='" + getLastName() + '\'' +
-				", username='" + getUsername() + '\'' +
-				", phoneNumber='" + getPhoneNumber() + '\'' +
-				", address='" + getAddress() + '\'' +
-				", employeeNumber=" + employeeNumber +
-				", specialties='" + specialties + '\'' +
-				'}';
+		return "---Doctor---\n" + super.toString() +
+				"\nEmployee #: " + employeeNumber +
+				"\nSpecialties: " + specialties +
+				"";
 	}
 
 	@Override

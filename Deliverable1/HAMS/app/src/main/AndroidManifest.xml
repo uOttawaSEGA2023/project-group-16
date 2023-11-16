@@ -13,10 +13,10 @@
         android:theme="@style/Theme.HAMS"
         tools:targetApi="31">
         <activity
-            android:name=".AppointmentClicked"
+            android:name=".doctor.appointments.AppointmentClicked"
             android:exported="false" />
         <activity
-            android:name=".doctor.AppointmentsDoctor"
+            android:name=".doctor.appointments.AppointmentsDoctor"
             android:exported="false" />
         <activity
             android:name=".admin.RejectedAccounts"
@@ -46,13 +46,13 @@
             android:name=".register.ChooseType"
             android:exported="false" />
         <activity
-            android:name=".doctor.ShiftsDoctor"
+            android:name=".doctor.shifts.ShiftsDoctor"
             android:exported="false" />
         <activity
-            android:name=".ShiftClicked"
+            android:name=".doctor.shifts.ShiftClicked"
             android:exported="false" />
         <activity
-            android:name=".doctor.AddShift"
+            android:name=".doctor.shifts.AddShift"
             android:exported="false" />
         <activity
             android:name=".LoginMenu"

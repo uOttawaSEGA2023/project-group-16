@@ -1,9 +1,8 @@
-package com.group16.hams.doctor;
+package com.group16.hams.doctor.shifts;
 
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.View;
 
 import androidx.annotation.RequiresApi;
@@ -11,11 +10,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.group16.hams.AppointmentClicked;
 import com.group16.hams.Database;
 import com.group16.hams.R;
 import com.group16.hams.RecyclerViewInterface;
-import com.group16.hams.ShiftClicked;
 
 import java.util.ArrayList;
 

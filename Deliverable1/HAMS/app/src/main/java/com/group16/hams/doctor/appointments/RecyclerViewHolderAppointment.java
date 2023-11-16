@@ -1,4 +1,4 @@
-package com.group16.hams.doctor;
+package com.group16.hams.doctor.appointments;
 
 import android.os.Parcel;
 import android.os.Parcelable;

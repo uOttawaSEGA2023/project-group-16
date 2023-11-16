@@ -1,20 +1,17 @@
-package com.group16.hams;
+package com.group16.hams.doctor.shifts;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.group16.hams.doctor.AddShift;
-import com.group16.hams.doctor.RecyclerViewHolderShift;
-import com.group16.hams.doctor.ShiftsDoctor;
+import com.group16.hams.Database;
+import com.group16.hams.R;
+import com.group16.hams.doctor.shifts.RecyclerViewHolderShift;
 
 import entities.Doctor;
-import entities.Patient;
 import entities.Shift;
 
 public class ShiftClicked extends AppCompatActivity {

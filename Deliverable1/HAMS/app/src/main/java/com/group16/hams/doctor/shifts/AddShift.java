@@ -1,9 +1,8 @@
-package com.group16.hams.doctor;
+package com.group16.hams.doctor.shifts;
 
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -13,18 +12,15 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.group16.hams.Database;
 import com.group16.hams.R;
-import com.group16.hams.register.RegisterDoctor;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import entities.Appointment;
 import entities.Doctor;
 import entities.Shift;
 

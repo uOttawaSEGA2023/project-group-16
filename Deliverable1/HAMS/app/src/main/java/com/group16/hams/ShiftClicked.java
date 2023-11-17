@@ -26,6 +26,8 @@ public class ShiftClicked extends AppCompatActivity {
         super.onCreate(savedInstance);
         setContentView(R.layout.shift_clicked);
 
+
+
         Intent intent = getIntent();
         curHolder = intent.getParcelableExtra("Shift Holder");
         index = intent.getIntExtra("index",-1);
@@ -45,7 +47,12 @@ public class ShiftClicked extends AppCompatActivity {
         // Delete it from database
         Shift delShift = new Shift(curHolder.getShiftDate(), curHolder.getShiftStartTime(), curHolder.getShiftEndTime());
         ((Doctor) Database.currentUser).removeShift(delShift);
-        Database.deleteShift(delShift);
+        (new Handler()).postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                Database.deleteShift(delShift);
+            }
+        },1000);
 
         finish();
     }

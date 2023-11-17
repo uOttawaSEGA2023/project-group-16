@@ -1,4 +1,4 @@
-package com.group16.hams.doctor.shifts;
+package com.group16.hams.doctor;
 
 import android.os.Parcel;
 import android.os.Parcelable;

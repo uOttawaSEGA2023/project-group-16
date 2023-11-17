@@ -131,8 +131,6 @@ public class Database {
             }
         };
 
-        System.out.println(currentUser.toString());
-
         myRef.addValueEventListener(listener);
 
     }

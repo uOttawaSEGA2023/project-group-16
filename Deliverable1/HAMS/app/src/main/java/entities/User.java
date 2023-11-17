@@ -7,7 +7,7 @@ import androidx.annotation.NonNull;
 
 public class User implements Parcelable {
 	
-	// Instance Variables******************************
+	//Instance Variables******************************
 	protected String firstName;
 	protected String lastName;
 	protected String username;
@@ -15,7 +15,7 @@ public class User implements Parcelable {
 	protected String phoneNumber;
 	protected String address;
 	
-	// Constructor*************************************
+	//Constructor*************************************
 	public User(String firstName, 
 				String lastName, 
 				String username, 
@@ -30,7 +30,7 @@ public class User implements Parcelable {
 			this.address = address;
 		}
 	
-	// Instance Methods********************************
+	//Instance Methods********************************
 
 	protected User(Parcel in) {
 		firstName = in.readString();
@@ -105,7 +105,7 @@ public class User implements Parcelable {
 		return "Name: " 
 				+ getFirstName() 
 				+ " " + getLastName() 
-				+ "\nPhone #: "
+				+ "\nPhone number: "
 				+ getPhoneNumber()
 				+ "\nAddress: "
 				+ getAddress();

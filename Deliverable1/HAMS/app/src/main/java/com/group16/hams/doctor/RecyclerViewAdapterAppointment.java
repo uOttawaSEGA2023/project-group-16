@@ -1,4 +1,4 @@
-package com.group16.hams.doctor.appointments;
+package com.group16.hams.doctor;
 
 import android.content.Context;
 import android.view.LayoutInflater;

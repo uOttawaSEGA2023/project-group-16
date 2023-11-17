@@ -10,8 +10,6 @@ import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.group16.hams.R;
-import com.group16.hams.doctor.appointments.AppointmentsDoctor;
-import com.group16.hams.doctor.shifts.ShiftsDoctor;
 
 public class LoggedInDoctor extends AppCompatActivity {
 

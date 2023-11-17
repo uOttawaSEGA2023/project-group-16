@@ -1,4 +1,4 @@
-package com.group16.hams.doctor.appointments;
+package com.group16.hams;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -9,8 +9,8 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.group16.hams.Database;
-import com.group16.hams.R;
+import com.group16.hams.doctor.AppointmentsDoctor;
+import com.group16.hams.doctor.RecyclerViewHolderAppointment;
 
 import entities.*;
 

@@ -1,4 +1,4 @@
-package com.group16.hams.doctor.shifts;
+package com.group16.hams.doctor;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -11,7 +11,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.group16.hams.R;
 import com.group16.hams.RecyclerViewInterface;
-import com.group16.hams.doctor.appointments.RecyclerViewHolderAppointment;
 
 import java.util.ArrayList;
 

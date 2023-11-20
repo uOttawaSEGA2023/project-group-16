@@ -10,6 +10,8 @@ import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.group16.hams.R;
+import com.group16.hams.SearchAppointment;
+import com.group16.hams.doctor.ShiftsDoctor;
 
 import entities.*;
 
@@ -32,5 +34,10 @@ public class LoggedInPatient extends AppCompatActivity {
         mAuth.signOut();
         finish();
         Toast.makeText(this, "Logout Successful", Toast.LENGTH_SHORT).show();
+    }
+
+    public void onClickBookAppointment(View view){
+        Intent intent = new Intent(this, SearchAppointment.class);
+        startActivity(intent);
     }
 }

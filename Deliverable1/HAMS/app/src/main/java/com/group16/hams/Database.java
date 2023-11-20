@@ -126,6 +126,7 @@ public class Database {
                 }            }
 
             @Override
+
             public void onCancelled(@NonNull DatabaseError error) {
                 Log.w(TAG, "Failed to read value.", error.toException());
             }

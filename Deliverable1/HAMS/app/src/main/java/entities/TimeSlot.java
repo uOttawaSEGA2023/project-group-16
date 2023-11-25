@@ -23,14 +23,16 @@ public class TimeSlot implements Parcelable {
     //This should be in the following format: "2023/11/07 14:28"
     //The space is important
     String DateAndTimeString;
+    String specialty;
     Date DateAndTime;
 
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/ddHH:mmHH:mm");
 
     int status;
-    public TimeSlot(String appointmentDoctorEmail, String DateAndTimeString) {
+    public TimeSlot(String appointmentDoctorEmail, String DateAndTimeString, String specialty) {
         this.appointmentDoctorEmail = appointmentDoctorEmail;
         this.DateAndTimeString = DateAndTimeString;
+        this.specialty = specialty;
         status = UNBOOKED_APPOINTMENT;
 
         Database.getDoctor(appointmentDoctorEmail, new Database.MyCallBack2() {
@@ -58,9 +60,10 @@ public class TimeSlot implements Parcelable {
         }
     }
 
-    public TimeSlot(String appointmentDoctorEmail, String DateAndTimeString, int status) {
+    public TimeSlot(String appointmentDoctorEmail, String DateAndTimeString, String specialty, int status) {
         this.appointmentDoctorEmail = appointmentDoctorEmail;
         this.DateAndTimeString = DateAndTimeString;
+        this.specialty = specialty;
         this.status = status;
 
         Database.getDoctor(appointmentDoctorEmail, new Database.MyCallBack2() {
@@ -91,6 +94,7 @@ public class TimeSlot implements Parcelable {
     protected TimeSlot(Parcel in) {
         appointmentDoctorEmail = in.readString();
         DateAndTimeString = in.readString();
+        specialty = in.readString();
         status = in.readInt();
 
         Database.getDoctor(appointmentDoctorEmail, new Database.MyCallBack2() {
@@ -139,6 +143,7 @@ public class TimeSlot implements Parcelable {
     public void writeToParcel(@NonNull Parcel parcel, int i) {
         parcel.writeString(appointmentDoctorEmail);
         parcel.writeString(DateAndTimeString);
+        parcel.writeString(specialty);
         parcel.writeInt(status);
     }
 
@@ -154,6 +159,8 @@ public class TimeSlot implements Parcelable {
     public String getDateAndTimeString() {
         return DateAndTimeString;
     }
+
+    public String getTimeSlotSpecialty() { return specialty; }
     public SimpleDateFormat getSdf() {
         return sdf;
     }

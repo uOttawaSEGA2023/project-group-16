@@ -7,6 +7,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.ContactsContract;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
@@ -26,7 +28,7 @@ import entities.TimeSlot;
 
 public class SpecialtyClicked extends AppCompatActivity implements RecyclerViewInterface {
 
-    TimeSlotHolder curHolder;
+    String curHolder;
     ArrayList<TimeSlotHolder> timeSlotHolders = new ArrayList<>();
     ArrayList<TimeSlot> timeSlots;
 
@@ -39,7 +41,7 @@ public class SpecialtyClicked extends AppCompatActivity implements RecyclerViewI
         setContentView(R.layout.activity_specialty_clicked);
 
         Intent intent = getIntent();
-        curHolder = intent.getParcelableExtra("Specialty Holder");
+        curHolder = intent.getStringExtra("Specialty Holder");
 
         RecyclerView availableView = findViewById(R.id.availableTimeSlotsView);
 
@@ -83,14 +85,15 @@ public class SpecialtyClicked extends AppCompatActivity implements RecyclerViewI
         for (int i = 0; i < timeSlots1.size(); i++) {
             curTimeSlot = timeSlots1.get(i);
 
-            DateAndTime = curTimeSlot.getDateAndTimeString().split(" ");
-            doctorName = curTimeSlot.getAppointmentDoctor().getFirstName() + " " +
-                    curTimeSlot.getAppointmentDoctor().getLastName();
+            if (curTimeSlot.getTimeSlotSpecialty().equals(curHolder)) {
+                DateAndTime = curTimeSlot.getDateAndTimeString().split(" ");
+                doctorName = curTimeSlot.getAppointmentDoctor().getFirstName() + " " +
+                        curTimeSlot.getAppointmentDoctor().getLastName();
 
-            timeSlotHolders.add(new TimeSlotHolder(DateAndTime[0],
+                timeSlotHolders.add(new TimeSlotHolder(DateAndTime[0],
                         DateAndTime[1], DateAndTime[2], doctorName, curTimeSlot));
+            }
         }
-
     }
 
     @Override
@@ -108,7 +111,7 @@ public class SpecialtyClicked extends AppCompatActivity implements RecyclerViewI
     }
 
     public void onClickTest(View view){
-        ((Patient) Database.currentUser).addTimeSlot(new TimeSlot("bobrob@gmail.com", "2021/02/23 3:30 4:00"));
+        ((Patient) Database.currentUser).addTimeSlot(new TimeSlot("bobrob@gmail.com", "2021/02/23 3:30 4:00", "family medicine"));
 
         (new Handler()).postDelayed(new Runnable() {
             @Override

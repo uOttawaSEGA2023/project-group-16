@@ -338,6 +338,7 @@ public class Database {
             temp = currentUserRef.child("appointments").child(a.getDateAndTimeString());
             temp.child("username").setValue(a.getAppointmentDoctorEmail());
             temp.child("status").setValue(a.getStatus());
+            temp.child("specialty").setValue(a.getTimeSlotSpecialty());
         }
 
     }
@@ -401,7 +402,8 @@ public class Database {
                             date[8] = temp[2].split(":")[1];
                             String email = dayAndHour.child("username").getValue(String.class);
                             int status = dayAndHour.child("status").getValue(Integer.class);
-                            dApps.add(new TimeSlot(email,date[0] + date[1] + date[2] + " " + date[4] + date[5] + " " + date[7] + date[8], status));
+                            String specialty = dayAndHour.child("specialty").getValue(String.class);
+                            dApps.add(new TimeSlot(email,date[0] + date[1] + date[2] + " " + date[4] + date[5] + " " + date[7] + date[8], specialty, status));
                         }
                     }
                 }

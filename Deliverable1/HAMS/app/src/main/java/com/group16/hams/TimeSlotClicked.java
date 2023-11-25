@@ -5,16 +5,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.group16.hams.doctor.RecyclerViewHolderAppointment;
 import com.group16.hams.patient.TimeSlotHolder;
 
-import entities.Appointment;
 import entities.Doctor;
-import entities.Patient;
 import entities.TimeSlot;
 
 public class TimeSlotClicked extends AppCompatActivity {

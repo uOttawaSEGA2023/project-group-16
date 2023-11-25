@@ -13,6 +13,12 @@
         android:theme="@style/Theme.HAMS"
         tools:targetApi="31">
         <activity
+            android:name=".patient.PastAppointmentPatientClicked"
+            android:exported="false" />
+        <activity
+            android:name=".patient.PastAppointmentsPatient"
+            android:exported="false" />
+        <activity
             android:name=".TimeSlotClicked"
             android:exported="false" />
         <activity
@@ -31,7 +37,7 @@
             android:name=".patient.SearchAppointment"
             android:exported="false" />
         <activity
-            android:name=".AppointmentClicked"
+            android:name=".AppointmentClickedDoctor"
             android:exported="false" />
         <activity
             android:name=".doctor.AppointmentsDoctor"

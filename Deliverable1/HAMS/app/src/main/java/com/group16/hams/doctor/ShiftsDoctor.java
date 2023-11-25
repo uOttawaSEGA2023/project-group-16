@@ -11,7 +11,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.group16.hams.AppointmentClicked;
 import com.group16.hams.Database;
 import com.group16.hams.R;
 import com.group16.hams.RecyclerViewInterface;
@@ -27,7 +26,7 @@ public class ShiftsDoctor extends AppCompatActivity implements RecyclerViewInter
     ArrayList<RecyclerViewHolderShift> upcomingShiftsHolders = new ArrayList<>();
     ArrayList<Shift> shifts;
 
-    public RecyclerViewAdapterShift upcomingAdapter;
+    public RecyclerViewAdapterShiftDoctor upcomingAdapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,7 +34,7 @@ public class ShiftsDoctor extends AppCompatActivity implements RecyclerViewInter
 
         RecyclerView shiftsView = findViewById(R.id.upcomingShiftsView);
 
-        upcomingAdapter = new RecyclerViewAdapterShift(this, upcomingShiftsHolders, this);
+        upcomingAdapter = new RecyclerViewAdapterShiftDoctor(this, upcomingShiftsHolders, this);
 
         shiftsView.setAdapter(upcomingAdapter);
         shiftsView.setLayoutManager(new LinearLayoutManager(this));

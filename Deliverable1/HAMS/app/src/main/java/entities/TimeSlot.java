@@ -24,7 +24,7 @@ public class TimeSlot implements Parcelable {
     //The space is important
     String DateAndTimeString;
     String specialty;
-    Date DateAndTime;
+    Date dateAndTime;
 
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/ddHH:mmHH:mm");
 
@@ -51,7 +51,7 @@ public class TimeSlot implements Parcelable {
         });
 
         try {
-            DateAndTime = sdf.parse(DateAndTimeString);
+            dateAndTime = sdf.parse(DateAndTimeString);
         }
 
         catch (ParseException e) {
@@ -82,7 +82,7 @@ public class TimeSlot implements Parcelable {
         });
 
         try {
-            DateAndTime = sdf.parse(DateAndTimeString);
+            dateAndTime = sdf.parse(DateAndTimeString);
         }
 
         catch (ParseException e) {
@@ -113,7 +113,7 @@ public class TimeSlot implements Parcelable {
         });
 
         try {
-            DateAndTime = sdf.parse(DateAndTimeString);
+            dateAndTime = sdf.parse(DateAndTimeString);
         }
 
         catch (ParseException e) {
@@ -154,7 +154,7 @@ public class TimeSlot implements Parcelable {
         return appointmentDoctorEmail;
     }
     public Date getDateAndTime() {
-        return DateAndTime;
+        return dateAndTime;
     }
     public String getDateAndTimeString() {
         return DateAndTimeString;
@@ -173,6 +173,18 @@ public class TimeSlot implements Parcelable {
         }
         else {
             this.status = status;
+        }
+    }
+
+    public boolean isUpcoming() {
+        Date currentTime = new Date();
+
+        if (currentTime.after(dateAndTime)) {
+            return false;
+        }
+
+        else {
+            return true;
         }
     }
 }

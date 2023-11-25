@@ -7,7 +7,7 @@ import androidx.annotation.NonNull;
 
 import entities.*;
 
-public class RecyclerViewHolderAppointment implements Parcelable {
+public class RecyclerViewHolderAppointmentDoctor implements Parcelable {
 
     public static final int PAST_APPOINTMENT = 0;
     public static final int UPCOMING_APPOINTMENT = 1;
@@ -18,10 +18,10 @@ public class RecyclerViewHolderAppointment implements Parcelable {
 
     Appointment appointment;
 
-    public RecyclerViewHolderAppointment(String appointmentDate, String appointmentTime,
-                                         String appointmentPatientName,
-                                         int appointmentApproval, int pastOrUpcoming,
-                                         Appointment appointment) {
+    public RecyclerViewHolderAppointmentDoctor(String appointmentDate, String appointmentTime,
+                                               String appointmentPatientName,
+                                               int appointmentApproval, int pastOrUpcoming,
+                                               Appointment appointment) {
         this.appointmentDate = appointmentDate;
         this.appointmentTime = appointmentTime;
         this.appointmentPatientName = appointmentPatientName;
@@ -29,7 +29,7 @@ public class RecyclerViewHolderAppointment implements Parcelable {
         this.appointment = appointment;
     }
 
-    protected RecyclerViewHolderAppointment(Parcel in) {
+    protected RecyclerViewHolderAppointmentDoctor(Parcel in) {
         appointmentDate = in.readString();
         appointmentTime = in.readString();
         appointmentPatientName = in.readString();
@@ -37,15 +37,15 @@ public class RecyclerViewHolderAppointment implements Parcelable {
         appointment = in.readParcelable(Appointment.class.getClassLoader());
     }
 
-    public static final Creator<RecyclerViewHolderAppointment> CREATOR = new Creator<RecyclerViewHolderAppointment>() {
+    public static final Creator<RecyclerViewHolderAppointmentDoctor> CREATOR = new Creator<RecyclerViewHolderAppointmentDoctor>() {
         @Override
-        public RecyclerViewHolderAppointment createFromParcel(Parcel in) {
-            return new RecyclerViewHolderAppointment(in);
+        public RecyclerViewHolderAppointmentDoctor createFromParcel(Parcel in) {
+            return new RecyclerViewHolderAppointmentDoctor(in);
         }
 
         @Override
-        public RecyclerViewHolderAppointment[] newArray(int size) {
-            return new RecyclerViewHolderAppointment[size];
+        public RecyclerViewHolderAppointmentDoctor[] newArray(int size) {
+            return new RecyclerViewHolderAppointmentDoctor[size];
         }
     };
 

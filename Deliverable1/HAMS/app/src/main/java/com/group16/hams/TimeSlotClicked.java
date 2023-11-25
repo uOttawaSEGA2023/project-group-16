@@ -86,7 +86,7 @@ public class TimeSlotClicked extends AppCompatActivity {
             Database.changeTimeSlotStatus(curHolder.getTimeSlot(), TimeSlot.BOOKED_APPOINTMENT);
         }
     }
-    public void onClickReturnToAppointmentsButton(View view) {
+    public void onClickReturnToTimeSlotsButton(View view) {
         finish();
     }
 }

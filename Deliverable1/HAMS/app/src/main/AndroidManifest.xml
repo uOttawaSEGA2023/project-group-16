@@ -19,6 +19,9 @@
             android:name=".patient.PastAppointmentsPatient"
             android:exported="false" />
         <activity
+            android:name=".patient.UpcomingAppointmentsPatient"
+            android:exported="false" />
+        <activity
             android:name=".TimeSlotClicked"
             android:exported="false" />
         <activity

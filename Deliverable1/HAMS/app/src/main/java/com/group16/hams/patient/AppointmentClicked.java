@@ -12,7 +12,7 @@ import com.group16.hams.R;
 
 import entities.Doctor;
 
-public class PastAppointmentPatientClicked extends AppCompatActivity {
+public class AppointmentClicked extends AppCompatActivity {
 
     TimeSlotHolder curHolder;
 
@@ -24,17 +24,17 @@ public class PastAppointmentPatientClicked extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.past_appointment_patient_clicked);
+        setContentView(R.layout.appointment_patient_clicked);
 
         Intent intent = getIntent();
         curHolder = intent.getParcelableExtra("TimeSlot Holder");
 
-        appointmentDate = findViewById(R.id.pastApptPatientDate);
-        appointmentStartTime = findViewById(R.id.pastApptPatientTime);
-        appointmentEndTime = findViewById(R.id.pastApptPatientEndTime);
-        doctorName = findViewById(R.id.pastApptPatientDoctorName);
-        doctorUsername = findViewById(R.id.pastApptPatientDoctorEmail);
-        doctorPhoneNumber = findViewById(R.id.pastApptPatientDoctorPhoneNumber);
+        appointmentDate = findViewById(R.id.ApptPatientDate);
+        appointmentStartTime = findViewById(R.id.ApptPatientTime);
+        appointmentEndTime = findViewById(R.id.ApptPatientEndTime);
+        doctorName = findViewById(R.id.ApptPatientDoctorName);
+        doctorUsername = findViewById(R.id.ApptPatientDoctorEmail);
+        doctorPhoneNumber = findViewById(R.id.ApptPatientDoctorPhoneNumber);
 
         appointmentDate.setText("Appointment Date: " + curHolder.getAppointmentDate());
         appointmentStartTime.setText("Appointment Start Time: " + curHolder.getAppointmentStartTime());

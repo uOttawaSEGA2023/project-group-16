@@ -1,12 +1,12 @@
 package com.group16.hams.patient;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.group16.hams.Database;
 import com.group16.hams.R;
@@ -17,8 +17,7 @@ import java.util.ArrayList;
 import entities.Patient;
 import entities.TimeSlot;
 
-public class PastAppointmentsPatient extends AppCompatActivity implements RecyclerViewInterface {
-
+public class UpcomingAppointmentsPatient extends AppCompatActivity implements RecyclerViewInterface {
     ArrayList<TimeSlotHolder> timeSlotHolders = new ArrayList<>();
 
     public TimeSlotAdapter timeSlotAdapter;
@@ -26,18 +25,18 @@ public class PastAppointmentsPatient extends AppCompatActivity implements Recycl
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.past_appointments_patient);
+        setContentView(R.layout.upcoming_appointment_patient);
 
-        RecyclerView pastAppointmentsRecycler = findViewById(R.id.pastAppointmentsPatientView);
+        RecyclerView upcomingAppointmentsRecycler = findViewById(R.id.upcomingAppointmentsView);
 
         timeSlotAdapter = new
                 TimeSlotAdapter(this, timeSlotHolders, this);
 
-        pastAppointmentsRecycler.setAdapter(timeSlotAdapter);
-        pastAppointmentsRecycler.setLayoutManager(new LinearLayoutManager(this));
+        upcomingAppointmentsRecycler.setAdapter(timeSlotAdapter);
+        upcomingAppointmentsRecycler.setLayoutManager(new LinearLayoutManager(this));
     }
 
-    public void setUpPastTimeSlotHolders() {
+    public void setUpUpcomingTimeSlotHolders() {
         ArrayList<TimeSlot> allTimeSlots = ((Patient) Database.currentUser).getTimeSlots();
         TimeSlot curTimeSlot;
 
@@ -58,7 +57,7 @@ public class PastAppointmentsPatient extends AppCompatActivity implements Recycl
         }
     }
 
-    public void onClickPastAppointmentsPatientReturn(View view){
+    public void onClickUpcomingAppointmentsPatientReturn(View view){
         finish();
     }
 
@@ -70,4 +69,5 @@ public class PastAppointmentsPatient extends AppCompatActivity implements Recycl
         intent.putExtra("TimeSlot Holder", curHolder);
         startActivity(intent);
     }
+
 }

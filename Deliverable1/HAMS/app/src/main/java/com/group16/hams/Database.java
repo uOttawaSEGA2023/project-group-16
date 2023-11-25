@@ -386,7 +386,7 @@ public class Database {
 
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                String [] date = {"Year", "Month", "Day",  "Space",  "StartHour", "StartMinute", "Space", "Dash", "EndHour", "EndMinute"};
+                String [] date = {"Year", "Month", "Day",  "Space",  "StartHour", "StartMinute", "Space", "EndHour", "EndMinute"};
 
                 for (DataSnapshot year : snapshot.getChildren()){
                     date[0] = year.getKey() + "/";
@@ -397,11 +397,11 @@ public class Database {
                             date[2] = temp[0];
                             date[4] = temp[1].split(":")[0] + ":";
                             date[5] = temp[1].split(":")[1];
-                            date[6] = temp[2].split(":")[0] + ":";
-                            date[7] = temp[2].split(":")[1];
+                            date[7] = temp[2].split(":")[0] + ":";
+                            date[8] = temp[2].split(":")[1];
                             String email = dayAndHour.child("username").getValue(String.class);
                             int status = dayAndHour.child("status").getValue(Integer.class);
-                            dApps.add(new TimeSlot(email,date[0] + date[1] + date[2] + " " + date[4] + date[5] + " " + "-" + date[6] + date[7], status));
+                            dApps.add(new TimeSlot(email,date[0] + date[1] + date[2] + " " + date[4] + date[5] + " " + date[7] + date[8], status));
                         }
                     }
                 }

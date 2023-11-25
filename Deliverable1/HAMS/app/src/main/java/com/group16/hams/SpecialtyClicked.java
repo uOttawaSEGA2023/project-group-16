@@ -108,7 +108,7 @@ public class SpecialtyClicked extends AppCompatActivity implements RecyclerViewI
     }
 
     public void onClickTest(View view){
-        ((Patient) Database.currentUser).addTimeSlot(new TimeSlot("bobrob@gmail.com", "2021/02/23 3:30-4:40"));
+        ((Patient) Database.currentUser).addTimeSlot(new TimeSlot("bobrob@gmail.com", "2021/02/23 3:30 4:00"));
 
         (new Handler()).postDelayed(new Runnable() {
             @Override

@@ -52,8 +52,8 @@ public class TimeSlotClicked extends AppCompatActivity {
                     //MOVED HERE.... WAITS FOR DATABASE TO RETRIEVE INFO
                     System.out.println("P: " + p);
                     curDoctor = p;
-                    doctorUsername.setText("Patient Username: " + curDoctor.getUsername());
-                    doctorPhoneNumber.setText("Patient Phone Number: " + curDoctor.getPhoneNumber());
+                    doctorUsername.setText("Doctor Username: " + curDoctor.getUsername());
+                    doctorPhoneNumber.setText("Doctor Phone Number: " + curDoctor.getPhoneNumber());
                 }
             }
         });
@@ -68,7 +68,7 @@ public class TimeSlotClicked extends AppCompatActivity {
 
         appointmentDate.setText("Appointment Date: " + curHolder.getAppointmentDate());
         appointmentStartTime.setText("Appointment Start Time: " + curHolder.getAppointmentStartTime());
-        appointmentEndTime.setText("Appointment End Time: " + curHolder.getAppointmentStartTime());
+        appointmentEndTime.setText("Appointment End Time: " + curHolder.getAppointmentEndTime());
         curBookingStatus.setText("Current Booking Status: " + curHolder.getAppointmentBooking());
         doctorName.setText("Doctor Name: " + curHolder.getAppointmentDoctorName());
     }

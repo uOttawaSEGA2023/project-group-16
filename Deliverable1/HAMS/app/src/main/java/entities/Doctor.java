@@ -1,15 +1,9 @@
 package entities;
 
-import android.os.Build;
 import android.os.Parcel;
 
 import androidx.annotation.NonNull;
 
-import com.google.firebase.database.Exclude;
-
-import org.checkerframework.checker.units.qual.A;
-
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class Doctor extends User{
@@ -88,7 +82,6 @@ public class Doctor extends User{
 
 		return processedString.toString();
 	}
-
 	public void setSpecialties(String s) {
 		specialties = s;
 	}
@@ -103,7 +96,6 @@ public class Doctor extends User{
 		}
 		appointments.add(newAppointment);
 	}
-
 	public boolean getAutoApprove() {
 		return autoApprove;
 	}

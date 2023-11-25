@@ -1,5 +1,7 @@
-package com.group16.hams;
+package com.group16.hams.patient;
 
+import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,12 +10,19 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.group16.hams.R;
+import com.group16.hams.SpecialtyClicked;
+
 import java.util.List;
+
+import entities.Specialty;
 
 public class SpecialtyAdapter extends RecyclerView.Adapter<SpecialtyAdapter.SpecialtyViewHolder> {
 
+    Context context;
     private List<Specialty> specialtyList;
-    public SpecialtyAdapter(List<Specialty> specialtyList) {
+    public SpecialtyAdapter(Context context, List<Specialty> specialtyList) {
+        this.context = context;
         this.specialtyList = specialtyList;
     }
 
@@ -35,6 +44,22 @@ public class SpecialtyAdapter extends RecyclerView.Adapter<SpecialtyAdapter.Spec
     public void onBindViewHolder(@NonNull SpecialtyAdapter.SpecialtyViewHolder holder, int position) {
         Specialty specialty = specialtyList.get(position);
         holder.tvSpecialty.setText(specialty.getSpecialty());
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                specialtyClicked(specialty.getSpecialty());
+            }
+        });
+    }
+
+    private void specialtyClicked(String specialty) {
+        Intent intent = new Intent(context, SpecialtyClicked.class);
+
+        intent.putExtra("Specialty Holder", specialty);
+        context.startActivity(intent);
+
     }
 
     @Override

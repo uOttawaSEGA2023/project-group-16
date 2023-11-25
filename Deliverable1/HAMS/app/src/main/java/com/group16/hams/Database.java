@@ -68,8 +68,63 @@ public class Database {
             }
         });
     }
+    public static void getDoctor(String email, MyCallBack2 m) {
+        DatabaseReference doctorRef = userRef.child("Doctors");
+        doctorRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                Doctor p = null;
+                for (DataSnapshot s : snapshot.getChildren()){
+                    if (s.child("username").getValue(String.class).equals(email)) {
+                        p = new Doctor(s.child("firstName").getValue(String.class),
+                                s.child("lastName").getValue(String.class),
+                                s.child("username").getValue(String.class),
+                                s.child("password").getValue(String.class),
+                                s.child("phoneNumber").getValue(String.class),
+                                s.child("address").getValue(String.class),
+                                s.child("employeeNumber").getValue(Integer.class),
+                                s.child("specialties").getValue(String.class));
+                        break;
+                    }
+                }
+                m.onCallBack2(p);
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                System.out.println("ERROR: getDoctor()");
+            }
+        });
+    }
+
+    public static void getSpecialties(SpecialtyCallBack m) {
+        DatabaseReference doctorRef = userRef.child("Doctors");
+        doctorRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                ArrayList<String> specialties = new ArrayList<>();
+                for (DataSnapshot s : snapshot.getChildren()){
+                    String p = s.child("specialties").getValue(String.class);
+                    if (p != null){
+                        specialties.add(p);
+                    }
+                }
+                m.onSpecialtyCallBack(specialties);
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                System.out.println("ERROR: getSpecialty()");
+            }
+        });
+    }
+    public interface SpecialtyCallBack{
+        void onSpecialtyCallBack(ArrayList<String> specialties);
+    }
     public interface MyCallBack{
         void onCallBack(Patient p);
+    }
+
+    public interface MyCallBack2{
+        void onCallBack2(Doctor p);
     }
 
     public static void getUser(FirebaseUser user) {
@@ -79,16 +134,27 @@ public class Database {
                 for (DataSnapshot snap : snapshot.getChildren()) { // Children of the database (Pending, Rejected, Users/Accepted)
                     String parent = snap.getKey();
                     if (snap.child("Patients").child(user.getUid()).exists()) {
-                        determineStatus(parent);
                         snap = snap.child("Patients").child(user.getUid());
+                        determineStatus(parent);
                         currentUserRef = snap.getRef();
-                        currentUser = new Patient(snap.child("firstName").getValue(String.class),
-                                snap.child("lastName").getValue(String.class),
-                                snap.child("username").getValue(String.class),
-                                snap.child("password").getValue(String.class),
-                                snap.child("phoneNumber").getValue(String.class),
-                                snap.child("address").getValue(String.class),
-                                snap.child("healthCardNumber").getValue(Integer.class));
+                        if (snap.child("appointments").hasChildren()) {
+                            currentUser = new Patient(snap.child("firstName").getValue(String.class),
+                                    snap.child("lastName").getValue(String.class),
+                                    snap.child("username").getValue(String.class),
+                                    snap.child("password").getValue(String.class),
+                                    snap.child("phoneNumber").getValue(String.class),
+                                    snap.child("address").getValue(String.class),
+                                    snap.child("healthCardNumber").getValue(Integer.class),
+                                    getTimeSlotsFromDatabase(currentUserRef));
+                        } else {
+                            currentUser = new Patient(snap.child("firstName").getValue(String.class),
+                                    snap.child("lastName").getValue(String.class),
+                                    snap.child("username").getValue(String.class),
+                                    snap.child("password").getValue(String.class),
+                                    snap.child("phoneNumber").getValue(String.class),
+                                    snap.child("address").getValue(String.class),
+                                    snap.child("healthCardNumber").getValue(Integer.class));
+                        }
                         break;
                     } else if (snap.child("Doctors").child(user.getUid()).exists()) {
                         snap = snap.child("Doctors").child(user.getUid());
@@ -262,6 +328,20 @@ public class Database {
 
     }
 
+    public static void timeSlotToDatabase(ArrayList<TimeSlot> timeSlots){
+        if (!(currentUser instanceof Patient))
+            return;
+
+        DatabaseReference temp;
+
+        for (TimeSlot a : timeSlots){
+            temp = currentUserRef.child("appointments").child(a.getDateAndTimeString());
+            temp.child("username").setValue(a.getAppointmentDoctorEmail());
+            temp.child("status").setValue(a.getStatus());
+        }
+
+    }
+
     public static ArrayList<Appointment> getAppointmentsFromDatabase(DatabaseReference c){
         ArrayList<Appointment> dApps = new ArrayList<>();
 
@@ -299,10 +379,52 @@ public class Database {
         return dApps;
     }
 
+    public static ArrayList<TimeSlot> getTimeSlotsFromDatabase(DatabaseReference c){
+        ArrayList<TimeSlot> dApps = new ArrayList<>();
+
+        ValueEventListener listener = new ValueEventListener() {
+
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                String [] date = {"Year", "Month", "Day",  "Space",  "StartHour", "StartMinute", "Space", "Dash", "EndHour", "EndMinute"};
+
+                for (DataSnapshot year : snapshot.getChildren()){
+                    date[0] = year.getKey() + "/";
+                    for (DataSnapshot month : year.getChildren()) {
+                        date[1] = month.getKey() + "/";
+                        for (DataSnapshot dayAndHour: month.getChildren()){
+                            String [] temp = dayAndHour.getKey().split(" ");
+                            date[2] = temp[0];
+                            date[4] = temp[1].split(":")[0] + ":";
+                            date[5] = temp[1].split(":")[1];
+                            date[6] = temp[2].split(":")[0] + ":";
+                            date[7] = temp[2].split(":")[1];
+                            String email = dayAndHour.child("username").getValue(String.class);
+                            int status = dayAndHour.child("status").getValue(Integer.class);
+                            dApps.add(new TimeSlot(email,date[0] + date[1] + date[2] + " " + date[4] + date[5] + " " + "-" + date[6] + date[7], status));
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        };
+
+        c.child("appointments").addValueEventListener(listener);
+
+        return dApps;
+    }
+
 
 
     public static void changeAppointmentStatus(Appointment a, int status){
         currentUserRef.child("appointments").child(a.getStartDateAndTimeString()).child("status").setValue(status);
+    }
+    public static void changeTimeSlotStatus(TimeSlot a, int status){
+        currentUserRef.child("appointments").child(a.getDateAndTimeString()).child("status").setValue(status);
     }
 
     public static void changeAutoApprove(Boolean b){

@@ -10,10 +10,6 @@ import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.group16.hams.R;
-import com.group16.hams.SearchAppointment;
-import com.group16.hams.doctor.ShiftsDoctor;
-
-import entities.*;
 
 public class LoggedInPatient extends AppCompatActivity {
 

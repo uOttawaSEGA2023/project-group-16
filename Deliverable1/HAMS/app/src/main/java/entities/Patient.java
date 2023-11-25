@@ -4,9 +4,13 @@ import android.os.Parcel;
 
 import androidx.annotation.NonNull;
 
+import java.sql.Time;
+import java.util.ArrayList;
+
 public class Patient extends User{
 	
 	private int healthCardNumber;
+	private ArrayList<TimeSlot> timeSlots;
 	
 	public Patient(String firstName, 
 				String lastName, 
@@ -17,11 +21,27 @@ public class Patient extends User{
 				int healthCardNumber) {
 		super(firstName, lastName, username, password, phoneNumber, address);
 		this.healthCardNumber = healthCardNumber;
+
+		timeSlots = new ArrayList<>();
+	}
+
+	public Patient(String firstName,
+				   String lastName,
+				   String username,
+				   String password,
+				   String phoneNumber,
+				   String address,
+				   int healthCardNumber,
+				   ArrayList<TimeSlot> timeSlots) {
+		super(firstName, lastName, username, password, phoneNumber, address);
+		this.healthCardNumber = healthCardNumber;
+		this.timeSlots = timeSlots;
 	}
 
 	protected Patient(Parcel in) {
 		super(in);
 		healthCardNumber = in.readInt();
+		timeSlots = in.readArrayList(null);
 	}
 
 	public int getHealthCardNumber() {
@@ -30,6 +50,14 @@ public class Patient extends User{
 
 	public void setHealthCardNumber(int newHealthCardNumber) {
 		healthCardNumber = newHealthCardNumber;
+	}
+
+	public ArrayList<TimeSlot> getTimeSlots() {
+		return timeSlots;
+	}
+
+	public void addTimeSlot(TimeSlot newTimeSlot) {
+		timeSlots.add(newTimeSlot);
 	}
 
 	@Override
@@ -41,6 +69,7 @@ public class Patient extends User{
 		parcel.writeString(phoneNumber);
 		parcel.writeString(address);
 		parcel.writeInt(healthCardNumber);
+		parcel.writeList(timeSlots);
 	}
 	
 }

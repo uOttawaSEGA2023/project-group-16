@@ -1,6 +1,6 @@
-package com.group16.hams;
+package com.group16.hams.patient;
 
-import androidx.annotation.NonNull;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -10,17 +10,18 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
 
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
+
+import com.group16.hams.Database;
+import com.group16.hams.R;
 
 import java.util.ArrayList;
 import java.util.List;
 
+
 import entities.Doctor;
+import entities.Patient;
+import entities.Specialty;
+
 
 public class SearchAppointment extends AppCompatActivity {
 
@@ -28,9 +29,6 @@ public class SearchAppointment extends AppCompatActivity {
     private List<Specialty> specialtyList;
     private SpecialtyAdapter specialtyAdapter;
     private SearchView searchView;
-
-    FirebaseUser user;
-    DatabaseReference reference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,14 +54,23 @@ public class SearchAppointment extends AppCompatActivity {
         recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        specialtyList = new ArrayList<Specialty>();
+        specialtyList = new ArrayList<>();
 
+        Database.getSpecialties(new Database.SpecialtyCallBack() {
+            @Override
+            public void onSpecialtyCallBack(ArrayList<String> specialties) {
+                if (specialties == null || specialties.isEmpty()) {
+                    System.out.println("Doctor does not have a specialty.");
+                }
+                else {
+                    for (String specialty : specialties){
+                        specialtyList.add(new Specialty(specialty));
+                    }
+                }
+            }
+        });
 
-        specialtyList.add(new Specialty("family medicine"));
-        specialtyList.add(new Specialty("pediatric"));
-        specialtyList.add(new Specialty("surgeon"));
-        
-        specialtyAdapter = new SpecialtyAdapter(specialtyList);
+        specialtyAdapter = new SpecialtyAdapter(this, specialtyList);
         recyclerView.setAdapter(specialtyAdapter);
 
     }

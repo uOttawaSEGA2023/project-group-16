@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SearchAppointment">
+    tools:context=".patient.SearchAppointment">
 
     <androidx.appcompat.widget.SearchView
         android:id="@+id/searchView"
@@ -18,17 +18,6 @@
         app:layout_constraintTop_toTopOf="parent"
         app:queryHint="Enter Specialty"
         app:iconifiedByDefault="false"/>
-
-    <Button
-        android:id="@+id/searchViewReturnButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="588dp"
-        android:onClick="onClickSearchViewReturnButton"
-        android:text="Return"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"

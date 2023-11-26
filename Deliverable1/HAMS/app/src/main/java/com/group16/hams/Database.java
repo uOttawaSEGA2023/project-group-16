@@ -342,7 +342,6 @@ public class Database {
             temp.child("status").setValue(a.getStatus());
             temp.child("specialty").setValue(a.getTimeSlotSpecialty());
         }
-
     }
 
     public static void timeSlotToDatabase(ArrayList<TimeSlot> timeSlots){

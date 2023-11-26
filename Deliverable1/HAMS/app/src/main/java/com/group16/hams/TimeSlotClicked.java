@@ -83,23 +83,23 @@ public class TimeSlotClicked extends AppCompatActivity {
                     Toast.LENGTH_SHORT).show();
         }
         else {
-            curHolder.getTimeSlot().setStatus(TimeSlot.BOOKED_APPOINTMENT);
-            curBookingStatus = findViewById(R.id.currentBookingStatus);
-            curBookingStatus.setText("Current Booking Status: " + curHolder.getAppointmentBooking());
-            Database.changeTimeSlotStatus(curHolder.getTimeSlot(), TimeSlot.BOOKED_APPOINTMENT);
-
-            ((Patient) Database.currentUser).addPatientAppointments(new TimeSlot(curHolder.getAppointmentDoctorName(),
+            ((Patient) Database.currentUser).addPatientAppointments(new TimeSlot(curHolder.getTimeSlot().getAppointmentDoctorEmail(),
                     curHolder.getAppointmentDate() + " " +
                             curHolder.getAppointmentStartTime() + " " +
                             curHolder.getAppointmentEndTime(),
                     curHolder.getTimeSlot().getTimeSlotSpecialty(), 1));
 
-            (new Handler()).postDelayed(new Runnable() {
+            (new Handler()).post(new Runnable() {
                 @Override
                 public void run() {
                     Database.patientAppointmentsToDatabase(((Patient) Database.currentUser).getPatientAppointments());
                 }
-            },1000);
+            });
+
+            curHolder.getTimeSlot().setStatus(TimeSlot.BOOKED_APPOINTMENT);
+            curBookingStatus = findViewById(R.id.currentBookingStatus);
+            curBookingStatus.setText("Current Booking Status: " + curHolder.getAppointmentBooking());
+            Database.changeTimeSlotStatus(curHolder.getTimeSlot(), TimeSlot.BOOKED_APPOINTMENT);
 
             Toast.makeText(TimeSlotClicked.this, "Booked!", Toast.LENGTH_SHORT).show();
             finish();

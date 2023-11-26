@@ -4,10 +4,14 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.group16.hams.doctor.AddShift;
+import com.group16.hams.doctor.RecyclerViewHolderAppointment;
 import com.group16.hams.patient.TimeSlotHolder;
 
 import entities.Doctor;
@@ -72,14 +76,30 @@ public class TimeSlotClicked extends AppCompatActivity {
 
         if (curHolder.getTimeSlot().getStatus() == TimeSlot.BOOKED_APPOINTMENT) {
             Toast t = new Toast(TimeSlotClicked.this);
-            t.makeText(TimeSlotClicked.this, "Appointment had already been booked",
+            t.makeText(TimeSlotClicked.this, "Time slot had already been booked",
                     Toast.LENGTH_SHORT).show();
         }
         else {
+            ((Patient) Database.currentUser).addPatientAppointments(new TimeSlot(curHolder.getTimeSlot().getAppointmentDoctorEmail(),
+                    curHolder.getAppointmentDate() + " " +
+                            curHolder.getAppointmentStartTime() + " " +
+                            curHolder.getAppointmentEndTime(),
+                    curHolder.getTimeSlot().getTimeSlotSpecialty(), 1));
+
+            (new Handler()).post(new Runnable() {
+                @Override
+                public void run() {
+                    Database.patientAppointmentsToDatabase(((Patient) Database.currentUser).getPatientAppointments());
+                }
+            });
+
             curHolder.getTimeSlot().setStatus(TimeSlot.BOOKED_APPOINTMENT);
-            curBookingStatus = findViewById(R.id.currentApprovalStatus);
+            curBookingStatus = findViewById(R.id.currentBookingStatus);
             curBookingStatus.setText("Current Booking Status: " + curHolder.getAppointmentBooking());
             Database.changeTimeSlotStatus(curHolder.getTimeSlot(), TimeSlot.BOOKED_APPOINTMENT);
+
+            Toast.makeText(TimeSlotClicked.this, "Booked!", Toast.LENGTH_SHORT).show();
+            finish();
         }
     }
     public void onClickReturnToTimeSlotsButton(View view) {

@@ -54,11 +54,11 @@ public class SearchAppointment extends AppCompatActivity {
         recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        specialtyList = new ArrayList<>();
 
         Database.getSpecialties(new Database.SpecialtyCallBack() {
             @Override
             public void onSpecialtyCallBack(ArrayList<String> specialties) {
+                specialtyList = new ArrayList<>();
                 if (specialties == null || specialties.isEmpty()) {
                     System.out.println("Doctor does not have a specialty.");
                 }
@@ -67,12 +67,11 @@ public class SearchAppointment extends AppCompatActivity {
                         specialtyList.add(new Specialty(specialty));
                     }
                 }
+
+                specialtyAdapter = new SpecialtyAdapter(SearchAppointment.this, specialtyList);
+                recyclerView.setAdapter(specialtyAdapter);
             }
         });
-
-        specialtyAdapter = new SpecialtyAdapter(this, specialtyList);
-        recyclerView.setAdapter(specialtyAdapter);
-
     }
 
     private void filterList(String text) {

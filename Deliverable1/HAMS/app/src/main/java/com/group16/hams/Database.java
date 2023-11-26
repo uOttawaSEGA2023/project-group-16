@@ -21,6 +21,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import entities.*;
 
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.EventListener;
 
@@ -137,7 +138,7 @@ public class Database {
                         snap = snap.child("Patients").child(user.getUid());
                         determineStatus(parent);
                         currentUserRef = snap.getRef();
-                        if (snap.child("appointments").hasChildren()) {
+                        if (snap.child("timeslots").hasChildren()) {
                             currentUser = new Patient(snap.child("firstName").getValue(String.class),
                                     snap.child("lastName").getValue(String.class),
                                     snap.child("username").getValue(String.class),
@@ -145,7 +146,8 @@ public class Database {
                                     snap.child("phoneNumber").getValue(String.class),
                                     snap.child("address").getValue(String.class),
                                     snap.child("healthCardNumber").getValue(Integer.class),
-                                    getTimeSlotsFromDatabase(currentUserRef));
+                                    getTimeSlotsFromDatabase(currentUserRef),
+                                    getPatientAppointmentsFromDatabase(currentUserRef));
                         } else {
                             currentUser = new Patient(snap.child("firstName").getValue(String.class),
                                     snap.child("lastName").getValue(String.class),
@@ -328,6 +330,20 @@ public class Database {
 
     }
 
+    public static void patientAppointmentsToDatabase(ArrayList<TimeSlot> patientAppointments){
+        if (!(currentUser instanceof Patient))
+            return;
+
+        DatabaseReference temp;
+
+        for (TimeSlot a : patientAppointments){
+            temp = currentUserRef.child("appointments").child(a.getDateAndTimeString());
+            temp.child("username").setValue(a.getAppointmentDoctorEmail());
+            temp.child("status").setValue(a.getStatus());
+            temp.child("specialty").setValue(a.getTimeSlotSpecialty());
+        }
+    }
+
     public static void timeSlotToDatabase(ArrayList<TimeSlot> timeSlots){
         if (!(currentUser instanceof Patient))
             return;
@@ -335,7 +351,7 @@ public class Database {
         DatabaseReference temp;
 
         for (TimeSlot a : timeSlots){
-            temp = currentUserRef.child("appointments").child(a.getDateAndTimeString());
+            temp = currentUserRef.child("timeslots").child(a.getDateAndTimeString());
             temp.child("username").setValue(a.getAppointmentDoctorEmail());
             temp.child("status").setValue(a.getStatus());
             temp.child("specialty").setValue(a.getTimeSlotSpecialty());
@@ -380,6 +396,44 @@ public class Database {
         return dApps;
     }
 
+    public static ArrayList<TimeSlot> getPatientAppointmentsFromDatabase(DatabaseReference c){
+        ArrayList<TimeSlot> patientAppointments = new ArrayList<>();
+
+        DatabaseReference patientAppointmentsRef = currentUserRef.child("appointments");
+        patientAppointmentsRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                String [] date = {"Year", "Month", "Day",  "Space",  "StartHour", "StartMinute", "Space", "EndHour", "EndMinute"};
+
+                for (DataSnapshot year : dataSnapshot.getChildren()){
+                    date[0] = year.getKey() + "/";
+                    for (DataSnapshot month : year.getChildren()) {
+                        date[1] = month.getKey() + "/";
+                        for (DataSnapshot dayAndHour: month.getChildren()){
+                            String [] temp = dayAndHour.getKey().split(" ");
+                            date[2] = temp[0];
+                            date[4] = temp[1].split(":")[0] + ":";
+                            date[5] = temp[1].split(":")[1];
+                            date[7] = temp[2].split(":")[0] + ":";
+                            date[8] = temp[2].split(":")[1];
+                            String email = dayAndHour.child("username").getValue(String.class);
+                            int status = dayAndHour.child("status").getValue(Integer.class);
+                            String specialty = dayAndHour.child("specialty").getValue(String.class);
+                            patientAppointments.add(new TimeSlot(email,date[0] + date[1] + date[2] + " " + date[4] + date[5] + " " + date[7] + date[8], specialty, status));
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                System.out.println("The read failed: " + databaseError.getCode());
+            }
+        });
+
+        return patientAppointments;
+    }
+
     public static ArrayList<TimeSlot> getTimeSlotsFromDatabase(DatabaseReference c){
         ArrayList<TimeSlot> dApps = new ArrayList<>();
 
@@ -415,7 +469,7 @@ public class Database {
             }
         };
 
-        c.child("appointments").addValueEventListener(listener);
+        c.child("timeslots").addValueEventListener(listener);
 
         return dApps;
     }
@@ -426,7 +480,7 @@ public class Database {
         currentUserRef.child("appointments").child(a.getStartDateAndTimeString()).child("status").setValue(status);
     }
     public static void changeTimeSlotStatus(TimeSlot a, int status){
-        currentUserRef.child("appointments").child(a.getDateAndTimeString()).child("status").setValue(status);
+        currentUserRef.child("timeslots").child(a.getDateAndTimeString()).child("status").setValue(status);
     }
 
     public static void changeAutoApprove(Boolean b){

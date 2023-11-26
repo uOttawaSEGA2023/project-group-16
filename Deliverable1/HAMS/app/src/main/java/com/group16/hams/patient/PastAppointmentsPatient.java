@@ -37,8 +37,32 @@ public class PastAppointmentsPatient extends AppCompatActivity implements Recycl
         pastAppointmentsRecycler.setLayoutManager(new LinearLayoutManager(this));
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        timeSlotHolders.clear();
+        setUpPastTimeSlotHolders();
+        refresh();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        refresh();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        refresh();
+    }
+
+    public void refresh(){
+        timeSlotAdapter.notifyDataSetChanged();
+    }
+
     public void setUpPastTimeSlotHolders() {
-        ArrayList<TimeSlot> allTimeSlots = ((Patient) Database.currentUser).getTimeSlots();
+        ArrayList<TimeSlot> allTimeSlots = ((Patient) Database.currentUser).getPatientAppointments();
         TimeSlot curTimeSlot;
 
         String[] DateAndTime;
@@ -47,7 +71,7 @@ public class PastAppointmentsPatient extends AppCompatActivity implements Recycl
         for (int i = 0; i < allTimeSlots.size(); i++) {
             curTimeSlot = allTimeSlots.get(i);
 
-            if ((curTimeSlot.getStatus() == TimeSlot.BOOKED_APPOINTMENT) && (curTimeSlot.isUpcoming())) {
+            if ((curTimeSlot.getStatus() == TimeSlot.BOOKED_APPOINTMENT) && !(curTimeSlot.isUpcoming())) {
                 DateAndTime = curTimeSlot.getDateAndTimeString().split(" ");
                 doctorName = curTimeSlot.getAppointmentDoctor().getFirstName() + " " +
                         curTimeSlot.getAppointmentDoctor().getLastName();

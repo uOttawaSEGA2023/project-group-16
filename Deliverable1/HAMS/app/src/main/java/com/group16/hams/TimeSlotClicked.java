@@ -11,10 +11,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.group16.hams.doctor.AddShift;
-import com.group16.hams.doctor.RecyclerViewHolderAppointment;
+import com.group16.hams.doctor.RecyclerViewHolderAppointmentDoctor;
 import com.group16.hams.patient.TimeSlotHolder;
 
 import entities.Doctor;
+import entities.Patient;
 import entities.TimeSlot;
 
 public class TimeSlotClicked extends AppCompatActivity {

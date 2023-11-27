@@ -26,7 +26,9 @@ import java.util.regex.Pattern;
 
 import entities.Appointment;
 import entities.Doctor;
+import entities.Patient;
 import entities.Shift;
+import entities.TimeSlot;
 
 public class AddShift extends AppCompatActivity {
 
@@ -103,6 +105,34 @@ public class AddShift extends AppCompatActivity {
                     Database.shiftToDatabase(((Doctor) Database.currentUser).getShifts());
                 }
             },1000);
+
+            // Add the timeslot to the patient's DB
+            String doctorEmail = ((Doctor) Database.currentUser).getUsername();
+            String doctorSpecialty = ((Doctor) Database.currentUser).getSpecialties();
+
+            String finalAddShiftDateText = addShiftDateText;
+            Database.getAllPatients(new Database.AllPatientsCallBack() {
+                @Override
+                public void onAllPatientsCallBack(ArrayList<Patient> patients, ArrayList<String> patientIDs) {
+                    if (patients == null || patients.isEmpty()) {
+                        System.out.println("Database does not have any patients.");
+                    }
+                    else {
+                        int i = 0;
+                        for (Patient patient : patients) {
+                            patient.addTimeSlot(new TimeSlot(doctorEmail, finalAddShiftDateText + " " + addShiftStartTimeText + " " + addShiftEndTimeText, doctorSpecialty));
+                            String thisPatientID = patientIDs.get(i);
+                            i++;
+                            (new Handler()).postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Database.timeSlotToDatabase(patient.getTimeSlots(), thisPatientID);
+                                }
+                            }, 1000);
+                        }
+                    }
+                }
+            });
 
             Toast.makeText(AddShift.this, "Success!", Toast.LENGTH_SHORT).show();
             finish();

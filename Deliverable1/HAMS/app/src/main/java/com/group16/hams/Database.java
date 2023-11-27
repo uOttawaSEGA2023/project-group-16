@@ -33,6 +33,7 @@ public class Database {
     static DatabaseReference pendingRef = myRef.child("Pending");
     static DatabaseReference rejectedRef = myRef.child("Rejected");
     static DatabaseReference userRef = myRef.child("Users");
+    static DatabaseReference patientsRef = userRef.child("Patients");
 
     public static User currentUser;
     public static DatabaseReference currentUserRef;
@@ -126,6 +127,37 @@ public class Database {
 
     public interface MyCallBack2{
         void onCallBack2(Doctor p);
+    }
+
+    public static void getAllPatients(AllPatientsCallBack m) {
+        DatabaseReference patientsRef = userRef.child("Patients");
+        patientsRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                ArrayList<Patient> patients = new ArrayList<>();
+                ArrayList<String> patientsIDs = new ArrayList<>();
+                for (DataSnapshot s : snapshot.getChildren()){
+                    patients.add(new Patient(s.child("firstName").getValue(String.class),
+                            s.child("lastName").getValue(String.class),
+                            s.child("username").getValue(String.class),
+                            s.child("password").getValue(String.class),
+                            s.child("phoneNumber").getValue(String.class),
+                            s.child("address").getValue(String.class),
+                            s.child("healthCardNumber").getValue(Integer.class))
+                    );
+                    patientsIDs.add(s.getKey());
+                }
+                m.onAllPatientsCallBack(patients, patientsIDs);
+                Log.d("patientIDs", "All patient IDs: " + patientsIDs);
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                System.out.println("ERROR: getAllPatients()");
+            }
+        });
+    }
+    public interface AllPatientsCallBack{
+        void onAllPatientsCallBack(ArrayList<Patient> patients, ArrayList<String> patientIDs);
     }
 
     public static void getUser(FirebaseUser user) {
@@ -344,7 +376,22 @@ public class Database {
         }
     }
 
-    public static void timeSlotToDatabase(ArrayList<TimeSlot> timeSlots){
+    public static void timeSlotToDatabase(ArrayList<TimeSlot> timeSlots, String patientID){
+        if (!(currentUser instanceof Doctor))
+            return;
+
+        DatabaseReference thisPatient = patientsRef.child(patientID);
+        DatabaseReference temp;
+
+        for (TimeSlot a : timeSlots){
+            temp = thisPatient.child("timeslots").child(a.getDateAndTimeString());
+            temp.child("username").setValue(a.getAppointmentDoctorEmail());
+            temp.child("status").setValue(a.getStatus());
+            temp.child("specialty").setValue(a.getTimeSlotSpecialty());
+        }
+    }
+
+    public static void timeSlotToDatabaseTest(ArrayList<TimeSlot> timeSlots){
         if (!(currentUser instanceof Patient))
             return;
 
@@ -356,7 +403,6 @@ public class Database {
             temp.child("status").setValue(a.getStatus());
             temp.child("specialty").setValue(a.getTimeSlotSpecialty());
         }
-
     }
 
     public static ArrayList<Appointment> getAppointmentsFromDatabase(DatabaseReference c){

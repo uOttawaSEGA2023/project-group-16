@@ -25,6 +25,7 @@ public class TimeSlot implements Parcelable {
     String DateAndTimeString;
     String specialty;
     Date dateAndTime;
+    float rating;
 
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/ddHH:mmHH:mm");
 
@@ -34,6 +35,7 @@ public class TimeSlot implements Parcelable {
         this.DateAndTimeString = DateAndTimeString;
         this.specialty = specialty;
         status = UNBOOKED_APPOINTMENT;
+        rating = 0;
 
         Database.getDoctor(appointmentDoctorEmail, new Database.MyCallBack2() {
             @Override
@@ -60,7 +62,7 @@ public class TimeSlot implements Parcelable {
         }
     }
 
-    public TimeSlot(String appointmentDoctorEmail, String DateAndTimeString, String specialty, int status) {
+    public TimeSlot(String appointmentDoctorEmail, String DateAndTimeString, String specialty, int status, float rating) {
         this.appointmentDoctorEmail = appointmentDoctorEmail;
         this.DateAndTimeString = DateAndTimeString;
         this.specialty = specialty;
@@ -186,5 +188,13 @@ public class TimeSlot implements Parcelable {
         else {
             return true;
         }
+    }
+
+    public float getRating() {
+        return rating;
+    }
+
+    public void setRating(float rating) {
+        this.rating = rating;
     }
 }

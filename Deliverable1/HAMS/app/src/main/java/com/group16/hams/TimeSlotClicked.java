@@ -85,7 +85,7 @@ public class TimeSlotClicked extends AppCompatActivity {
                     curHolder.getAppointmentDate() + " " +
                             curHolder.getAppointmentStartTime() + " " +
                             curHolder.getAppointmentEndTime(),
-                    curHolder.getTimeSlot().getTimeSlotSpecialty(), 1));
+                    curHolder.getTimeSlot().getTimeSlotSpecialty(), 1, 0));
 
             (new Handler()).post(new Runnable() {
                 @Override

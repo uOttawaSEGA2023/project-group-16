@@ -419,7 +419,7 @@ public class Database {
                             String email = dayAndHour.child("username").getValue(String.class);
                             int status = dayAndHour.child("status").getValue(Integer.class);
                             String specialty = dayAndHour.child("specialty").getValue(String.class);
-                            patientAppointments.add(new TimeSlot(email,date[0] + date[1] + date[2] + " " + date[4] + date[5] + " " + date[7] + date[8], specialty, status));
+                            patientAppointments.add(new TimeSlot(email,date[0] + date[1] + date[2] + " " + date[4] + date[5] + " " + date[7] + date[8], specialty, status, 0));
                         }
                     }
                 }
@@ -457,7 +457,7 @@ public class Database {
                             String email = dayAndHour.child("username").getValue(String.class);
                             int status = dayAndHour.child("status").getValue(Integer.class);
                             String specialty = dayAndHour.child("specialty").getValue(String.class);
-                            dApps.add(new TimeSlot(email,date[0] + date[1] + date[2] + " " + date[4] + date[5] + " " + date[7] + date[8], specialty, status));
+                            dApps.add(new TimeSlot(email,date[0] + date[1] + date[2] + " " + date[4] + date[5] + " " + date[7] + date[8], specialty, status, 0));
                         }
                     }
                 }

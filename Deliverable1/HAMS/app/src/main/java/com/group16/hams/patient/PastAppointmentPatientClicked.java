@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.group16.hams.Database;
@@ -21,6 +22,8 @@ public class PastAppointmentPatientClicked extends AppCompatActivity {
 
     Doctor curDoctor;
 
+    RatingBar ratingBar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,6 +38,7 @@ public class PastAppointmentPatientClicked extends AppCompatActivity {
         doctorName = findViewById(R.id.pastApptPatientDoctorName);
         doctorUsername = findViewById(R.id.pastApptPatientDoctorEmail);
         doctorPhoneNumber = findViewById(R.id.pastApptPatientDoctorPhoneNumber);
+        ratingBar = findViewById(R.id.doctorRatingBar);
 
         appointmentDate.setText("Appointment Date: " + curHolder.getAppointmentDate());
         appointmentStartTime.setText("Appointment Start Time: " + curHolder.getAppointmentStartTime());
@@ -57,6 +61,15 @@ public class PastAppointmentPatientClicked extends AppCompatActivity {
                     doctorUsername.setText("Doctor Email: " + curDoctor.getUsername());
                     doctorPhoneNumber.setText("Doctor Phone Number: " + curDoctor.getPhoneNumber());
                 }
+            }
+        });
+
+        ratingBar.setRating(curHolder.getTimeSlot().getRating());
+        ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
+            @Override
+            public void onRatingChanged(RatingBar ratingBar, float v, boolean b) {
+                curHolder.getTimeSlot().setRating(v);
+
             }
         });
     }

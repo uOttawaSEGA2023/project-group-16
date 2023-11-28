@@ -110,7 +110,7 @@ public class AddShift extends AppCompatActivity {
             String doctorEmail = ((Doctor) Database.currentUser).getUsername();
             String doctorSpecialty = ((Doctor) Database.currentUser).getSpecialties();
 
-            String finalAddShiftDateText = addShiftDateText;
+            String finalAddShiftDateText = changeDateFormat(addShiftDateText);
             Database.getAllPatients(new Database.AllPatientsCallBack() {
                 @Override
                 public void onAllPatientsCallBack(ArrayList<Patient> patients, ArrayList<String> patientIDs) {
@@ -176,6 +176,15 @@ public class AddShift extends AppCompatActivity {
         catch (Exception e) {
             return false;
         }
+    }
+
+    public String changeDateFormat(String addShiftDateText) {
+        String[] addShiftDateTextSplit = addShiftDateText.split("/");
+        String year = addShiftDateTextSplit[2];
+        String month = addShiftDateTextSplit[1];
+        String day = addShiftDateTextSplit[0];
+
+        return year + "/" + month + "/" + day;
     }
 
     public boolean validateTimeFormat(String time){

@@ -107,7 +107,7 @@ public class SpecialtyClicked extends AppCompatActivity implements RecyclerViewI
         (new Handler()).postDelayed(new Runnable() {
             @Override
             public void run() {
-                Database.timeSlotToDatabase(((Patient) Database.currentUser).getTimeSlots());
+                Database.timeSlotToDatabaseTest(((Patient) Database.currentUser).getTimeSlots());
             }
         },1000);
 

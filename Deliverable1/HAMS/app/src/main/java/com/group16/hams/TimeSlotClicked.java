@@ -15,6 +15,8 @@ import com.group16.hams.doctor.AddShift;
 import com.group16.hams.doctor.RecyclerViewHolderAppointment;
 import com.group16.hams.patient.TimeSlotHolder;
 
+import java.util.ArrayList;
+
 import entities.Appointment;
 import entities.Doctor;
 import entities.Patient;
@@ -99,7 +101,15 @@ public class TimeSlotClicked extends AppCompatActivity {
             curHolder.getTimeSlot().setStatus(TimeSlot.BOOKED_APPOINTMENT);
             curBookingStatus = findViewById(R.id.currentBookingStatus);
             curBookingStatus.setText("Current Booking Status: " + curHolder.getAppointmentBooking());
-            Database.changeTimeSlotStatus(curHolder.getTimeSlot(), TimeSlot.BOOKED_APPOINTMENT);
+            Database.getAllPatients(new Database.AllPatientsCallBack() {
+                @Override
+                public void onAllPatientsCallBack(ArrayList<Patient> patients, ArrayList<String> patientIDs) {
+                    for (String patientID : patientIDs) {
+                        Database.changeTimeSlotStatus(curHolder.getTimeSlot(),
+                                TimeSlot.BOOKED_APPOINTMENT, patientID);
+                    }
+                }
+            });
 
             Toast.makeText(TimeSlotClicked.this, "Booked!", Toast.LENGTH_SHORT).show();
             finish();

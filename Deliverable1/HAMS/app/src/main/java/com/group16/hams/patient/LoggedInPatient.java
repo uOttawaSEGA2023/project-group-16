@@ -41,4 +41,9 @@ public class LoggedInPatient extends AppCompatActivity {
         Intent intent = new Intent(this, PastAppointmentsPatient.class);
         startActivity(intent);
     }
+
+    public void onClickViewUpcomingAppointments(View view) {
+        Intent intent = new Intent(this, UpcomingAppointmentsPatient.class);
+        startActivity(intent);
+    }
 }

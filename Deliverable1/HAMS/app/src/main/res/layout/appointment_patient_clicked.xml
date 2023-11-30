@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".patient.PastAppointmentPatientClicked">
+    tools:context=".patient.AppointmentClickedPatient">
 
     <Button
         android:id="@+id/clkdPastApptPtntRtrnButton"
@@ -18,7 +18,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/pastApptPatientDate"
+        android:id="@+id/ApptPatientDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -29,7 +29,7 @@
         app:layout_constraintTop_toBottomOf="@+id/clkdPastApptPtntRtrnButton" />
 
     <TextView
-        android:id="@+id/pastApptPatientTime"
+        android:id="@+id/ApptPatientTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -37,11 +37,11 @@
         android:text="TextView"
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/pastApptPatientDate"
+        app:layout_constraintTop_toBottomOf="@+id/ApptPatientDate"
         tools:text="Appointment Time: " />
 
     <TextView
-        android:id="@+id/pastApptPatientEndTime"
+        android:id="@+id/ApptPatientEndTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -49,10 +49,10 @@
         android:text="Appointment End Time: "
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/pastApptPatientTime" />
+        app:layout_constraintTop_toBottomOf="@+id/ApptPatientTime" />
 
     <TextView
-        android:id="@+id/pastApptPatientDoctorName"
+        android:id="@+id/ApptPatientDoctorName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -60,10 +60,10 @@
         android:text="Doctor Name: "
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/pastApptPatientEndTime" />
+        app:layout_constraintTop_toBottomOf="@+id/ApptPatientEndTime" />
 
     <TextView
-        android:id="@+id/pastApptPatientDoctorEmail"
+        android:id="@+id/ApptPatientDoctorEmail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -71,10 +71,10 @@
         android:text="Doctor Email: "
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/pastApptPatientDoctorName" />
+        app:layout_constraintTop_toBottomOf="@+id/ApptPatientDoctorName" />
 
     <TextView
-        android:id="@+id/pastApptPatientDoctorPhoneNumber"
+        android:id="@+id/ApptPatientDoctorPhoneNumber"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -82,7 +82,7 @@
         android:text="Doctor Phone Number: "
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/pastApptPatientDoctorEmail" />
+        app:layout_constraintTop_toBottomOf="@+id/ApptPatientDoctorEmail" />
 
     <RatingBar
         android:id="@+id/doctorRatingBar"

@@ -12,11 +12,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.HAMS"
         tools:targetApi="31">
-        <activity
-            android:name=".patient.PastAppointmentPatientClicked"
-            android:exported="false" />
+
         <activity
             android:name=".patient.PastAppointmentsPatient"
+            android:exported="false" />
+        <activity
+            android:name=".patient.UpcomingAppointmentsPatient"
             android:exported="false" />
         <activity
             android:name=".TimeSlotClicked"
@@ -28,7 +29,7 @@
             android:name=".SpecialtyClicked"
             android:exported="false" />
         <activity
-            android:name=".PatientAppointmentClicked"
+            android:name=".patient.AppointmentClickedPatient"
             android:exported="false" />
         <activity
             android:name=".patient.SpecialtyAdapter"

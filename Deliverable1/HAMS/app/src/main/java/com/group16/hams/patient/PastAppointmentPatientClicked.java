@@ -63,11 +63,12 @@ public class PastAppointmentPatientClicked extends AppCompatActivity {
                 }
             }
         });
+        ratingBar.setRating(curHolder.getRating());
 
-        ratingBar.setRating(curHolder.getTimeSlot().getRating());
         ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
             @Override
             public void onRatingChanged(RatingBar ratingBar, float v, boolean b) {
+                Database.changeTimeSlotRating(curHolder.getTimeSlot(), v);
                 curHolder.getTimeSlot().setRating(v);
 
             }

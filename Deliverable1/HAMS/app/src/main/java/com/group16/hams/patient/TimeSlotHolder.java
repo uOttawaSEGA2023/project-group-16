@@ -78,6 +78,10 @@ public class TimeSlotHolder implements Parcelable {
         return timeSlot;
     }
 
+    public float getRating(){
+        return this.timeSlot.getRating();
+    }
+
     @Override
     public int describeContents() {
         return 0;

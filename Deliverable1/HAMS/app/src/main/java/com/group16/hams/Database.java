@@ -44,6 +44,7 @@ public class Database {
     }
     public static UserStatus currentUserStatus;
 
+    // Getting User Types
     public static void getPatient(String email, MyCallBack m) {
         DatabaseReference patientRef = userRef.child("Patients");
         patientRef.addValueEventListener(new ValueEventListener() {
@@ -69,6 +70,9 @@ public class Database {
                 System.out.println("ERROR: getPatient()");
             }
         });
+    }
+    public interface MyCallBack{
+        void onCallBack(Patient p);
     }
     public static void getDoctor(String email, MyCallBack2 m) {
         DatabaseReference doctorRef = userRef.child("Doctors");
@@ -97,34 +101,6 @@ public class Database {
             }
         });
     }
-
-    public static void getSpecialties(SpecialtyCallBack m) {
-        DatabaseReference doctorRef = userRef.child("Doctors");
-        doctorRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                ArrayList<String> specialties = new ArrayList<>();
-                for (DataSnapshot s : snapshot.getChildren()){
-                    String p = s.child("specialties").getValue(String.class);
-                    if (p != null){
-                        specialties.add(p);
-                    }
-                }
-                m.onSpecialtyCallBack(specialties);
-            }
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                System.out.println("ERROR: getSpecialty()");
-            }
-        });
-    }
-    public interface SpecialtyCallBack{
-        void onSpecialtyCallBack(ArrayList<String> specialties);
-    }
-    public interface MyCallBack{
-        void onCallBack(Patient p);
-    }
-
     public interface MyCallBack2{
         void onCallBack2(Doctor p);
     }
@@ -235,7 +211,6 @@ public class Database {
         myRef.addValueEventListener(listener);
 
     }
-
     public static ArrayList<User> getAllUsers(UserStatus status) {
         ArrayList<User> totalUsers = new ArrayList<User>();
         ValueEventListener listener = new ValueEventListener() {
@@ -284,6 +259,7 @@ public class Database {
         return totalUsers;
     }
 
+    // Register Methods
     public static void registerUser(FirebaseUser user, User u) {
         if (u instanceof Doctor) {
             pendingRef.child("Doctors").child(user.getUid()).setValue(u);
@@ -291,7 +267,6 @@ public class Database {
             pendingRef.child("Patients").child(user.getUid()).setValue(u);
         }
     }
-
     public static void changeStatus(FirebaseUser user, User u, UserStatus newStatus) {
         removeUserFromCurrentStatus(user);
         DatabaseReference newStatusRef = getStatusReference(newStatus);
@@ -303,7 +278,6 @@ public class Database {
             newStatusRef.child("Patients").child(user.getUid()).setValue(u);
         }
     }
-
     private static void determineStatus(String status) {
         if (status.equals("Pending"))
             currentUserStatus = UserStatus.PENDING;
@@ -312,7 +286,6 @@ public class Database {
         else if (status.equals("Users"))
             currentUserStatus = UserStatus.ACCEPTED;
     }
-
     private static DatabaseReference getStatusReference(UserStatus status) {
         switch (status) {
             case PENDING:
@@ -325,7 +298,6 @@ public class Database {
                 throw new IllegalArgumentException("Unknown status: " + status);
         }
     }
-
     private static void removeUserFromCurrentStatus(FirebaseUser user) {
         DatabaseReference ref = getStatusReference(currentUserStatus);
         ref.addValueEventListener(new ValueEventListener() {
@@ -348,6 +320,7 @@ public class Database {
 
     }
 
+    // Appointment Methods
     public static void appointmentToDatabase(ArrayList<Appointment> appointments){
         if (!(currentUser instanceof Doctor))
             return;
@@ -358,22 +331,12 @@ public class Database {
             temp = currentUserRef.child("appointments").child(a.getStartDateAndTimeString());
             temp.child("username").setValue(a.getAppointmentPatientEmail());
             temp.child("status").setValue(a.getStatus());
+            a.checkIfPast();
         }
 
     }
-
-    public static void patientAppointmentsToDatabase(ArrayList<TimeSlot> patientAppointments){
-        if (!(currentUser instanceof Patient))
-            return;
-
-        DatabaseReference temp;
-
-        for (TimeSlot a : patientAppointments){
-            temp = currentUserRef.child("appointments").child(a.getDateAndTimeString());
-            temp.child("username").setValue(a.getAppointmentDoctorEmail());
-            temp.child("status").setValue(a.getStatus());
-            temp.child("specialty").setValue(a.getTimeSlotSpecialty());
-        }
+    public static void changeAppointmentStatus(Appointment a, int status){
+        currentUserRef.child("appointments").child(a.getStartDateAndTimeString()).child("status").setValue(status);
     }
 
     public static void timeSlotToDatabase(ArrayList<TimeSlot> timeSlots, String patientID){
@@ -407,9 +370,7 @@ public class Database {
 
     public static ArrayList<Appointment> getAppointmentsFromDatabase(DatabaseReference c){
         ArrayList<Appointment> dApps = new ArrayList<>();
-
         ValueEventListener listener = new ValueEventListener() {
-
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 String [] date = {"Year", "Month", "Day",  "Space",  "Hour","Minute"};
@@ -441,7 +402,68 @@ public class Database {
 
         return dApps;
     }
+    public static void changeAutoApprove(Boolean b){
+        if (!(currentUser instanceof Doctor))
+            return;
 
+        currentUserRef.child("autoApprove").setValue(b);
+        ((Doctor) currentUser).setAutoApprove(b);
+        System.out.println(currentUser);
+        System.out.println(((Doctor) currentUser).getAutoApprove());
+    }
+
+    // TimeSlot Methods
+    public static void getSpecialties(SpecialtyCallBack m) {
+        DatabaseReference doctorRef = userRef.child("Doctors");
+        doctorRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                ArrayList<String> specialties = new ArrayList<>();
+                for (DataSnapshot s : snapshot.getChildren()){
+                    String p = s.child("specialties").getValue(String.class);
+                    if (p != null){
+                        specialties.add(p);
+                    }
+                }
+                m.onSpecialtyCallBack(specialties);
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                System.out.println("ERROR: getSpecialty()");
+            }
+        });
+    }
+    public interface SpecialtyCallBack{
+        void onSpecialtyCallBack(ArrayList<String> specialties);
+    }
+    public static void patientAppointmentsToDatabase(ArrayList<TimeSlot> patientAppointments){
+        if (!(currentUser instanceof Patient))
+            return;
+
+        DatabaseReference temp;
+
+        for (TimeSlot a : patientAppointments){
+            temp = currentUserRef.child("appointments").child(a.getDateAndTimeString());
+            temp.child("username").setValue(a.getAppointmentDoctorEmail());
+            temp.child("status").setValue(a.getStatus());
+            temp.child("specialty").setValue(a.getTimeSlotSpecialty());
+        }
+    }
+    public static void timeSlotToDatabase(ArrayList<TimeSlot> timeSlots){
+        if (!(currentUser instanceof Patient))
+            return;
+
+        DatabaseReference temp;
+
+        for (TimeSlot a : timeSlots){
+            temp = currentUserRef.child("timeslots").child(a.getDateAndTimeString());
+            temp.child("username").setValue(a.getAppointmentDoctorEmail());
+            temp.child("status").setValue(a.getStatus());
+            temp.child("specialty").setValue(a.getTimeSlotSpecialty());
+            temp.child("rating").setValue(a.getRating());
+        }
+
+    }
     public static ArrayList<TimeSlot> getPatientAppointmentsFromDatabase(DatabaseReference c){
         ArrayList<TimeSlot> patientAppointments = new ArrayList<>();
 
@@ -479,15 +501,14 @@ public class Database {
 
         return patientAppointments;
     }
-
     public static ArrayList<TimeSlot> getTimeSlotsFromDatabase(DatabaseReference c){
         ArrayList<TimeSlot> dApps = new ArrayList<>();
 
         ValueEventListener listener = new ValueEventListener() {
-
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 String [] date = {"Year", "Month", "Day",  "Space",  "StartHour", "StartMinute", "Space", "EndHour", "EndMinute"};
+                float rating = 0;
 
                 for (DataSnapshot year : snapshot.getChildren()){
                     date[0] = year.getKey() + "/";
@@ -500,10 +521,13 @@ public class Database {
                             date[5] = temp[1].split(":")[1];
                             date[7] = temp[2].split(":")[0] + ":";
                             date[8] = temp[2].split(":")[1];
+                            if (dayAndHour.child("rating").exists()){
+                                rating = dayAndHour.child("rating").getValue(Float.class);
+                            }
                             String email = dayAndHour.child("username").getValue(String.class);
                             int status = dayAndHour.child("status").getValue(Integer.class);
                             String specialty = dayAndHour.child("specialty").getValue(String.class);
-                            dApps.add(new TimeSlot(email,date[0] + date[1] + date[2] + " " + date[4] + date[5] + " " + date[7] + date[8], specialty, status, 0));
+                            dApps.add(new TimeSlot(email,date[0] + date[1] + date[2] + " " + date[4] + date[5] + " " + date[7] + date[8], specialty, status, rating));
                         }
                     }
                 }
@@ -519,26 +543,14 @@ public class Database {
 
         return dApps;
     }
-
-
-
-    public static void changeAppointmentStatus(Appointment a, int status){
-        currentUserRef.child("appointments").child(a.getStartDateAndTimeString()).child("status").setValue(status);
-    }
     public static void changeTimeSlotStatus(TimeSlot a, int status){
         currentUserRef.child("timeslots").child(a.getDateAndTimeString()).child("status").setValue(status);
     }
-
-    public static void changeAutoApprove(Boolean b){
-        if (!(currentUser instanceof Doctor))
-            return;
-
-        currentUserRef.child("autoApprove").setValue(b);
-        ((Doctor) currentUser).setAutoApprove(b);
-        System.out.println(currentUser);
-        System.out.println(((Doctor) currentUser).getAutoApprove());
+    public static void changeTimeSlotRating(TimeSlot t, float v){
+        currentUserRef.child("timeslots").child(t.getDateAndTimeString()).child("rating").setValue(v);
     }
 
+    // Shift Methods
     public static void shiftToDatabase(ArrayList<Shift> shifts){
         if (!(currentUser instanceof Doctor))
             return;
@@ -557,7 +569,6 @@ public class Database {
         }
 
     }
-
     public static ArrayList<Shift> getShiftsFromDatabase(DatabaseReference c){
         ArrayList<Shift> shifts = new ArrayList<>();
 
@@ -592,7 +603,6 @@ public class Database {
 
         return shifts;
     }
-
     public static void deleteShift(Shift shift) {
         if (!(currentUser instanceof Doctor)) {
             System.out.println("Current user is not a Doctor.");
@@ -624,4 +634,5 @@ public class Database {
             }
         });
     }
+
 }

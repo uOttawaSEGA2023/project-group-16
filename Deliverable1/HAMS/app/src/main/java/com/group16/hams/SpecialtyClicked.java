@@ -7,22 +7,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.provider.ContactsContract;
-import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 
-import com.group16.hams.doctor.RecyclerViewAdapterAppointment;
-import com.group16.hams.doctor.RecyclerViewHolderAppointment;
-import com.group16.hams.patient.SpecialtyHolder;
 import com.group16.hams.patient.TimeSlotAdapter;
 import com.group16.hams.patient.TimeSlotHolder;
 
-import java.sql.Time;
 import java.util.ArrayList;
 
-import entities.Appointment;
-import entities.Doctor;
 import entities.Patient;
 import entities.TimeSlot;
 

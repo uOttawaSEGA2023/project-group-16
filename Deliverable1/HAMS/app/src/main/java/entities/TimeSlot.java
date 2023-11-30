@@ -24,7 +24,8 @@ public class TimeSlot implements Parcelable {
     //The space is important
     String DateAndTimeString;
     String specialty;
-    Date DateAndTime;
+    Date dateAndTime;
+    float rating;
 
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/ddHH:mmHH:mm");
 
@@ -34,6 +35,7 @@ public class TimeSlot implements Parcelable {
         this.DateAndTimeString = DateAndTimeString;
         this.specialty = specialty;
         status = UNBOOKED_APPOINTMENT;
+        rating = 0;
 
         Database.getDoctor(appointmentDoctorEmail, new Database.MyCallBack2() {
             @Override
@@ -51,7 +53,7 @@ public class TimeSlot implements Parcelable {
         });
 
         try {
-            DateAndTime = sdf.parse(DateAndTimeString);
+            dateAndTime = sdf.parse(DateAndTimeString);
         }
 
         catch (ParseException e) {
@@ -60,11 +62,12 @@ public class TimeSlot implements Parcelable {
         }
     }
 
-    public TimeSlot(String appointmentDoctorEmail, String DateAndTimeString, String specialty, int status) {
+    public TimeSlot(String appointmentDoctorEmail, String DateAndTimeString, String specialty, int status, float rating) {
         this.appointmentDoctorEmail = appointmentDoctorEmail;
         this.DateAndTimeString = DateAndTimeString;
         this.specialty = specialty;
         this.status = status;
+        this.rating = rating;
 
         Database.getDoctor(appointmentDoctorEmail, new Database.MyCallBack2() {
             @Override
@@ -82,7 +85,7 @@ public class TimeSlot implements Parcelable {
         });
 
         try {
-            DateAndTime = sdf.parse(DateAndTimeString);
+            dateAndTime = sdf.parse(DateAndTimeString);
         }
 
         catch (ParseException e) {
@@ -96,6 +99,7 @@ public class TimeSlot implements Parcelable {
         DateAndTimeString = in.readString();
         specialty = in.readString();
         status = in.readInt();
+        rating = in.readFloat();
 
         Database.getDoctor(appointmentDoctorEmail, new Database.MyCallBack2() {
             @Override
@@ -113,7 +117,7 @@ public class TimeSlot implements Parcelable {
         });
 
         try {
-            DateAndTime = sdf.parse(DateAndTimeString);
+            dateAndTime = sdf.parse(DateAndTimeString);
         }
 
         catch (ParseException e) {
@@ -145,6 +149,7 @@ public class TimeSlot implements Parcelable {
         parcel.writeString(DateAndTimeString);
         parcel.writeString(specialty);
         parcel.writeInt(status);
+        parcel.writeFloat(rating);
     }
 
     public Doctor getAppointmentDoctor() {
@@ -154,7 +159,7 @@ public class TimeSlot implements Parcelable {
         return appointmentDoctorEmail;
     }
     public Date getDateAndTime() {
-        return DateAndTime;
+        return dateAndTime;
     }
     public String getDateAndTimeString() {
         return DateAndTimeString;
@@ -174,5 +179,25 @@ public class TimeSlot implements Parcelable {
         else {
             this.status = status;
         }
+    }
+
+    public boolean isUpcoming() {
+        Date currentTime = new Date();
+
+        if (currentTime.after(dateAndTime)) {
+            return false;
+        }
+
+        else {
+            return true;
+        }
+    }
+
+    public float getRating() {
+        return rating;
+    }
+
+    public void setRating(float rating) {
+        this.rating = rating;
     }
 }

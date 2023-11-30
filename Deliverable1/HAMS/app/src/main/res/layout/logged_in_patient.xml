@@ -58,6 +58,28 @@
                 android:textSize="18sp"
                 app:cornerRadius="20dp" />
 
+            <Button
+                android:id="@+id/pastAppointmentsButton"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_marginTop="18dp"
+                android:backgroundTint="@color/purple"
+                android:onClick="onClickViewPastAppointments"
+                android:text="View Past Appointments"
+                android:textSize="18sp"
+                app:cornerRadius="20dp" />
+
+            <Button
+                android:id="@+id/upcomingAppointmentsButton"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_marginTop="18dp"
+                android:backgroundTint="@color/purple"
+                android:onClick="onClickViewUpcomingAppointments"
+                android:text="View Upcoming Appointments"
+                android:textSize="18sp"
+                app:cornerRadius="20dp" />
+
         </LinearLayout>
 
     </androidx.cardview.widget.CardView>

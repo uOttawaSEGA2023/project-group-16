@@ -14,14 +14,14 @@ import com.group16.hams.RecyclerViewInterface;
 
 import java.util.ArrayList;
 
-public class RecyclerViewAdapterShift extends RecyclerView.Adapter<RecyclerViewAdapterShift.MyViewHolder>{
+public class RecyclerViewAdapterShiftDoctor extends RecyclerView.Adapter<RecyclerViewAdapterShiftDoctor.MyViewHolder>{
 
 
     private final RecyclerViewInterface recyclerViewInterface;
     Context context;
     ArrayList<RecyclerViewHolderShift> shiftHolders;
 
-    public RecyclerViewAdapterShift(Context context, ArrayList<RecyclerViewHolderShift> shiftHolders, RecyclerViewInterface recyclerViewInterface) {
+    public RecyclerViewAdapterShiftDoctor(Context context, ArrayList<RecyclerViewHolderShift> shiftHolders, RecyclerViewInterface recyclerViewInterface) {
         this.context = context;
         this.shiftHolders = shiftHolders;
         this.recyclerViewInterface = recyclerViewInterface;
@@ -29,25 +29,25 @@ public class RecyclerViewAdapterShift extends RecyclerView.Adapter<RecyclerViewA
 
     @NonNull
     @Override
-    public RecyclerViewAdapterShift.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public RecyclerViewAdapterShiftDoctor.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(context);
         View view = inflater.inflate(R.layout.recycler_view_row_shift, parent, false);
-        return new RecyclerViewAdapterShift.MyViewHolder(view, recyclerViewInterface);
+        return new RecyclerViewAdapterShiftDoctor.MyViewHolder(view, recyclerViewInterface);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull RecyclerViewAdapterShift.MyViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull RecyclerViewAdapterShiftDoctor.MyViewHolder holder, int position) {
 
         holder.tvShiftDate.setText("Shift Date: "+ shiftHolders.get(position).getShiftDate());
         holder.tvShiftStartTime.setText("Start Time: " + shiftHolders.get(position).getShiftStartTime());
         holder.tvShiftEndTime.setText("End Time: " + shiftHolders.get(position).getShiftEndTime());
 
-        if (shiftHolders.get(position).getPastOrUpcoming() == RecyclerViewHolderAppointment.PAST_APPOINTMENT) {
-            holder.type = RecyclerViewHolderAppointment.PAST_APPOINTMENT;
+        if (shiftHolders.get(position).getPastOrUpcoming() == RecyclerViewHolderAppointmentDoctor.PAST_APPOINTMENT) {
+            holder.type = RecyclerViewHolderAppointmentDoctor.PAST_APPOINTMENT;
         }
 
         else {
-            holder.type = RecyclerViewHolderAppointment.UPCOMING_APPOINTMENT;
+            holder.type = RecyclerViewHolderAppointmentDoctor.UPCOMING_APPOINTMENT;
         }
 
     }

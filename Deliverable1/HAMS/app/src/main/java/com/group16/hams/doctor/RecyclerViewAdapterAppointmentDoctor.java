@@ -14,14 +14,14 @@ import com.group16.hams.RecyclerViewInterface;
 
 import java.util.ArrayList;
 
-public class RecyclerViewAdapterAppointment extends RecyclerView.Adapter<RecyclerViewAdapterAppointment.MyViewHolder> {
+public class RecyclerViewAdapterAppointmentDoctor extends RecyclerView.Adapter<RecyclerViewAdapterAppointmentDoctor.MyViewHolder> {
     private final RecyclerViewInterface recyclerViewInterface;
     Context context;
-    ArrayList<RecyclerViewHolderAppointment> appointmentHolders;
+    ArrayList<RecyclerViewHolderAppointmentDoctor> appointmentHolders;
 
-    public RecyclerViewAdapterAppointment(Context context,
-                                          ArrayList<RecyclerViewHolderAppointment> appointmentHolders,
-                                          RecyclerViewInterface recyclerViewInterface) {
+    public RecyclerViewAdapterAppointmentDoctor(Context context,
+                                                ArrayList<RecyclerViewHolderAppointmentDoctor> appointmentHolders,
+                                                RecyclerViewInterface recyclerViewInterface) {
         this.context = context;
         this.appointmentHolders = appointmentHolders;
         this.recyclerViewInterface = recyclerViewInterface;
@@ -29,15 +29,15 @@ public class RecyclerViewAdapterAppointment extends RecyclerView.Adapter<Recycle
 
     @NonNull
     @Override
-    public RecyclerViewAdapterAppointment.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public RecyclerViewAdapterAppointmentDoctor.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(context);
-        View view = inflater.inflate(R.layout.recycler_view_row_appointment, parent, false);
+        View view = inflater.inflate(R.layout.recycler_view_row_appointment_doctor, parent, false);
 
         return new MyViewHolder(view, recyclerViewInterface);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull RecyclerViewAdapterAppointment.MyViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull RecyclerViewAdapterAppointmentDoctor.MyViewHolder holder, int position) {
         holder.tvAppointmentDate.setText(appointmentHolders.get(position).getAppointmentDate());
         holder.tvAppointmentTime.setText(appointmentHolders.get(position).getAppointmentTime());
         holder.tvAppointmentPatientName.setText(appointmentHolders.get(position)
@@ -46,12 +46,12 @@ public class RecyclerViewAdapterAppointment extends RecyclerView.Adapter<Recycle
                 .getAppointmentApproval());
 
         if (appointmentHolders.get(position).getPastOrUpcoming() ==
-                RecyclerViewHolderAppointment.PAST_APPOINTMENT) {
-            holder.type = RecyclerViewHolderAppointment.PAST_APPOINTMENT;
+                RecyclerViewHolderAppointmentDoctor.PAST_APPOINTMENT) {
+            holder.type = RecyclerViewHolderAppointmentDoctor.PAST_APPOINTMENT;
         }
 
         else {
-            holder.type = RecyclerViewHolderAppointment.UPCOMING_APPOINTMENT;
+            holder.type = RecyclerViewHolderAppointmentDoctor.UPCOMING_APPOINTMENT;
         }
     }
 

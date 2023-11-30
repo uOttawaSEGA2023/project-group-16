@@ -9,9 +9,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 
-import com.group16.hams.AppointmentClicked;
+import com.group16.hams.AppointmentClickedDoctor;
 import com.group16.hams.Database;
 import com.group16.hams.R;
 import com.group16.hams.RecyclerViewInterface;
@@ -22,12 +21,12 @@ import entities.*;
 
 public class AppointmentsDoctor extends AppCompatActivity implements RecyclerViewInterface {
 
-    ArrayList<RecyclerViewHolderAppointment> upcomingAppointmentHolders = new ArrayList<>();
-    ArrayList<RecyclerViewHolderAppointment> pastAppointmentHolders = new ArrayList<>();
+    ArrayList<RecyclerViewHolderAppointmentDoctor> upcomingAppointmentHolders = new ArrayList<>();
+    ArrayList<RecyclerViewHolderAppointmentDoctor> pastAppointmentHolders = new ArrayList<>();
     ArrayList<Appointment> appointments;
 
-    public RecyclerViewAdapterAppointment upcomingAdapter;
-    public RecyclerViewAdapterAppointment pastAdapter;
+    public RecyclerViewAdapterAppointmentDoctor upcomingAdapter;
+    public RecyclerViewAdapterAppointmentDoctor pastAdapter;
 
     boolean autoApprove;
 
@@ -42,9 +41,9 @@ public class AppointmentsDoctor extends AppCompatActivity implements RecyclerVie
         RecyclerView pastView = findViewById(R.id.pastAppointmentsView);
 
         upcomingAdapter = new
-                RecyclerViewAdapterAppointment(this, upcomingAppointmentHolders, this);
+                RecyclerViewAdapterAppointmentDoctor(this, upcomingAppointmentHolders, this);
         pastAdapter = new
-                RecyclerViewAdapterAppointment(this, pastAppointmentHolders, this);
+                RecyclerViewAdapterAppointmentDoctor(this, pastAppointmentHolders, this);
 
 
         upcomingView.setAdapter(upcomingAdapter);
@@ -131,15 +130,15 @@ public class AppointmentsDoctor extends AppCompatActivity implements RecyclerVie
                     curAppointment.getAppointmentPatient().getLastName();
 
             if (curAppointment.isUpcoming()) {
-                upcomingAppointmentHolders.add(new RecyclerViewHolderAppointment(dateAndTime[0],
+                upcomingAppointmentHolders.add(new RecyclerViewHolderAppointmentDoctor(dateAndTime[0],
                         dateAndTime[1], patientName, curAppointment.getStatus(),
-                        RecyclerViewHolderAppointment.UPCOMING_APPOINTMENT, curAppointment));
+                        RecyclerViewHolderAppointmentDoctor.UPCOMING_APPOINTMENT, curAppointment));
             }
 
             else {
-                pastAppointmentHolders.add(new RecyclerViewHolderAppointment(dateAndTime[0],
+                pastAppointmentHolders.add(new RecyclerViewHolderAppointmentDoctor(dateAndTime[0],
                         dateAndTime[1], patientName, curAppointment.getStatus(),
-                        RecyclerViewHolderAppointment.PAST_APPOINTMENT, curAppointment));
+                        RecyclerViewHolderAppointmentDoctor.PAST_APPOINTMENT, curAppointment));
             }
         }
 
@@ -147,9 +146,9 @@ public class AppointmentsDoctor extends AppCompatActivity implements RecyclerVie
 
     @Override
     public void onItemClick(int type, int position) {
-        RecyclerViewHolderAppointment curHolder;
+        RecyclerViewHolderAppointmentDoctor curHolder;
 
-        if (type == RecyclerViewHolderAppointment.PAST_APPOINTMENT) {
+        if (type == RecyclerViewHolderAppointmentDoctor.PAST_APPOINTMENT) {
             curHolder = pastAppointmentHolders.get(position);
         }
 
@@ -157,7 +156,7 @@ public class AppointmentsDoctor extends AppCompatActivity implements RecyclerVie
             curHolder = upcomingAppointmentHolders.get(position);
         }
 
-        Intent intent = new Intent(this, AppointmentClicked.class);
+        Intent intent = new Intent(this, AppointmentClickedDoctor.class);
 
         intent.putExtra("Appointment Holder", curHolder);
         intent.putExtra("index",position);

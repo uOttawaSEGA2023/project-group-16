@@ -7,12 +7,11 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.group16.hams.doctor.AddShift;
-import com.group16.hams.doctor.RecyclerViewHolderAppointment;
+import com.group16.hams.doctor.RecyclerViewHolderAppointmentDoctor;
 import com.group16.hams.patient.TimeSlotHolder;
 
 import java.util.ArrayList;
@@ -89,7 +88,7 @@ public class TimeSlotClicked extends AppCompatActivity {
                     curHolder.getAppointmentDate() + " " +
                             curHolder.getAppointmentStartTime() + " " +
                             curHolder.getAppointmentEndTime(),
-                    curHolder.getTimeSlot().getTimeSlotSpecialty(), 1));
+                    curHolder.getTimeSlot().getTimeSlotSpecialty(), 1, 0));
 
             (new Handler()).post(new Runnable() {
                 @Override

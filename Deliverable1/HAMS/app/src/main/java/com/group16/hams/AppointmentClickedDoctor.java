@@ -9,14 +9,13 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.group16.hams.doctor.AppointmentsDoctor;
-import com.group16.hams.doctor.RecyclerViewHolderAppointment;
+import com.group16.hams.doctor.RecyclerViewHolderAppointmentDoctor;
 
 import entities.*;
 
-public class AppointmentClicked extends AppCompatActivity {
+public class AppointmentClickedDoctor extends AppCompatActivity {
 
-    RecyclerViewHolderAppointment curHolder;
+    RecyclerViewHolderAppointmentDoctor curHolder;
     int index;
 
     TextView appointmentDate, appointmentTime, curApprovalStatus, patientName, patientUsername,
@@ -29,7 +28,7 @@ public class AppointmentClicked extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         System.out.println("REACHED");
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.appointment_clicked);
+        setContentView(R.layout.appointment_clicked_doctor);
 
         Intent intent = getIntent();
         curHolder = intent.getParcelableExtra("Appointment Holder");
@@ -92,8 +91,8 @@ public class AppointmentClicked extends AppCompatActivity {
     public void onClickCancelAppointmentButton(View view) {
         //Change the status of the appointment to CANCELLED
         if (curHolder.getAppointment().getStatus() == Appointment.REJECTED_APPOINTMENT) {
-            Toast t = new Toast(AppointmentClicked.this);
-            t.makeText(AppointmentClicked.this, "Appointment had already been cancelled",
+            Toast t = new Toast(AppointmentClickedDoctor.this);
+            t.makeText(AppointmentClickedDoctor.this, "Appointment had already been cancelled",
                     Toast.LENGTH_SHORT).show();
         }
 
@@ -110,8 +109,8 @@ public class AppointmentClicked extends AppCompatActivity {
     public void onClickApproveAppointmentButton(View view) {
         //Change the status of the appointment to APPROVED
         if (curHolder.getAppointment().getStatus() == Appointment.APPROVED_APPOINTMENT) {
-            Toast t = new Toast(AppointmentClicked.this);
-            t.makeText(AppointmentClicked.this, "Appointment had already been approved",
+            Toast t = new Toast(AppointmentClickedDoctor.this);
+            t.makeText(AppointmentClickedDoctor.this, "Appointment had already been approved",
                     Toast.LENGTH_SHORT).show();
         }
 

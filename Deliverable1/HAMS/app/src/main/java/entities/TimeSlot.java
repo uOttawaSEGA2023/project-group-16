@@ -67,6 +67,7 @@ public class TimeSlot implements Parcelable {
         this.DateAndTimeString = DateAndTimeString;
         this.specialty = specialty;
         this.status = status;
+        this.rating = rating;
 
         Database.getDoctor(appointmentDoctorEmail, new Database.MyCallBack2() {
             @Override
@@ -98,6 +99,7 @@ public class TimeSlot implements Parcelable {
         DateAndTimeString = in.readString();
         specialty = in.readString();
         status = in.readInt();
+        rating = in.readFloat();
 
         Database.getDoctor(appointmentDoctorEmail, new Database.MyCallBack2() {
             @Override
@@ -147,6 +149,7 @@ public class TimeSlot implements Parcelable {
         parcel.writeString(DateAndTimeString);
         parcel.writeString(specialty);
         parcel.writeInt(status);
+        parcel.writeFloat(rating);
     }
 
     public Doctor getAppointmentDoctor() {

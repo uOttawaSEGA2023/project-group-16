@@ -73,6 +73,16 @@ public class AppointmentClickedPatient extends AppCompatActivity {
 
             }
         });
+
+        if (curHolder.getTimeSlot().isUpcoming()) {
+            ratingBar.setVisibility(View.GONE);
+            findViewById(R.id.rateDoctor).setVisibility(View.GONE);
+        }
+
+        else {
+            ratingBar.setVisibility(View.VISIBLE);
+            findViewById(R.id.rateDoctor).setVisibility(View.VISIBLE);
+        }
     }
 
     public void onClickClkdPastApptPtntRtrnButton(View view) {

@@ -29,6 +29,8 @@ public class UpcomingAppointmentsPatient extends AppCompatActivity implements Re
 
         RecyclerView upcomingAppointmentsRecycler = findViewById(R.id.upcomingAppointmentsView);
 
+        setUpUpcomingTimeSlotHolders();
+
         timeSlotAdapter = new
                 TimeSlotAdapter(this, timeSlotHolders, this);
 
@@ -65,7 +67,7 @@ public class UpcomingAppointmentsPatient extends AppCompatActivity implements Re
     public void onItemClick(int type, int position) {
         TimeSlotHolder curHolder = timeSlotHolders.get(position);
 
-        Intent intent = new Intent(this, AppointmentClicked.class);
+        Intent intent = new Intent(this, AppointmentClickedPatient.class);
         intent.putExtra("TimeSlot Holder", curHolder);
         startActivity(intent);
     }

@@ -12,7 +12,7 @@ import com.group16.hams.R;
 
 import entities.Doctor;
 
-public class AppointmentClicked extends AppCompatActivity {
+public class AppointmentClickedPatient extends AppCompatActivity {
 
     TimeSlotHolder curHolder;
 

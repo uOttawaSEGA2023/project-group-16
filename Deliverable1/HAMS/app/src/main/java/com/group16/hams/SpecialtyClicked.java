@@ -100,19 +100,6 @@ public class SpecialtyClicked extends AppCompatActivity implements RecyclerViewI
 
         startActivity(intent);
     }
-
-    public void onClickTest(View view){
-        ((Patient) Database.currentUser).addTimeSlot(new TimeSlot("bobrob@gmail.com", "2021/02/23 3:30 4:00", "family medicine"));
-
-        (new Handler()).postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                Database.timeSlotToDatabaseTest(((Patient) Database.currentUser).getTimeSlots());
-            }
-        },1000);
-
-        finish();
-    }
     public void refresh(){
         timeSlotAdapter.notifyDataSetChanged();
     }

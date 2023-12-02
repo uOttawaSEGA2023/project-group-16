@@ -62,6 +62,37 @@ public class TimeSlot implements Parcelable {
         }
     }
 
+    public TimeSlot(String appointmentDoctorEmail, String DateAndTimeString, String specialty, int status) {
+        this.appointmentDoctorEmail = appointmentDoctorEmail;
+        this.DateAndTimeString = DateAndTimeString;
+        this.specialty = specialty;
+        this.status = status;
+
+        Database.getDoctor(appointmentDoctorEmail, new Database.MyCallBack2() {
+            @Override
+            public void onCallBack2(Doctor p) {
+                if (p == null) {
+                    //Might have to add more precautions here in case the patient gets deleted
+                    //after the appointment has already been created. Otherwise this should never occur
+                    System.out.println("Doctor is not in database.");
+                }
+
+                else {
+                    appointmentDoctor = p;
+                }
+            }
+        });
+
+        try {
+            dateAndTime = sdf.parse(DateAndTimeString);
+        }
+
+        catch (ParseException e) {
+            //MAYBE DO SOMETHING HERE, BUT SHOULDN'T HAVE TO BECAUSE WE WILL FORCE USERS TO ENTER
+            //THE INFORMATION IN THE CORRECT FORMAT SO THIS SHOULDN'T BE NECESSARY
+        }
+    }
+
     public TimeSlot(String appointmentDoctorEmail, String DateAndTimeString, String specialty, int status, float rating) {
         this.appointmentDoctorEmail = appointmentDoctorEmail;
         this.DateAndTimeString = DateAndTimeString;

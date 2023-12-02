@@ -68,7 +68,7 @@ public class AppointmentClickedPatient extends AppCompatActivity {
         ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
             @Override
             public void onRatingChanged(RatingBar ratingBar, float v, boolean b) {
-                Database.changeTimeSlotRating(curHolder.getTimeSlot(), v);
+                Database.changePatientAppointmentRating(curHolder.getTimeSlot(), v);
                 curHolder.getTimeSlot().setRating(v);
 
             }

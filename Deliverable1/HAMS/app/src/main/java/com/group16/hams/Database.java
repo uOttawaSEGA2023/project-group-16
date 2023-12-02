@@ -335,9 +335,6 @@ public class Database {
         }
 
     }
-    public static void changeAppointmentStatus(Appointment a, int status){
-        currentUserRef.child("appointments").child(a.getStartDateAndTimeString()).child("status").setValue(status);
-    }
 
     public static void timeSlotToDatabase(ArrayList<TimeSlot> timeSlots, String patientID){
         if (!(currentUser instanceof Doctor))
@@ -348,20 +345,6 @@ public class Database {
 
         for (TimeSlot a : timeSlots){
             temp = thisPatient.child("timeslots").child(a.getDateAndTimeString());
-            temp.child("username").setValue(a.getAppointmentDoctorEmail());
-            temp.child("status").setValue(a.getStatus());
-            temp.child("specialty").setValue(a.getTimeSlotSpecialty());
-        }
-    }
-
-    public static void timeSlotToDatabaseTest(ArrayList<TimeSlot> timeSlots){
-        if (!(currentUser instanceof Patient))
-            return;
-
-        DatabaseReference temp;
-
-        for (TimeSlot a : timeSlots){
-            temp = currentUserRef.child("timeslots").child(a.getDateAndTimeString());
             temp.child("username").setValue(a.getAppointmentDoctorEmail());
             temp.child("status").setValue(a.getStatus());
             temp.child("specialty").setValue(a.getTimeSlotSpecialty());
@@ -447,22 +430,8 @@ public class Database {
             temp.child("username").setValue(a.getAppointmentDoctorEmail());
             temp.child("status").setValue(a.getStatus());
             temp.child("specialty").setValue(a.getTimeSlotSpecialty());
-        }
-    }
-    public static void timeSlotToDatabase(ArrayList<TimeSlot> timeSlots){
-        if (!(currentUser instanceof Patient))
-            return;
-
-        DatabaseReference temp;
-
-        for (TimeSlot a : timeSlots){
-            temp = currentUserRef.child("timeslots").child(a.getDateAndTimeString());
-            temp.child("username").setValue(a.getAppointmentDoctorEmail());
-            temp.child("status").setValue(a.getStatus());
-            temp.child("specialty").setValue(a.getTimeSlotSpecialty());
             temp.child("rating").setValue(a.getRating());
         }
-
     }
     public static ArrayList<TimeSlot> getPatientAppointmentsFromDatabase(DatabaseReference c){
         ArrayList<TimeSlot> patientAppointments = new ArrayList<>();
@@ -487,7 +456,8 @@ public class Database {
                             String email = dayAndHour.child("username").getValue(String.class);
                             int status = dayAndHour.child("status").getValue(Integer.class);
                             String specialty = dayAndHour.child("specialty").getValue(String.class);
-                            patientAppointments.add(new TimeSlot(email,date[0] + date[1] + date[2] + " " + date[4] + date[5] + " " + date[7] + date[8], specialty, status, 0));
+                            float rating = dayAndHour.child("rating").getValue(Float.class);
+                            patientAppointments.add(new TimeSlot(email,date[0] + date[1] + date[2] + " " + date[4] + date[5] + " " + date[7] + date[8], specialty, status, rating));
                         }
                     }
                 }
@@ -508,7 +478,6 @@ public class Database {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 String [] date = {"Year", "Month", "Day",  "Space",  "StartHour", "StartMinute", "Space", "EndHour", "EndMinute"};
-                float rating = 0;
 
                 for (DataSnapshot year : snapshot.getChildren()){
                     date[0] = year.getKey() + "/";
@@ -521,13 +490,10 @@ public class Database {
                             date[5] = temp[1].split(":")[1];
                             date[7] = temp[2].split(":")[0] + ":";
                             date[8] = temp[2].split(":")[1];
-                            if (dayAndHour.child("rating").exists()){
-                                rating = dayAndHour.child("rating").getValue(Float.class);
-                            }
                             String email = dayAndHour.child("username").getValue(String.class);
                             int status = dayAndHour.child("status").getValue(Integer.class);
                             String specialty = dayAndHour.child("specialty").getValue(String.class);
-                            dApps.add(new TimeSlot(email,date[0] + date[1] + date[2] + " " + date[4] + date[5] + " " + date[7] + date[8], specialty, status, rating));
+                            dApps.add(new TimeSlot(email,date[0] + date[1] + date[2] + " " + date[4] + date[5] + " " + date[7] + date[8], specialty, status));
                         }
                     }
                 }
@@ -554,8 +520,8 @@ public class Database {
         temp = thisPatient.child("timeslots").child(a.getDateAndTimeString());
         temp.child("status").setValue(status);
     }
-    public static void changeTimeSlotRating(TimeSlot t, float v){
-        currentUserRef.child("timeslots").child(t.getDateAndTimeString()).child("rating").setValue(v);
+    public static void changePatientAppointmentRating(TimeSlot t, float v){
+        currentUserRef.child("appointments").child(t.getDateAndTimeString()).child("rating").setValue(v);
     }
 
     // Shift Methods

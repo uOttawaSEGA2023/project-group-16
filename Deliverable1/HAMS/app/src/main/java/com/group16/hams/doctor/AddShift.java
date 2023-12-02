@@ -99,12 +99,12 @@ public class AddShift extends AppCompatActivity {
         if (validFlag == true){
             // Add the shift to the doctor's DB
             ((Doctor) Database.currentUser).addShift(new Shift(addShiftDateText, addShiftStartTimeText, addShiftEndTimeText));
-            (new Handler()).postDelayed(new Runnable() {
+            (new Handler()).post(new Runnable() {
                 @Override
                 public void run() {
                     Database.shiftToDatabase(((Doctor) Database.currentUser).getShifts());
                 }
-            },1000);
+            });
 
             // Add the timeslot to the patient's DB
             String doctorEmail = ((Doctor) Database.currentUser).getUsername();
@@ -123,12 +123,12 @@ public class AddShift extends AppCompatActivity {
                             patient.addTimeSlot(new TimeSlot(doctorEmail, finalAddShiftDateText + " " + addShiftStartTimeText + " " + addShiftEndTimeText, doctorSpecialty));
                             String thisPatientID = patientIDs.get(i);
                             i++;
-                            (new Handler()).postDelayed(new Runnable() {
+                            (new Handler()).post(new Runnable() {
                                 @Override
                                 public void run() {
                                     Database.timeSlotToDatabase(patient.getTimeSlots(), thisPatientID);
                                 }
-                            }, 1000);
+                            });
                         }
                     }
                 }

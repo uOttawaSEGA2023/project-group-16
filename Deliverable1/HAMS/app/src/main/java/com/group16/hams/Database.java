@@ -456,7 +456,10 @@ public class Database {
                             String email = dayAndHour.child("username").getValue(String.class);
                             int status = dayAndHour.child("status").getValue(Integer.class);
                             String specialty = dayAndHour.child("specialty").getValue(String.class);
-                            float rating = dayAndHour.child("rating").getValue(Float.class);
+                            float rating = 0;
+                            if (dayAndHour.child("rating").getValue() != null) {
+                                rating = dayAndHour.child("rating").getValue(Float.class);
+                            }
                             patientAppointments.add(new TimeSlot(email,date[0] + date[1] + date[2] + " " + date[4] + date[5] + " " + date[7] + date[8], specialty, status, rating));
                         }
                     }

@@ -23,6 +23,7 @@ import entities.Appointment;
 import entities.Doctor;
 import entities.Patient;
 import entities.Shift;
+import entities.TimeSlot;
 
 public class ShiftClicked extends AppCompatActivity {
     RecyclerViewHolderShift curHolder;
@@ -73,6 +74,34 @@ public class ShiftClicked extends AppCompatActivity {
                     Database.deleteShift(delShift);
                 }
             },1000);
+
+            String[] p = delShift.getDate().split("/");
+            String changeDateFormat = p[2] + "/" + p[1] + "/" + p[0];
+            Database.getAllPatients(new Database.AllPatientsCallBack() {
+                @Override
+                public void onAllPatientsCallBack(ArrayList<Patient> patients, ArrayList<String> patientIDs) {
+                    for (String patientID : patientIDs) {
+                        int numberOfTimeSlots = AddShift.calculateNumberOfTimeSlots(delShift.getStartTime(), delShift.getEndTime());
+                        int timeSlotInterval = 30;
+                        int shiftStartMinute = AddShift.convertTimeToMinutes(delShift.getStartTime());
+                        for (int k = 0; k < numberOfTimeSlots; k++) {
+                            int startTime = shiftStartMinute + k * timeSlotInterval;
+                            int endTime = startTime + timeSlotInterval;
+
+                            String timeSlotStartTime = AddShift.convertMinutesToTime(startTime);
+                            String timeSlotEndTime = AddShift.convertMinutesToTime(endTime);
+                            String thisDoctorEmail = ((Doctor) Database.currentUser).getUsername();
+                            String thisDoctorSpecialty = ((Doctor) Database.currentUser).getSpecialties();
+
+                            TimeSlot delTimeSlot = new TimeSlot(thisDoctorEmail, changeDateFormat + " "
+                                    + timeSlotStartTime + " " + timeSlotEndTime, thisDoctorSpecialty);
+
+                            Database.changeTimeSlotStatus(delTimeSlot,
+                                    TimeSlot.BOOKED_APPOINTMENT, patientID);
+                        }
+                    }
+                }
+            });
 
             finish();
         }

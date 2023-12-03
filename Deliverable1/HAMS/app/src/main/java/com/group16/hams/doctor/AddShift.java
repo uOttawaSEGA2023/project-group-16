@@ -147,7 +147,7 @@ public class AddShift extends AppCompatActivity {
             finish();
         }
     }
-    private int calculateNumberOfTimeSlots(String startTime, String endTime) {
+    public static int calculateNumberOfTimeSlots(String startTime, String endTime) {
         int startHour = Integer.parseInt(startTime.split(":")[0]);
         int startMinute = Integer.parseInt(startTime.split(":")[1]);
 
@@ -161,7 +161,7 @@ public class AddShift extends AppCompatActivity {
         return numberOfTimeSlots;
     }
 
-    private int convertTimeToMinutes(String time) {
+    public static int convertTimeToMinutes(String time) {
         int hour = Integer.parseInt(time.split(":")[0]);
         int minute = Integer.parseInt(time.split(":")[1]);
 
@@ -170,7 +170,7 @@ public class AddShift extends AppCompatActivity {
         return totalMinutes;
     }
 
-    private String convertMinutesToTime(int totalMinutes) {
+    public static String convertMinutesToTime(int totalMinutes) {
         int hours = totalMinutes / 60;
         int minutes = totalMinutes % 60;
 

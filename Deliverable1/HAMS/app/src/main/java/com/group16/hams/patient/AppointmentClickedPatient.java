@@ -7,7 +7,9 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.group16.hams.AppointmentClickedDoctor;
 import com.group16.hams.Database;
 import com.group16.hams.R;
 
@@ -87,5 +89,21 @@ public class AppointmentClickedPatient extends AppCompatActivity {
 
     public void onClickClkdPastApptPtntRtrnButton(View view) {
         finish();
+    }
+
+    public void onClickPatientCancelAppointment(View view) {
+        if (curHolder.getTimeSlot().isUpcoming()) {
+            //CANCEL THE APPOINTMENT HERE
+
+
+
+        }
+
+        else {
+            //Not sure why this isn't displaying
+            Toast t = new Toast(AppointmentClickedPatient.this);
+            t.makeText(AppointmentClickedPatient.this, "Appointment had passed",
+                    Toast.LENGTH_SHORT).show();
+        }
     }
 }

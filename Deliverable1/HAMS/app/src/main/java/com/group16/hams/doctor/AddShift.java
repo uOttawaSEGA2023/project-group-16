@@ -114,7 +114,21 @@ public class AddShift extends AppCompatActivity {
                     else {
                         int i = 0;
                         for (Patient patient : patients) {
-                            patient.addTimeSlot(new TimeSlot(doctorEmail, finalAddShiftDateText + " " + addShiftStartTimeText + " " + addShiftEndTimeText, doctorSpecialty));
+                            int numberOfTimeSlots = calculateNumberOfTimeSlots(addShiftStartTimeText, addShiftEndTimeText);
+                            int timeSlotInterval = 30;
+                            int shiftStartMinute = convertTimeToMinutes(addShiftStartTimeText);
+                            for (int k = 0; k < numberOfTimeSlots; k++) {
+                                int startTime = shiftStartMinute + k * timeSlotInterval;
+                                int endTime = startTime + timeSlotInterval;
+
+                                // Format the time slots
+                                String timeSlotStartTime = convertMinutesToTime(startTime);
+                                String timeSlotEndTime = convertMinutesToTime(endTime);
+
+                                // Add the time slot to the patient
+                                patient.addTimeSlot(new TimeSlot(doctorEmail, finalAddShiftDateText + " " + timeSlotStartTime + " " + timeSlotEndTime, doctorSpecialty));
+                            }
+                            //patient.addTimeSlot(new TimeSlot(doctorEmail, finalAddShiftDateText + " " + addShiftStartTimeText + " " + addShiftEndTimeText, doctorSpecialty));
                             String thisPatientID = patientIDs.get(i);
                             i++;
                             (new Handler()).post(new Runnable() {
@@ -132,6 +146,37 @@ public class AddShift extends AppCompatActivity {
             Toast.makeText(AddShift.this, "Success!", Toast.LENGTH_SHORT).show();
             finish();
         }
+    }
+    private int calculateNumberOfTimeSlots(String startTime, String endTime) {
+        int startHour = Integer.parseInt(startTime.split(":")[0]);
+        int startMinute = Integer.parseInt(startTime.split(":")[1]);
+
+        int endHour = Integer.parseInt(endTime.split(":")[0]);
+        int endMinute = Integer.parseInt(endTime.split(":")[1]);
+
+        int totalMinutes = (endHour * 60 + endMinute) - (startHour * 60 + startMinute);
+
+        int numberOfTimeSlots = totalMinutes / 30;
+
+        return numberOfTimeSlots;
+    }
+
+    private int convertTimeToMinutes(String time) {
+        int hour = Integer.parseInt(time.split(":")[0]);
+        int minute = Integer.parseInt(time.split(":")[1]);
+
+        int totalMinutes = hour * 60 + minute;
+
+        return totalMinutes;
+    }
+
+    private String convertMinutesToTime(int totalMinutes) {
+        int hours = totalMinutes / 60;
+        int minutes = totalMinutes % 60;
+
+        String formattedTime = String.format("%02d:%02d", hours, minutes);
+
+        return formattedTime;
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)

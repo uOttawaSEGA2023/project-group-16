@@ -105,7 +105,7 @@ public class AppointmentClickedPatient extends AppCompatActivity {
     public void onClickClkdPastApptPtntRtrnButton(View view) {
         finish();
     }
-    
+
     @RequiresApi(api = Build.VERSION_CODES.O)
     public void onClickCancelAppointmentButton(View view) {
         if (cancellationIsPossible()) {

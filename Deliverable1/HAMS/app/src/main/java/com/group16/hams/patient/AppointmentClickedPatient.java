@@ -102,7 +102,7 @@ public class AppointmentClickedPatient extends AppCompatActivity {
         else {
             //Not sure why this isn't displaying
             Toast t = new Toast(AppointmentClickedPatient.this);
-            t.makeText(AppointmentClickedPatient.this, "Appointment had passed",
+            t.makeText(AppointmentClickedPatient.this, "Appointment had already passed.",
                     Toast.LENGTH_SHORT).show();
         }
     }

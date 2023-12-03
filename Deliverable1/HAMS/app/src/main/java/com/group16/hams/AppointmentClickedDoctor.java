@@ -18,6 +18,7 @@ import com.group16.hams.doctor.RecyclerViewHolderAppointmentDoctor;
 
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 
 import entities.*;
 
@@ -132,14 +133,13 @@ public class AppointmentClickedDoctor extends AppCompatActivity {
             LocalTime endTime = startTime.plusMinutes(30);
             String endTimeString = endTime.format(DateTimeFormatter.ofPattern("HH:mm"));
             String startDateAndTimeString = formatChange[0] + " " + startTimeString + " " + endTimeString;
+            TimeSlot delDoctorAppointment = new TimeSlot(((Doctor) Database.currentUser).
+                    getUsername(), startDateAndTimeString, ((Doctor) Database.currentUser).getSpecialties());
 
             //getting the patient associated with the appointment
             Database.getPatientWithID(curHolder.getAppointment().getAppointmentPatientEmail(), new Database.PatientWithIDCallBack() {
                 @Override
                 public void PatientWithIDCallBack(Patient p, String patientID) {
-                    //deleting the appointment
-                    TimeSlot delDoctorAppointment = new TimeSlot(((Doctor) Database.currentUser).
-                            getUsername(), startDateAndTimeString, ((Doctor) Database.currentUser).getSpecialties());
                     p.removePatientAppointment(delDoctorAppointment);
                     //updating patient database
                     (new Handler()).post(new Runnable() {
@@ -148,6 +148,16 @@ public class AppointmentClickedDoctor extends AppCompatActivity {
                             Database.deletePatientAppointmentThroughDoctor(delDoctorAppointment, patientID);
                         }
                     });
+                }
+            });
+
+            Database.getAllPatients(new Database.AllPatientsCallBack() {
+                @Override
+                public void onAllPatientsCallBack(ArrayList<Patient> patients, ArrayList<String> patientIDs) {
+                    for (String patientID : patientIDs) {
+                        Database.changeTimeSlotStatus(delDoctorAppointment,
+                                TimeSlot.UNBOOKED_APPOINTMENT, patientID);
+                    }
                 }
             });
 

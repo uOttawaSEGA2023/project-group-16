@@ -1,15 +1,23 @@
 package com.group16.hams;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.provider.ContactsContract;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.group16.hams.doctor.AddShift;
 import com.group16.hams.doctor.RecyclerViewHolderAppointmentDoctor;
+
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 
 import entities.*;
 
@@ -88,6 +96,7 @@ public class AppointmentClickedDoctor extends AppCompatActivity {
 
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     public void onClickCancelAppointmentButton(View view) {
         //Change the status of the appointment to CANCELLED
         if (curHolder.getAppointment().getStatus() == Appointment.REJECTED_APPOINTMENT) {
@@ -103,6 +112,47 @@ public class AppointmentClickedDoctor extends AppCompatActivity {
             curApprovalStatus.setText("Current Approval Status: " + curHolder.getAppointmentApproval());
             Database.changeAppointmentStatus(curHolder.getAppointment(), Appointment.REJECTED_APPOINTMENT);
 
+            Appointment delPatientAppointment = new Appointment(curHolder.getAppointment().getAppointmentPatientEmail(),
+                    curHolder.getAppointment().getStartDateAndTimeString());
+
+
+            ((Doctor) Database.currentUser).removeAppointment(delPatientAppointment);
+
+
+            (new Handler()).post(new Runnable() {
+                @Override
+                public void run() {
+                    Database.deleteDoctorAppointmentThroughDoctor(delPatientAppointment);
+                }
+            });
+
+            String formatChange[] = curHolder.getAppointment().getStartDateAndTimeString().split(" ");
+            String startTimeString = formatChange[1];
+            LocalTime startTime = LocalTime.parse(startTimeString, DateTimeFormatter.ofPattern("HH:mm"));
+            LocalTime endTime = startTime.plusMinutes(30);
+            String endTimeString = endTime.format(DateTimeFormatter.ofPattern("HH:mm"));
+            String startDateAndTimeString = formatChange[0] + " " + startTimeString + " " + endTimeString;
+
+            //getting the patient associated with the appointment
+            Database.getPatientWithID(curHolder.getAppointment().getAppointmentPatientEmail(), new Database.PatientWithIDCallBack() {
+                @Override
+                public void PatientWithIDCallBack(Patient p, String patientID) {
+                    //deleting the appointment
+                    TimeSlot delDoctorAppointment = new TimeSlot(((Doctor) Database.currentUser).
+                            getUsername(), startDateAndTimeString, ((Doctor) Database.currentUser).getSpecialties());
+                    p.removePatientAppointment(delDoctorAppointment);
+                    //updating patient database
+                    (new Handler()).post(new Runnable() {
+                        @Override
+                        public void run() {
+                            Database.deletePatientAppointmentThroughDoctor(delDoctorAppointment, patientID);
+                        }
+                    });
+                }
+            });
+
+            Toast.makeText(AppointmentClickedDoctor.this, "Canceled!", Toast.LENGTH_SHORT).show();
+            finish();
         }
     }
 

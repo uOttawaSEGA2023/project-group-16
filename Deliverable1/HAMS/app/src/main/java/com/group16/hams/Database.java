@@ -75,6 +75,38 @@ public class Database {
     public interface MyCallBack{
         void onCallBack(Patient p);
     }
+
+    public static void getPatientWithID(String email, PatientWithIDCallBack m) {
+        DatabaseReference patientRef = userRef.child("Patients");
+        patientRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                Patient p = null;
+                String patientID = null;
+                for (DataSnapshot s : snapshot.getChildren()){
+                    if (s.child("username").getValue(String.class).equals(email)) {
+                        patientID = s.getKey();
+                        p = new Patient(s.child("firstName").getValue(String.class),
+                                s.child("lastName").getValue(String.class),
+                                s.child("username").getValue(String.class),
+                                s.child("password").getValue(String.class),
+                                s.child("phoneNumber").getValue(String.class),
+                                s.child("address").getValue(String.class),
+                                s.child("healthCardNumber").getValue(Integer.class));
+                        break;
+                    }
+                }
+                m.PatientWithIDCallBack(p, patientID);
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                System.out.println("ERROR: getPatient()");
+            }
+        });
+    }
+    public interface PatientWithIDCallBack{
+        void PatientWithIDCallBack(Patient p, String patientID);
+    }
     public static void getDoctor(String email, MyCallBack2 m) {
         DatabaseReference doctorRef = userRef.child("Doctors");
         doctorRef.addValueEventListener(new ValueEventListener() {
@@ -566,6 +598,33 @@ public class Database {
         });
     }
 
+    public static void deleteDoctorAppointmentThroughDoctor(Appointment patientAppointment) {
+        if (!(currentUser instanceof Doctor)) {
+            System.out.println("Current user is not a Doctor.");
+            return;
+        }
+
+        DatabaseReference patientAppointmentRef = currentUserRef.child("appointments")
+                .child(patientAppointment.getStartDateAndTimeString());
+
+        patientAppointmentRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    dataSnapshot.getRef().removeValue();
+                    System.out.println("Appointment deleted successfully.");
+                } else {
+                    System.out.println("Appointment not found in database.");
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                System.out.println("Failed to delete appointment: " + databaseError.getMessage());
+            }
+        });
+    }
+
     public static void deleteDoctorAppointment(Appointment doctorAppointment, String doctorID) {
         if (!(currentUser instanceof Patient)) {
             System.out.println("Current user is not a Patient.");
@@ -574,6 +633,33 @@ public class Database {
 
         DatabaseReference doctorAppointmentRef = doctorsRef.child(doctorID).child("appointments")
                 .child(doctorAppointment.getStartDateAndTimeString());
+
+        doctorAppointmentRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    dataSnapshot.getRef().removeValue();
+                    System.out.println("Appointment deleted successfully.");
+                } else {
+                    System.out.println("Appointment not found in database.");
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                System.out.println("Failed to delete appointment: " + databaseError.getMessage());
+            }
+        });
+    }
+
+    public static void deletePatientAppointmentThroughDoctor(TimeSlot doctorAppointment, String patientID) {
+        if (!(currentUser instanceof Doctor)) {
+            System.out.println("Current user is not a Doctor.");
+            return;
+        }
+
+        DatabaseReference doctorAppointmentRef = patientsRef.child(patientID).child("appointments")
+                .child(doctorAppointment.getDateAndTimeString());
 
         doctorAppointmentRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override

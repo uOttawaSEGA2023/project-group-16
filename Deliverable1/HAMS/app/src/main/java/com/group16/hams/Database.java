@@ -34,6 +34,7 @@ public class Database {
     static DatabaseReference rejectedRef = myRef.child("Rejected");
     static DatabaseReference userRef = myRef.child("Users");
     static DatabaseReference patientsRef = userRef.child("Patients");
+    static DatabaseReference doctorsRef = userRef.child("Doctors");
 
     public static User currentUser;
     public static DatabaseReference currentUserRef;
@@ -105,6 +106,39 @@ public class Database {
         void onCallBack2(Doctor p);
     }
 
+    public static void getDoctorWithID(String email, MyCallBack3 m) {
+        DatabaseReference doctorRef = userRef.child("Doctors");
+        doctorRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                Doctor p = null;
+                String doctorID = null;
+                for (DataSnapshot s : snapshot.getChildren()){
+                    if (s.child("username").getValue(String.class).equals(email)) {
+                        doctorID = s.getKey();
+                        p = new Doctor(s.child("firstName").getValue(String.class),
+                                s.child("lastName").getValue(String.class),
+                                s.child("username").getValue(String.class),
+                                s.child("password").getValue(String.class),
+                                s.child("phoneNumber").getValue(String.class),
+                                s.child("address").getValue(String.class),
+                                s.child("employeeNumber").getValue(Integer.class),
+                                s.child("specialties").getValue(String.class));
+                        break;
+                    }
+                }
+                m.onCallBack3(p, doctorID);
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                System.out.println("ERROR: getDoctor()");
+            }
+        });
+    }
+    public interface MyCallBack3{
+        void onCallBack3(Doctor p, String doctorID);
+    }
+
     public static void getAllPatients(AllPatientsCallBack m) {
         DatabaseReference patientsRef = userRef.child("Patients");
         patientsRef.addValueEventListener(new ValueEventListener() {
@@ -124,7 +158,6 @@ public class Database {
                     patientsIDs.add(s.getKey());
                 }
                 m.onAllPatientsCallBack(patients, patientsIDs);
-                Log.d("patientIDs", "All patient IDs: " + patientsIDs);
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
@@ -322,13 +355,29 @@ public class Database {
 
     // Appointment Methods
     public static void appointmentToDatabase(ArrayList<Appointment> appointments){
-        if (!(currentUser instanceof Doctor))
+        if ((!(currentUser instanceof Doctor)))
             return;
 
         DatabaseReference temp;
 
         for (Appointment a : appointments){
             temp = currentUserRef.child("appointments").child(a.getStartDateAndTimeString());
+            temp.child("username").setValue(a.getAppointmentPatientEmail());
+            temp.child("status").setValue(a.getStatus());
+            a.checkIfPast();
+        }
+
+    }
+
+    public static void appointmentToDatabaseFromPatient(ArrayList<Appointment> appointments, String doctorID){
+        if (!(currentUser instanceof Patient))
+            return;
+
+        DatabaseReference thisDoctor = doctorsRef.child(doctorID);
+        DatabaseReference temp;
+
+        for (Appointment a : appointments){
+            temp = thisDoctor.child("appointments").child(a.getStartDateAndTimeString());
             temp.child("username").setValue(a.getAppointmentPatientEmail());
             temp.child("status").setValue(a.getStatus());
             a.checkIfPast();

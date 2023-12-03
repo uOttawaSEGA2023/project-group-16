@@ -97,6 +97,21 @@ public class TimeSlotClicked extends AppCompatActivity {
                 }
             });
 
+            String formatChange[] = curHolder.getTimeSlot().getDateAndTimeString().split(" ");
+            String startDateAndTimeString = formatChange[0] + " " + formatChange[1];
+            Database.getDoctorWithID(curHolder.getTimeSlot().getAppointmentDoctorEmail(), new Database.MyCallBack3() {
+                @Override
+                public void onCallBack3(Doctor p, String doctorID) {
+                    p.addAppointment(new Appointment(((Patient) Database.currentUser).getUsername(), startDateAndTimeString));
+                    (new Handler()).post(new Runnable() {
+                        @Override
+                        public void run() {
+                            Database.appointmentToDatabaseFromPatient(p.getAppointments(), doctorID);
+                        }
+                    });
+                }
+            });
+
             curHolder.getTimeSlot().setStatus(TimeSlot.BOOKED_APPOINTMENT);
             curBookingStatus = findViewById(R.id.currentBookingStatus);
             curBookingStatus.setText("Current Booking Status: " + curHolder.getAppointmentBooking());

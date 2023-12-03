@@ -73,6 +73,8 @@ public class ShiftClicked extends AppCompatActivity {
                     Database.deleteShift(delShift);
                 }
             },1000);
+
+            finish();
         }
 
         else {
@@ -81,8 +83,6 @@ public class ShiftClicked extends AppCompatActivity {
                     "Cannot delete shift because there is an appointment during it",
                     Toast.LENGTH_LONG).show();
         }
-
-        finish();
     }
 
     private boolean isOverlapping (Shift shift, Appointment appointment) {
@@ -91,7 +91,7 @@ public class ShiftClicked extends AppCompatActivity {
         String shiftEnd = shift.getEndTime();
 
         //THIS IS NOT WORKING
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/ddHH:mm");
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyyHH:mm");
 
         Date shiftStartDateAndTime = null;
         Date shiftEndDateAndTime = null;

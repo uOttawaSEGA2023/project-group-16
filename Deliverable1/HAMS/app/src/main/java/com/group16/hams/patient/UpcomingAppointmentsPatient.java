@@ -39,7 +39,7 @@ public class UpcomingAppointmentsPatient extends AppCompatActivity implements Re
     }
 
     public void setUpUpcomingTimeSlotHolders() {
-        ArrayList<TimeSlot> allTimeSlots = ((Patient) Database.currentUser).getTimeSlots();
+        ArrayList<TimeSlot> allTimeSlots = ((Patient) Database.currentUser).getPatientAppointments();
         TimeSlot curTimeSlot;
 
         String[] DateAndTime;

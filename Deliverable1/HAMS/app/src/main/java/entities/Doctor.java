@@ -40,6 +40,24 @@ public class Doctor extends User{
 				  String address,
 				  int employeeNumber,
 				  String specialties,
+				  boolean autoApprove, ArrayList<Shift> shifts) {
+		super(firstName, lastName, username, password, phoneNumber, address);
+		this.employeeNumber = employeeNumber;
+		this.specialties = specialties;
+		this.autoApprove = autoApprove;
+		this.shifts = shifts;
+
+		appointments = new ArrayList<Appointment>();
+	}
+
+	public Doctor(String firstName,
+				  String lastName,
+				  String username,
+				  String password,
+				  String phoneNumber,
+				  String address,
+				  int employeeNumber,
+				  String specialties,
 				  ArrayList<Appointment> appointments,
 				  boolean autoApprove, ArrayList<Shift> shifts) {
 		super(firstName, lastName, username, password, phoneNumber, address);
@@ -56,7 +74,7 @@ public class Doctor extends User{
 		specialties = in.readString();
 		appointments = in.readArrayList(null);
 		autoApprove = in.readByte() != 0;
-		shifts = in.readArrayList(null);
+		shifts = in.readArrayList(Shift.class.getClassLoader());
 	}
 	
 	public int getEmployeeNumber() {

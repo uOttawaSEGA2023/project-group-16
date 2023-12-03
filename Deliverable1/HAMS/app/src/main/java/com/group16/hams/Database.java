@@ -215,7 +215,22 @@ public class Database {
                                     getAppointmentsFromDatabase(currentUserRef),
                                     false,
                                     getShiftsFromDatabase(currentUserRef));
-                        } else {
+                        }
+
+                        else if (snap.child("shifts").hasChildren()) {
+                            currentUser = new Doctor(snap.child("firstName").getValue(String.class),
+                                    snap.child("lastName").getValue(String.class),
+                                    snap.child("username").getValue(String.class),
+                                    snap.child("password").getValue(String.class),
+                                    snap.child("phoneNumber").getValue(String.class),
+                                    snap.child("address").getValue(String.class),
+                                    snap.child("employeeNumber").getValue(Integer.class),
+                                    snap.child("specialties").getValue(String.class),
+                                    false,
+                                    getShiftsFromDatabase(currentUserRef));
+                        }
+
+                        else {
                             currentUser = new Doctor(snap.child("firstName").getValue(String.class),
                                     snap.child("lastName").getValue(String.class),
                                     snap.child("username").getValue(String.class),

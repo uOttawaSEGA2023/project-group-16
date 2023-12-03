@@ -65,6 +65,10 @@ public class RecyclerViewHolderShift implements Parcelable{
         return pastOrUpcoming;
     }
 
+    public Shift getShift() {
+        return shift;
+    }
+
     public void setPastOrUpcoming(int pastOrUpcoming) {
         this.pastOrUpcoming = pastOrUpcoming;
     }
@@ -80,5 +84,6 @@ public class RecyclerViewHolderShift implements Parcelable{
         parcel.writeString(shiftStartTime);
         parcel.writeString(shiftEndTime);
         parcel.writeInt(pastOrUpcoming);
+        parcel.writeParcelable(shift, i);
     }
 }

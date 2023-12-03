@@ -538,6 +538,61 @@ public class Database {
 
         return patientAppointments;
     }
+
+    public static void deletePatientAppointment(TimeSlot patientAppointment) {
+        if (!(currentUser instanceof Patient)) {
+            System.out.println("Current user is not a Patient.");
+            return;
+        }
+
+        DatabaseReference patientAppointmentRef = currentUserRef.child("appointments")
+                .child(patientAppointment.getDateAndTimeString());
+
+        patientAppointmentRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    dataSnapshot.getRef().removeValue();
+                    System.out.println("Appointment deleted successfully.");
+                } else {
+                    System.out.println("Appointment not found in database.");
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                System.out.println("Failed to delete appointment: " + databaseError.getMessage());
+            }
+        });
+    }
+
+    public static void deleteDoctorAppointment(Appointment doctorAppointment, String doctorID) {
+        if (!(currentUser instanceof Patient)) {
+            System.out.println("Current user is not a Patient.");
+            return;
+        }
+
+        DatabaseReference doctorAppointmentRef = doctorsRef.child(doctorID).child("appointments")
+                .child(doctorAppointment.getStartDateAndTimeString());
+
+        doctorAppointmentRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    dataSnapshot.getRef().removeValue();
+                    System.out.println("Appointment deleted successfully.");
+                } else {
+                    System.out.println("Appointment not found in database.");
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                System.out.println("Failed to delete appointment: " + databaseError.getMessage());
+            }
+        });
+    }
+
     public static ArrayList<TimeSlot> getTimeSlotsFromDatabase(DatabaseReference c){
         ArrayList<TimeSlot> dApps = new ArrayList<>();
 

@@ -1,9 +1,12 @@
 package com.group16.hams.patient;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import android.widget.RatingBar;
 import android.widget.TextView;
@@ -12,8 +15,20 @@ import android.widget.Toast;
 import com.group16.hams.AppointmentClickedDoctor;
 import com.group16.hams.Database;
 import com.group16.hams.R;
+import com.group16.hams.doctor.AddShift;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Calendar;
+import java.util.Date;
+
+import entities.Appointment;
 import entities.Doctor;
+import entities.Patient;
+import entities.Shift;
+import entities.TimeSlot;
 
 public class AppointmentClickedPatient extends AppCompatActivity {
 
@@ -90,20 +105,71 @@ public class AppointmentClickedPatient extends AppCompatActivity {
     public void onClickClkdPastApptPtntRtrnButton(View view) {
         finish();
     }
+    
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public void onClickCancelAppointmentButton(View view) {
+        if (cancellationIsPossible()) {
+            TimeSlot delPatientAppointment = new TimeSlot(curHolder.getTimeSlot().getAppointmentDoctorEmail(),
+                    curHolder.getAppointmentDate() + " " +
+                            curHolder.getAppointmentStartTime() + " " +
+                            curHolder.getAppointmentEndTime(),
+                    curHolder.getTimeSlot().getTimeSlotSpecialty(), curHolder.getTimeSlot().getStatus(),
+                    curHolder.getTimeSlot().getRating());
 
-    public void onClickPatientCancelAppointment(View view) {
-        if (curHolder.getTimeSlot().isUpcoming()) {
-            //CANCEL THE APPOINTMENT HERE
+            //removing appointment
+            ((Patient) Database.currentUser).removePatientAppointment(delPatientAppointment);
 
+            //updating patient database
+            (new Handler()).post(new Runnable() {
+                @Override
+                public void run() {
+                    Database.deletePatientAppointment(delPatientAppointment);
+                }
+            });
 
+            //changing the format of the date and time to match the Appointment class
+            String formatChange[] = curHolder.getTimeSlot().getDateAndTimeString().split(" ");
+            String startDateAndTimeString = formatChange[0] + " " + formatChange[1];
 
+            //getting the doctor associated with the appointment
+            Database.getDoctorWithID(curHolder.getTimeSlot().getAppointmentDoctorEmail(), new Database.MyCallBack3() {
+                @Override
+                public void onCallBack3(Doctor p, String doctorID) {
+                    //deleting the appointment
+                    Appointment delDoctorAppointment = new Appointment(((Patient) Database.currentUser).
+                            getUsername(), startDateAndTimeString);
+                    p.removeAppointment(delDoctorAppointment);
+                    //updating doctor database
+                    (new Handler()).post(new Runnable() {
+                        @Override
+                        public void run() {
+                            Database.deleteDoctorAppointment(delDoctorAppointment, doctorID);
+                        }
+                    });
+                }
+            });
+
+            Toast.makeText(AppointmentClickedPatient.this, "Canceled!", Toast.LENGTH_SHORT).show();
+            finish();
         }
-
         else {
-            //Not sure why this isn't displaying
-            Toast t = new Toast(AppointmentClickedPatient.this);
-            t.makeText(AppointmentClickedPatient.this, "Appointment had already passed.",
-                    Toast.LENGTH_SHORT).show();
+            Toast.makeText(AppointmentClickedPatient.this, "Cancellation failed!", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private boolean cancellationIsPossible() {
+        String[] p = curHolder.getTimeSlot().getDateAndTimeString().split(" ");
+        String date = p[0];
+        String startTime = p[1];
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+        String dateTimeString = date + " " + startTime;
+        LocalDateTime dateTime = LocalDateTime.parse(dateTimeString, formatter);
+        LocalDateTime now = LocalDateTime.now();
+        if(dateTime.isAfter(now)) {
+            long minutesDifference = java.time.Duration.between(now, dateTime).toMinutes();
+            return (minutesDifference < 60);
+        }
+        return false;
     }
 }

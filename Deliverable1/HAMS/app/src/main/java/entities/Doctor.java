@@ -114,6 +114,11 @@ public class Doctor extends User{
 		}
 		appointments.add(newAppointment);
 	}
+
+	public void removeAppointment(Appointment removeAppointment) {
+		appointments.remove(removeAppointment);
+	}
+
 	public boolean getAutoApprove() {
 		return autoApprove;
 	}

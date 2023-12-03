@@ -63,7 +63,9 @@ public class Patient extends User{
 
 	public ArrayList<TimeSlot> getPatientAppointments() { return patientAppointments; }
 	public void addPatientAppointments(TimeSlot newPatientAppointment) { patientAppointments.add(newPatientAppointment); }
-
+	public void removePatientAppointment(TimeSlot delPatientAppointment){
+		patientAppointments.remove(delPatientAppointment);
+	}
 	public void addTimeSlot(TimeSlot newTimeSlot) {
 		timeSlots.add(newTimeSlot);
 	}

@@ -76,9 +76,12 @@ public class SearchAppointment extends AppCompatActivity {
 
     private void filterList(String text) {
         List<Specialty> filteredList = new ArrayList<>();
-        for (Specialty specialty : specialtyList) {
-            if (specialty.getSpecialty().toLowerCase().contains(text.toLowerCase())){
-                filteredList.add(specialty);
+
+        if (specialtyList != null) {
+            for (Specialty specialty : specialtyList) {
+                if (specialty.getSpecialty().toLowerCase().contains(text.toLowerCase())){
+                    filteredList.add(specialty);
+                }
             }
         }
 

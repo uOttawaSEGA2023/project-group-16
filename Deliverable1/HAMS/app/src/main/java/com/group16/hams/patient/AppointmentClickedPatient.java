@@ -21,6 +21,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -146,6 +147,16 @@ public class AppointmentClickedPatient extends AppCompatActivity {
                             Database.deleteDoctorAppointment(delDoctorAppointment, doctorID);
                         }
                     });
+                }
+            });
+
+            Database.getAllPatients(new Database.AllPatientsCallBack() {
+                @Override
+                public void onAllPatientsCallBack(ArrayList<Patient> patients, ArrayList<String> patientIDs) {
+                    for (String patientID : patientIDs) {
+                        Database.changeTimeSlotStatus(curHolder.getTimeSlot(),
+                                TimeSlot.UNBOOKED_APPOINTMENT, patientID);
+                    }
                 }
             });
 

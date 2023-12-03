@@ -162,13 +162,14 @@ public class AppointmentClickedPatient extends AppCompatActivity {
         String[] p = curHolder.getTimeSlot().getDateAndTimeString().split(" ");
         String date = p[0];
         String startTime = p[1];
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm");
         String dateTimeString = date + " " + startTime;
         LocalDateTime dateTime = LocalDateTime.parse(dateTimeString, formatter);
         LocalDateTime now = LocalDateTime.now();
         if(dateTime.isAfter(now)) {
             long minutesDifference = java.time.Duration.between(now, dateTime).toMinutes();
-            return (minutesDifference < 60);
+            System.out.println(minutesDifference);
+            return (minutesDifference > 60);
         }
         return false;
     }

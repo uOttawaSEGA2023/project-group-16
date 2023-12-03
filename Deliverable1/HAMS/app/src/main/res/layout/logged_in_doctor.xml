@@ -52,7 +52,7 @@
                 android:id="@+id/shiftsButton"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
-                android:text="View / Book Shifts"
+                android:text="View / Edit Shifts"
                 android:textSize="18sp"
                 android:textColor="@color/white"
                 android:onClick="onClickShifts"

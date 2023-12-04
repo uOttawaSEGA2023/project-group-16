@@ -102,7 +102,7 @@ public class TimeSlotClicked extends AppCompatActivity {
             Database.getDoctorWithID(curHolder.getTimeSlot().getAppointmentDoctorEmail(), new Database.MyCallBack3() {
                 @Override
                 public void onCallBack3(Doctor p, String doctorID) {
-                    p.addAppointment(new Appointment(((Patient) Database.currentUser).getUsername(), startDateAndTimeString));
+                    p.addAppointment(new Appointment(Database.currentUser.getUsername(), startDateAndTimeString));
                     (new Handler()).post(new Runnable() {
                         @Override
                         public void run() {

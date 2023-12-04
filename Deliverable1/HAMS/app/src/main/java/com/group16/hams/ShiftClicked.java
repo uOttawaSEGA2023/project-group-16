@@ -16,6 +16,7 @@ import com.group16.hams.doctor.RecyclerViewHolderShift;
 import com.group16.hams.doctor.ShiftsDoctor;
 import com.group16.hams.patient.AppointmentClickedPatient;
 
+import java.sql.Time;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -70,28 +71,22 @@ public class ShiftClicked extends AppCompatActivity {
 
         if (!overlap) {
             ((Doctor) Database.currentUser).removeShift(delShift);
-            (new Handler()).postDelayed(new Runnable() {
+            (new Handler()).post(new Runnable() {
                 @Override
                 public void run() {
                     Database.deleteShift(delShift);
                 }
-            },1000);
+            });
 
             String[] p = delShift.getDate().split("/");
             String changeDateFormat = p[2] + "/" + p[1] + "/" + p[0];
+            ArrayList<TimeSlot> temp = new ArrayList<>();
+            ArrayList<String> tempIDs = new ArrayList<>();
             Database.getAllPatients(new Database.AllPatientsCallBack() {
                 @Override
                 public void onAllPatientsCallBack(ArrayList<Patient> patients, ArrayList<String> patientIDs) {
-                    boolean continueLoop = true;
-                    int numberOfPatients = patientIDs.size();
-                    Log.d("numberOfPatients", "number is: " + numberOfPatients);
-                    int counter = 0;
                     for (String patientID : patientIDs) {
-                        counter++;
-                        Log.d("counter", "counter is at: " + counter);
-                        if (counter == numberOfPatients) {
-                            return;
-                        }
+                        tempIDs.add(patientID);
                         int numberOfTimeSlots = AddShift.calculateNumberOfTimeSlots(delShift.getStartTime(), delShift.getEndTime());
                         int timeSlotInterval = 30;
                         int shiftStartMinute = AddShift.convertTimeToMinutes(delShift.getStartTime());
@@ -104,10 +99,13 @@ public class ShiftClicked extends AppCompatActivity {
                             String thisDoctorEmail = ((Doctor) Database.currentUser).getUsername();
                             String thisDoctorSpecialty = ((Doctor) Database.currentUser).getSpecialties();
 
-                            TimeSlot delTimeSlot = new TimeSlot(thisDoctorEmail, changeDateFormat + " "
-                                    + timeSlotStartTime + " " + timeSlotEndTime, thisDoctorSpecialty);
-
-                            Database.changeTimeSlotStatus(delTimeSlot,
+                            temp.add(new TimeSlot(thisDoctorEmail, changeDateFormat + " "
+                                    + timeSlotStartTime + " " + timeSlotEndTime, thisDoctorSpecialty));
+                        }
+                    }
+                    for (String patientID : tempIDs) {
+                        for (TimeSlot t : temp) {
+                            Database.changeTimeSlotStatus(t,
                                     TimeSlot.BOOKED_APPOINTMENT, patientID);
                         }
                     }

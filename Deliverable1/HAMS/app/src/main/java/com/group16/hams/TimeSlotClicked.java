@@ -46,10 +46,10 @@ public class TimeSlotClicked extends AppCompatActivity {
         Database.getDoctor(email, new Database.MyCallBack2() {
             @Override
             public void onCallBack2(Doctor p) {
-                if (p == null) {
+                if (p == null || (!(p instanceof Doctor))) {
                     //Might have to add more precautions here in case the patient gets deleted
                     //after the appointment has already been created. Otherwise this should never occur
-                    System.out.println("Doctor is not in database.");
+                    System.out.println("Error retrieving doctor.");
                 }
 
                 else {

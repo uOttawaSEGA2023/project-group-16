@@ -135,7 +135,9 @@ public class AddShift extends AppCompatActivity {
                                 @Override
                                 public void run() {
                                     Database.timeSlotToDatabase(patient.getTimeSlots(), thisPatientID);
-                                    Database.shiftToDatabase(((Doctor) Database.currentUser).getShifts());
+                                    if (Database.currentUser instanceof Doctor) {
+                                        Database.shiftToDatabase(((Doctor) Database.currentUser).getShifts());
+                                    }
                                 }
                             });
                         }

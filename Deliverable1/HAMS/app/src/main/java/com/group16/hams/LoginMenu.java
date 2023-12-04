@@ -105,7 +105,7 @@ public class LoginMenu extends AppCompatActivity {
                                     String message = "";
                                     switch(Database.currentUserStatus){
                                         case PENDING:
-                                            message = "Pending for admin approval";
+                                            message = "Pending admin approval";
                                             break;
                                         case REJECTED:
                                             popUp = new Dialog(LoginMenu.this);

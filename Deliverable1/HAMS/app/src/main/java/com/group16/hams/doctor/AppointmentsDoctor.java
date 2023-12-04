@@ -164,25 +164,6 @@ public class AppointmentsDoctor extends AppCompatActivity implements RecyclerVie
         startActivity(intent);
     }
 
-    public void onClickTest(View view){
-        ((Doctor) Database.currentUser).addAppointment(new Appointment("example1@example.com", "2021/02/23 3:45"));
-        ((Doctor) Database.currentUser).addAppointment(new Appointment("example1@example.com", "2022/05/10 19:27"));
-        ((Doctor) Database.currentUser).addAppointment(new Appointment("example1@example.com", "2021/09/30 12:36"));
-        ((Doctor) Database.currentUser).addAppointment(new Appointment("example2@example.com", "2023/11/11 4:00"));
-        ((Doctor) Database.currentUser).addAppointment(new Appointment("example2@example.com", "2024/01/27 15:55"));
-        ((Doctor) Database.currentUser).addAppointment(new Appointment("example2@example.com", "2025/10/01 23:00", Appointment.REJECTED_APPOINTMENT));
-        ((Doctor) Database.currentUser).addAppointment(new Appointment("uaroha@gmail.com", "2024/07/07 20:12"));
-        //System.out.println(((Doctor) Database.currentUser).getAppointments());
-
-        (new Handler()).postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                Database.appointmentToDatabase(((Doctor) Database.currentUser).getAppointments());
-            }
-        },1000);
-
-    }
-
     public void refresh(){
         upcomingAdapter.notifyDataSetChanged();
         pastAdapter.notifyDataSetChanged();

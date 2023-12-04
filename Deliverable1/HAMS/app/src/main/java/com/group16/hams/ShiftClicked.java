@@ -3,6 +3,7 @@ package com.group16.hams;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -13,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.group16.hams.doctor.AddShift;
 import com.group16.hams.doctor.RecyclerViewHolderShift;
 import com.group16.hams.doctor.ShiftsDoctor;
+import com.group16.hams.patient.AppointmentClickedPatient;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -80,7 +82,16 @@ public class ShiftClicked extends AppCompatActivity {
             Database.getAllPatients(new Database.AllPatientsCallBack() {
                 @Override
                 public void onAllPatientsCallBack(ArrayList<Patient> patients, ArrayList<String> patientIDs) {
+                    boolean continueLoop = true;
+                    int numberOfPatients = patientIDs.size();
+                    Log.d("numberOfPatients", "number is: " + numberOfPatients);
+                    int counter = 0;
                     for (String patientID : patientIDs) {
+                        counter++;
+                        Log.d("counter", "counter is at: " + counter);
+                        if (counter == numberOfPatients) {
+                            return;
+                        }
                         int numberOfTimeSlots = AddShift.calculateNumberOfTimeSlots(delShift.getStartTime(), delShift.getEndTime());
                         int timeSlotInterval = 30;
                         int shiftStartMinute = AddShift.convertTimeToMinutes(delShift.getStartTime());
@@ -103,6 +114,7 @@ public class ShiftClicked extends AppCompatActivity {
                 }
             });
 
+            Toast.makeText(ShiftClicked.this, "Canceled!", Toast.LENGTH_SHORT).show();
             finish();
         }
 

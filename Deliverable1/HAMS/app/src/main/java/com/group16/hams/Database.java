@@ -290,6 +290,19 @@ public class Database {
                         snap = snap.child("Doctors").child(user.getUid());
                         determineStatus(parent);
                         currentUserRef = snap.getRef();
+
+                        boolean autoApprove = false;
+
+                        try {
+                            if (snap.child("autoApprove").getValue(Boolean.class) != null) {
+                                autoApprove = snap.child("autoApprove").getValue(Boolean.class);
+                            }
+                        }
+
+                        catch (NullPointerException e) {
+                            System.out.println("No autoApprove value. Keep default as false.");
+                        }
+
                         if (snap.child("appointments").hasChildren()) {
                             currentUser = new Doctor(snap.child("firstName").getValue(String.class),
                                     snap.child("lastName").getValue(String.class),
@@ -300,7 +313,7 @@ public class Database {
                                     snap.child("employeeNumber").getValue(Integer.class),
                                     snap.child("specialties").getValue(String.class),
                                     getAppointmentsFromDatabase(currentUserRef),
-                                    false,
+                                    autoApprove,
                                     getShiftsFromDatabase(currentUserRef));
                         }
 
@@ -313,7 +326,7 @@ public class Database {
                                     snap.child("address").getValue(String.class),
                                     snap.child("employeeNumber").getValue(Integer.class),
                                     snap.child("specialties").getValue(String.class),
-                                    false,
+                                    autoApprove,
                                     getShiftsFromDatabase(currentUserRef));
                         }
 
@@ -325,7 +338,8 @@ public class Database {
                                     snap.child("phoneNumber").getValue(String.class),
                                     snap.child("address").getValue(String.class),
                                     snap.child("employeeNumber").getValue(Integer.class),
-                                    snap.child("specialties").getValue(String.class));
+                                    snap.child("specialties").getValue(String.class),
+                                    autoApprove);
                         }
                         break;
                     } else if (snap.child("Admin").child(user.getUid()).exists()) {

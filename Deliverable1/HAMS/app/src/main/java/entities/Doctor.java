@@ -39,6 +39,23 @@ public class Doctor extends User{
 				  String phoneNumber,
 				  String address,
 				  int employeeNumber,
+				  String specialties, boolean autoApprove) {
+		super(firstName, lastName, username, password, phoneNumber, address);
+		this.employeeNumber = employeeNumber;
+		this.specialties = specialties;
+
+		appointments = new ArrayList<Appointment>();
+		this.autoApprove = autoApprove;
+		shifts = new ArrayList<Shift>();
+	}
+
+	public Doctor(String firstName,
+				  String lastName,
+				  String username,
+				  String password,
+				  String phoneNumber,
+				  String address,
+				  int employeeNumber,
 				  String specialties,
 				  boolean autoApprove, ArrayList<Shift> shifts) {
 		super(firstName, lastName, username, password, phoneNumber, address);

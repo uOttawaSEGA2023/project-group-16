@@ -126,8 +126,16 @@ public class AppointmentsDoctor extends AppCompatActivity implements RecyclerVie
             curAppointment.checkIfPast();
 
             dateAndTime = curAppointment.getStartDateAndTimeString().split(" ");
-            patientName = curAppointment.getAppointmentPatient().getFirstName() + " " +
-                    curAppointment.getAppointmentPatient().getLastName();
+
+            // Check if the appointment has a patient before accessing its methods
+            if (curAppointment.getAppointmentPatient() != null) {
+                patientName = curAppointment.getAppointmentPatient().getFirstName() + " " +
+                        curAppointment.getAppointmentPatient().getLastName();
+            } else {
+                patientName = "Unknown Patient";
+                // You can also choose to continue to the next iteration or handle it differently
+                continue;
+            }
 
             if (curAppointment.isUpcoming()) {
                 if (autoApprove) {
@@ -137,9 +145,7 @@ public class AppointmentsDoctor extends AppCompatActivity implements RecyclerVie
                 upcomingAppointmentHolders.add(new RecyclerViewHolderAppointmentDoctor(dateAndTime[0],
                         dateAndTime[1], patientName, curAppointment.getStatus(),
                         RecyclerViewHolderAppointmentDoctor.UPCOMING_APPOINTMENT, curAppointment));
-            }
-
-            else {
+            } else {
                 pastAppointmentHolders.add(new RecyclerViewHolderAppointmentDoctor(dateAndTime[0],
                         dateAndTime[1], patientName, curAppointment.getStatus(),
                         RecyclerViewHolderAppointmentDoctor.PAST_APPOINTMENT, curAppointment));

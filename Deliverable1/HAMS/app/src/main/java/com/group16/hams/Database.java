@@ -283,7 +283,12 @@ public class Database {
                                     snap.child("phoneNumber").getValue(String.class),
                                     snap.child("address").getValue(String.class),
                                     snap.child("healthCardNumber").getValue(Integer.class),
-                                    getTimeSlotsFromDatabase(currentUserRef),
+                                    getTimeSlotsFromDatabase(currentUserRef, new DataCallBack() {
+                                        @Override
+                                        public void onDataLoaded(ArrayList<TimeSlot> timeSlots) {
+
+                                        }
+                                    }),
                                     getPatientAppointmentsFromDatabase(currentUserRef));
                         } else {
                             currentUser = new Patient(snap.child("firstName").getValue(String.class),
@@ -542,7 +547,8 @@ public class Database {
                             date[4] = temp[1].split(":")[0] + ":";
                             date[5] = temp[1].split(":")[1];
                             String email = dayAndHour.child("username").getValue(String.class);
-                            int status = dayAndHour.child("status").getValue(Integer.class);
+                            Integer statusInteger = dayAndHour.child("status").getValue(Integer.class);
+                            int status = (statusInteger != null) ? statusInteger : 0;
                             dApps.add(new Appointment(email,date[0] + date[1] + date[2] + " " + date[4] + date[5], status));
                         }
                     }
@@ -757,7 +763,10 @@ public class Database {
         });
     }
 
-    public static ArrayList<TimeSlot> getTimeSlotsFromDatabase(DatabaseReference c){
+    public interface DataCallBack {
+        void onDataLoaded(ArrayList<TimeSlot> timeSlots);
+    }
+    public static ArrayList<TimeSlot> getTimeSlotsFromDatabase(DatabaseReference c, DataCallBack callBack){
         ArrayList<TimeSlot> dApps = new ArrayList<>();
 
         ValueEventListener listener = new ValueEventListener() {
@@ -777,12 +786,14 @@ public class Database {
                             date[7] = temp[2].split(":")[0] + ":";
                             date[8] = temp[2].split(":")[1];
                             String email = dayAndHour.child("username").getValue(String.class);
-                            int status = dayAndHour.child("status").getValue(Integer.class);
+                            Integer statusInteger = dayAndHour.child("status").getValue(Integer.class);
+                            int status = (statusInteger != null) ? statusInteger : 0;
                             String specialty = dayAndHour.child("specialty").getValue(String.class);
                             dApps.add(new TimeSlot(email,date[0] + date[1] + date[2] + " " + date[4] + date[5] + " " + date[7] + date[8], specialty, status));
                         }
                     }
                 }
+                callBack.onDataLoaded(dApps);
             }
 
             @Override

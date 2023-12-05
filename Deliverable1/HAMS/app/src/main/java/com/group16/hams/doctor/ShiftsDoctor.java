@@ -65,33 +65,46 @@ public class ShiftsDoctor extends AppCompatActivity implements RecyclerViewInter
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     public void setUpAppointmentHolders() {
-        ArrayList<Shift> shifts = ((Doctor) Database.currentUser).getShifts();
-        System.out.println(shifts.size());
-        System.out.println("Shift: " + shifts);
-        Shift curShift;
-        ArrayList<Shift> shiftsToDelete = new ArrayList<>();
+        if (Database.currentUser instanceof Doctor) {
+            Doctor currentDoctor = (Doctor) Database.currentUser;
+            ArrayList<Shift> shifts = currentDoctor.getShifts();
 
-        for (int i = 0; i < shifts.size(); i++) {
-            curShift = shifts.get(i);
+            if (shifts != null) {
+                System.out.println("Number of shifts: " + shifts.size());
+                System.out.println("Shifts: " + shifts);
 
-            if (curShift.isFuture()) {
-                upcomingShiftsHolders.add(new RecyclerViewHolderShift(curShift.getDate(),
-                        curShift.getStartTime(), curShift.getEndTime(), 1, curShift));
-            }
-            else{
-                Shift delShift = new Shift(curShift.getDate(), curShift.getStartTime(),
-                        curShift.getEndTime(), curShift.getDoctorUsername(), curShift.getDoctorSpecialty());
-                shiftsToDelete.add(delShift);
-            }
-        }
-        for (Shift delShift : shiftsToDelete) {
-            ((Doctor) Database.currentUser).removeShift(delShift);
-            (new Handler()).postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    Database.deleteShift(delShift);
+                Shift curShift;
+                ArrayList<Shift> shiftsToDelete = new ArrayList<>();
+
+                for (int i = 0; i < shifts.size(); i++) {
+                    curShift = shifts.get(i);
+
+                    if (curShift.isFuture()) {
+                        upcomingShiftsHolders.add(new RecyclerViewHolderShift(curShift.getDate(),
+                                curShift.getStartTime(), curShift.getEndTime(), 1, curShift));
+                    } else {
+                        Shift delShift = new Shift(curShift.getDate(), curShift.getStartTime(),
+                                curShift.getEndTime(), curShift.getDoctorUsername(), curShift.getDoctorSpecialty());
+                        shiftsToDelete.add(delShift);
+                    }
                 }
-            }, 1000);
+
+                for (Shift delShift : shiftsToDelete) {
+                    currentDoctor.removeShift(delShift);
+
+                    (new Handler()).postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            Database.deleteShift(delShift);
+                        }
+                    }, 1000);
+                }
+            } else {
+                System.out.println("Shifts are null");
+            }
+        } else {
+            System.out.println("Current user is not a Doctor");
+            // Handle the situation where the current user is not a Doctor
         }
     }
 

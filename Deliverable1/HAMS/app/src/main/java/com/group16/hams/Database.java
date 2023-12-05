@@ -21,9 +21,12 @@ import com.google.firebase.database.ValueEventListener;
 
 import entities.*;
 
+import java.sql.Array;
 import java.sql.Time;
 import java.util.ArrayList;
 import java.util.EventListener;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Database {
     // Instance Variables
@@ -199,6 +202,47 @@ public class Database {
     }
     public interface AllPatientsCallBack{
         void onAllPatientsCallBack(ArrayList<Patient> patients, ArrayList<String> patientIDs);
+    }
+
+    public static void getAllShiftsOfDoctors(ShiftCallback callback) {
+        HashMap<Shift, ArrayList<String>> allShifts = new HashMap<>();
+
+        doctorsRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot doctorSnapshot : dataSnapshot.getChildren()) {
+                    ArrayList<String> id = new ArrayList<>();
+                    String username = doctorSnapshot.child("username").getValue(String.class);
+                    String specialties = doctorSnapshot.child("specialties").getValue(String.class);
+                    id.add(username);
+                    id.add(specialties);
+
+                    if (doctorSnapshot.hasChild("shifts")) {
+                        DataSnapshot shiftsSnapshot = doctorSnapshot.child("shifts");
+
+                        for (DataSnapshot shiftSnapshot : shiftsSnapshot.getChildren()) {
+                            String date = shiftSnapshot.getKey();
+                            String startTime = shiftSnapshot.child("Start Time").getValue(String.class);
+                            String endTime = shiftSnapshot.child("End Time").getValue(String.class);
+
+                            Shift shift = new Shift(date, startTime, endTime);
+                            allShifts.put(shift, id);
+                        }
+                    }
+                }
+
+                // Notify the callback with the collected shifts
+                callback.onShiftsRetrieved(allShifts);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                // Handle errors here
+            }
+        });
+    }
+    public interface ShiftCallback {
+        void onShiftsRetrieved(HashMap<Shift, ArrayList<String>> shifts);
     }
 
     public static void getUser(FirebaseUser user) {

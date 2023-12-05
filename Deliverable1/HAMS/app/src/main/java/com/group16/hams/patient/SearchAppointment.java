@@ -121,6 +121,7 @@ public class SearchAppointment extends AppCompatActivity {
                         for (String split : splited){
                             specialtyList.add(new Specialty(split.trim()));
                         }
+                        specialtyList.add(new Specialty(specialty));
                     }
                 }
 

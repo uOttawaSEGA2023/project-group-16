@@ -92,15 +92,15 @@ public class SearchAppointment extends AppCompatActivity {
                                         // Add the time slot to the patient
                                         patient.addTimeSlot(new TimeSlot(shift.getValue().get(0), shift.getKey().getDate() + " " + timeSlotStartTime + " " + timeSlotEndTime, shift.getValue().get(1)));
                                     }
-                                    String thisPatientID = patientIDs.get(i);
-                                    i++;
-                                    (new Handler()).post(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            Database.timeSlotToDatabase(patient.getTimeSlots(), thisPatientID);
-                                        }
-                                    });
                                 }
+                                String thisPatientID = patientIDs.get(i);
+                                i++;
+                                (new Handler()).post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        Database.timeSlotToDatabase(patient.getTimeSlots(), thisPatientID);
+                                    }
+                                });
                             }
                         }
                     }

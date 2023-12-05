@@ -19,12 +19,16 @@ public class Shift implements Parcelable {
     private String date;
     private String startTime;
     private String endTime;
+    private String doctorUsername;
+    private String doctorSpecialty;
 
 
-    public Shift(String date, String startTime, String endTime){
+    public Shift(String date, String startTime, String endTime, String doctorUsername, String doctorSpecialty){
         this.date = date;
         this.startTime = startTime;
         this.endTime = endTime;
+        this.doctorUsername = doctorUsername;
+        this.doctorSpecialty = doctorSpecialty;
     }
 
     public String getDate(){
@@ -85,4 +89,12 @@ public class Shift implements Parcelable {
             return new Shift[size];
         }
     };
+
+    public String getDoctorUsername() {
+        return doctorUsername;
+    }
+
+    public String getDoctorSpecialty() {
+        return doctorSpecialty;
+    }
 }

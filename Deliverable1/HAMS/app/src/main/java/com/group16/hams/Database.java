@@ -39,6 +39,8 @@ public class Database {
     static DatabaseReference patientsRef = userRef.child("Patients");
     static DatabaseReference doctorsRef = userRef.child("Doctors");
 
+    public static boolean breakLoop;
+
     public static User currentUser;
     public static DatabaseReference currentUserRef;
     public enum UserStatus {
@@ -175,6 +177,8 @@ public class Database {
     }
 
     public static void getAllPatients(AllPatientsCallBack m) {
+        breakLoop = false;
+
         DatabaseReference patientsRef = userRef.child("Patients");
         patientsRef.addValueEventListener(new ValueEventListener() {
             @Override
@@ -192,7 +196,12 @@ public class Database {
                     );
                     patientsIDs.add(s.getKey());
                 }
-                m.onAllPatientsCallBack(patients, patientsIDs);
+
+                if (!breakLoop) {
+                    System.out.println("TEST IF LOOPING 1");
+                    m.onAllPatientsCallBack(patients, patientsIDs);
+                    breakLoop = true;
+                }
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
@@ -234,7 +243,7 @@ public class Database {
                                     String endTime = daySnapshot.child("End Time").getValue(String.class);
 
 
-                                    Shift shift = new Shift(date, startTime, endTime);
+                                    Shift shift = new Shift(date, startTime, endTime, username, specialties);
                                     allShifts.put(shift, id);
                                 }
                             }
@@ -817,6 +826,8 @@ public class Database {
             temp = currentUserRef.child("shifts").child(newDate);
             temp.child("Start Time").setValue(a.getStartTime());
             temp.child("End Time").setValue(a.getEndTime());
+            temp.child("Doctor Username").setValue(a.getDoctorUsername());
+            temp.child("Specialties").setValue(a.getDoctorSpecialty());
         }
 
     }
@@ -839,8 +850,10 @@ public class Database {
 
                             String startTime = daySnapshot.child("Start Time").getValue(String.class);
                             String endTime = daySnapshot.child("End Time").getValue(String.class);
+                            String username = daySnapshot.child("Doctor Username").getValue(String.class);
+                            String specialties = daySnapshot.child("Specialties").getValue(String.class);
 
-                            shifts.add(new Shift(date, startTime, endTime));
+                            shifts.add(new Shift(date, startTime, endTime, username, specialties));
                         }
                     }
                 }

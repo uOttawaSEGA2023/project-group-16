@@ -14,7 +14,7 @@ public class Deliverable4UnitTests {
 
     @Test
     public void ShiftUpcoming() {
-        Shift testShift = new Shift("12/12/2023", "12:00", "15:00");
+        Shift testShift = new Shift("12/12/2023", "12:00", "15:00","doctor@username.com", "Medicine");
 
         assertEquals("Test if shift is upcoming", true, testShift.isFuture());
     }

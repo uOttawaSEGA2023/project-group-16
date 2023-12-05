@@ -96,8 +96,8 @@ public class ShiftClicked extends AppCompatActivity {
 
                             String timeSlotStartTime = AddShift.convertMinutesToTime(startTime);
                             String timeSlotEndTime = AddShift.convertMinutesToTime(endTime);
-                            String thisDoctorEmail = Database.currentUser.getUsername();
-                            String thisDoctorSpecialty = ((Doctor) Database.currentUser).getSpecialties();
+                            String thisDoctorEmail = delShift.getDoctorSpecialty();
+                            String thisDoctorSpecialty = delShift.getDoctorSpecialty();
 
                             temp.add(new TimeSlot(thisDoctorEmail, changeDateFormat + " "
                                     + timeSlotStartTime + " " + timeSlotEndTime, thisDoctorSpecialty));

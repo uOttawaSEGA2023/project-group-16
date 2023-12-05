@@ -79,7 +79,8 @@ public class ShiftsDoctor extends AppCompatActivity implements RecyclerViewInter
                         curShift.getStartTime(), curShift.getEndTime(), 1, curShift));
             }
             else{
-                Shift delShift = new Shift(curShift.getDate(), curShift.getStartTime(), curShift.getEndTime());
+                Shift delShift = new Shift(curShift.getDate(), curShift.getStartTime(),
+                        curShift.getEndTime(), curShift.getDoctorUsername(), curShift.getDoctorSpecialty());
                 shiftsToDelete.add(delShift);
             }
         }

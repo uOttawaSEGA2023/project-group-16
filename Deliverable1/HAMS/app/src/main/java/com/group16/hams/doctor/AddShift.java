@@ -49,6 +49,8 @@ public class AddShift extends AppCompatActivity {
         String addShiftDateText = addShiftDate.getText().toString();
         String addShiftStartTimeText = addShiftStartTime.getText().toString();
         String addShiftEndTimeText = addShiftEndTime.getText().toString();
+        String doctorUsername = ((Doctor) Database.currentUser).getUsername();
+        String doctorSpecialties = ((Doctor) Database.currentUser).getSpecialties();
 
         if (validateDateFormat(addShiftDateText) == false) {
             addShiftDate.setError("Invalid Date Format (Date/Month/YYYY)");
@@ -99,7 +101,7 @@ public class AddShift extends AppCompatActivity {
         if (validFlag == true){
             // Add the shift to the doctor's DB
 
-            ((Doctor) Database.currentUser).addShift(new Shift(addShiftDateText, addShiftStartTimeText, addShiftEndTimeText));
+            ((Doctor) Database.currentUser).addShift(new Shift(addShiftDateText, addShiftStartTimeText, addShiftEndTimeText, doctorUsername, doctorSpecialties));
             (new Handler()).postDelayed(new Runnable() {
                 @Override
                 public void run() {

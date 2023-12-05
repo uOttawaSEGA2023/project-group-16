@@ -102,7 +102,14 @@ public class TimeSlotClicked extends AppCompatActivity {
             Database.getDoctorWithID(curHolder.getTimeSlot().getAppointmentDoctorEmail(), new Database.MyCallBack3() {
                 @Override
                 public void onCallBack3(Doctor p, String doctorID) {
-                    p.addAppointment(new Appointment(Database.currentUser.getUsername(), startDateAndTimeString));
+                    boolean autoApprove = p.getAutoApprove();
+                    int status = Appointment.PENDING_APPOINTMENT;
+
+                    if (autoApprove) {
+                         status = Appointment.APPROVED_APPOINTMENT;
+                    }
+
+                    p.addAppointment(new Appointment(Database.currentUser.getUsername(), startDateAndTimeString, status));
                     (new Handler()).post(new Runnable() {
                         @Override
                         public void run() {
@@ -115,11 +122,19 @@ public class TimeSlotClicked extends AppCompatActivity {
             curHolder.getTimeSlot().setStatus(TimeSlot.BOOKED_APPOINTMENT);
             curBookingStatus = findViewById(R.id.currentBookingStatus);
             curBookingStatus.setText("Current Booking Status: " + curHolder.getAppointmentBooking());
+
             Database.getAllPatients(new Database.AllPatientsCallBack() {
                 @Override
                 public void onAllPatientsCallBack(ArrayList<Patient> patients, ArrayList<String> patientIDs) {
-                    for (String patientID : patientIDs) {
-                        Database.changeTimeSlotStatus(curHolder.getTimeSlot(),
+                    String patientID;
+                    int loopTimes = patientIDs.size();
+
+                    TimeSlot toUpdate = curHolder.getTimeSlot();
+
+                    for (int i = 0; i < loopTimes; i++) {
+                        patientID = patientIDs.get(i);
+
+                        Database.changeTimeSlotStatus(toUpdate,
                                 TimeSlot.BOOKED_APPOINTMENT, patientID);
                     }
                 }

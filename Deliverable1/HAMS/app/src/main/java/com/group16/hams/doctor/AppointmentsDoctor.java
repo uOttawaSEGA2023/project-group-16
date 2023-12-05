@@ -96,7 +96,7 @@ public class AppointmentsDoctor extends AppCompatActivity implements RecyclerVie
             System.out.println("Changing to false..");
             System.out.println("GetAutoApprove: = " + ((Doctor)Database.currentUser).getAutoApprove());
             autoApprove = ((Doctor) Database.currentUser).getAutoApprove();
-        } else if (!autoApprove){
+        } else {
             autoApproveButton.setText("Disable Auto Approve");
             Database.changeAutoApprove(true);
 
@@ -130,6 +130,10 @@ public class AppointmentsDoctor extends AppCompatActivity implements RecyclerVie
                     curAppointment.getAppointmentPatient().getLastName();
 
             if (curAppointment.isUpcoming()) {
+                if (autoApprove) {
+                    curAppointment.setStatus(Appointment.APPROVED_APPOINTMENT);
+                }
+
                 upcomingAppointmentHolders.add(new RecyclerViewHolderAppointmentDoctor(dateAndTime[0],
                         dateAndTime[1], patientName, curAppointment.getStatus(),
                         RecyclerViewHolderAppointmentDoctor.UPCOMING_APPOINTMENT, curAppointment));

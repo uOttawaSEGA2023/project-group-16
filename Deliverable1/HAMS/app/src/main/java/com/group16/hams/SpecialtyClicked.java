@@ -76,7 +76,7 @@ public class SpecialtyClicked extends AppCompatActivity implements RecyclerViewI
         for (int i = 0; i < timeSlots1.size(); i++) {
             curTimeSlot = timeSlots1.get(i);
 
-            if (curTimeSlot.getTimeSlotSpecialty() != null && curTimeSlot.getTimeSlotSpecialty().contains(curHolder) && curTimeSlot.getStatus() != TimeSlot.BOOKED_APPOINTMENT) {
+            if (curTimeSlot.getTimeSlotSpecialty() != null && curTimeSlot.getTimeSlotSpecialty().equals(curHolder) && curTimeSlot.getStatus() != TimeSlot.BOOKED_APPOINTMENT) {
                 DateAndTime = curTimeSlot.getDateAndTimeString().split(" ");
                 doctorName = curTimeSlot.getAppointmentDoctor().getFirstName() + " " +
                         curTimeSlot.getAppointmentDoctor().getLastName();

@@ -64,10 +64,7 @@ public class SearchAppointment extends AppCompatActivity {
                 }
                 else {
                     for (String specialty : specialties){
-                        String[] splited = specialty.split(",");
-                        for (String split : splited){
-                            specialtyList.add(new Specialty(split.trim()));
-                        }
+                        specialtyList.add(new Specialty(specialty));
                     }
                 }
 

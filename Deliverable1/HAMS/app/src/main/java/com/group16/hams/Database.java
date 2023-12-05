@@ -488,7 +488,7 @@ public class Database {
     }
 
     public static void timeSlotToDatabase(ArrayList<TimeSlot> timeSlots, String patientID){
-        if (!(currentUser instanceof Doctor))
+        if (!(currentUser instanceof Patient))
             return;
 
         DatabaseReference thisPatient = patientsRef.child(patientID);

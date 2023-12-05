@@ -98,52 +98,14 @@ public class AddShift extends AppCompatActivity {
         }
         if (validFlag == true){
             // Add the shift to the doctor's DB
+
             ((Doctor) Database.currentUser).addShift(new Shift(addShiftDateText, addShiftStartTimeText, addShiftEndTimeText));
-
-            // Add the timeslot to the patient's DB
-            String doctorEmail = ((Doctor) Database.currentUser).getUsername();
-            String doctorSpecialty = ((Doctor) Database.currentUser).getSpecialties();
-
-            String finalAddShiftDateText = changeDateFormat(addShiftDateText);
-            Database.getAllPatients(new Database.AllPatientsCallBack() {
+            (new Handler()).postDelayed(new Runnable() {
                 @Override
-                public void onAllPatientsCallBack(ArrayList<Patient> patients, ArrayList<String> patientIDs) {
-                    if (patients == null || patients.isEmpty()) {
-                        System.out.println("Database does not have any patients.");
-                    }
-                    else {
-                        int i = 0;
-                        for (Patient patient : patients) {
-                            int numberOfTimeSlots = calculateNumberOfTimeSlots(addShiftStartTimeText, addShiftEndTimeText);
-                            int timeSlotInterval = 30;
-                            int shiftStartMinute = convertTimeToMinutes(addShiftStartTimeText);
-                            for (int k = 0; k < numberOfTimeSlots; k++) {
-                                int startTime = shiftStartMinute + k * timeSlotInterval;
-                                int endTime = startTime + timeSlotInterval;
-
-                                // Format the time slots
-                                String timeSlotStartTime = convertMinutesToTime(startTime);
-                                String timeSlotEndTime = convertMinutesToTime(endTime);
-
-                                // Add the time slot to the patient
-                                patient.addTimeSlot(new TimeSlot(doctorEmail, finalAddShiftDateText + " " + timeSlotStartTime + " " + timeSlotEndTime, doctorSpecialty));
-                            }
-                            //patient.addTimeSlot(new TimeSlot(doctorEmail, finalAddShiftDateText + " " + addShiftStartTimeText + " " + addShiftEndTimeText, doctorSpecialty));
-                            String thisPatientID = patientIDs.get(i);
-                            i++;
-                            (new Handler()).post(new Runnable() {
-                                @Override
-                                public void run() {
-                                    Database.timeSlotToDatabase(patient.getTimeSlots(), thisPatientID);
-                                    if (Database.currentUser instanceof Doctor) {
-                                        Database.shiftToDatabase(((Doctor) Database.currentUser).getShifts());
-                                    }
-                                }
-                            });
-                        }
-                    }
+                public void run() {
+                    Database.shiftToDatabase(((Doctor) Database.currentUser).getShifts());
                 }
-            });
+            },1000);
 
             Toast.makeText(AddShift.this, "Success!", Toast.LENGTH_SHORT).show();
             finish();

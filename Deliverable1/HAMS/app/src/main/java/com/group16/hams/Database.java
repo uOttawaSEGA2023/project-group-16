@@ -221,12 +221,23 @@ public class Database {
                         DataSnapshot shiftsSnapshot = doctorSnapshot.child("shifts");
 
                         for (DataSnapshot shiftSnapshot : shiftsSnapshot.getChildren()) {
-                            String date = shiftSnapshot.getKey();
-                            String startTime = shiftSnapshot.child("Start Time").getValue(String.class);
-                            String endTime = shiftSnapshot.child("End Time").getValue(String.class);
+                            String year = shiftSnapshot.getKey();
 
-                            Shift shift = new Shift(date, startTime, endTime);
-                            allShifts.put(shift, id);
+                            for (DataSnapshot monthSnapshot : shiftSnapshot.getChildren()) {
+                                String month = monthSnapshot.getKey();
+
+                                for (DataSnapshot daySnapshot : monthSnapshot.getChildren()) {
+                                    String[] day = daySnapshot.getKey().split(" ");
+                                    String date = day[0] + "/" + month + "/" + year;
+
+                                    String startTime = daySnapshot.child("Start Time").getValue(String.class);
+                                    String endTime = daySnapshot.child("End Time").getValue(String.class);
+
+
+                                    Shift shift = new Shift(date, startTime, endTime);
+                                    allShifts.put(shift, id);
+                                }
+                            }
                         }
                     }
                 }

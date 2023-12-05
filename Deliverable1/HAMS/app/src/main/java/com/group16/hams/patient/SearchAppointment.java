@@ -67,6 +67,7 @@ public class SearchAppointment extends AppCompatActivity {
         Database.getAllShiftsOfDoctors(new Database.ShiftCallback() {
             @Override
             public void onShiftsRetrieved(HashMap<Shift, ArrayList<String>> shifts) {
+                System.out.println(shifts);
                 Database.getAllPatients(new Database.AllPatientsCallBack() {
                     @Override
                     public void onAllPatientsCallBack(ArrayList<Patient> patients, ArrayList<String> patientIDs) {

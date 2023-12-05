@@ -236,6 +236,12 @@ public class Database {
                         determineStatus(parent);
                         currentUserRef = snap.getRef();
                         if (snap.child("appointments").hasChildren()) {
+
+                            boolean autoApprove = false;
+                            if (snap.child("autoApprove").getValue(boolean.class) != null) {
+                                autoApprove = snap.child("autoApprove").getValue(boolean.class);
+                            }
+
                             currentUser = new Doctor(snap.child("firstName").getValue(String.class),
                                     snap.child("lastName").getValue(String.class),
                                     snap.child("username").getValue(String.class),
@@ -245,7 +251,7 @@ public class Database {
                                     snap.child("employeeNumber").getValue(Integer.class),
                                     snap.child("specialties").getValue(String.class),
                                     getAppointmentsFromDatabase(currentUserRef),
-                                    false,
+                                    autoApprove,
                                     getShiftsFromDatabase(currentUserRef));
                         }
 

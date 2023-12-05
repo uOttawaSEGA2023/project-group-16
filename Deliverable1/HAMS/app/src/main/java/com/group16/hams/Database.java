@@ -228,7 +228,7 @@ public class Database {
 
                                 for (DataSnapshot daySnapshot : monthSnapshot.getChildren()) {
                                     String[] day = daySnapshot.getKey().split(" ");
-                                    String date = day[0] + "/" + month + "/" + year;
+                                    String date = year + "/" + month + "/" + day[0];
 
                                     String startTime = daySnapshot.child("Start Time").getValue(String.class);
                                     String endTime = daySnapshot.child("End Time").getValue(String.class);

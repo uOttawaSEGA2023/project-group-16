@@ -71,6 +71,8 @@ public class SearchAppointment extends AppCompatActivity {
                 Database.getAllPatients(new Database.AllPatientsCallBack() {
                     @Override
                     public void onAllPatientsCallBack(ArrayList<Patient> patients, ArrayList<String> patientIDs) {
+                        System.out.println("SEARCH APPOINTMENT");
+
                         if (patients == null || patients.isEmpty()) {
                             System.out.println("Database does not have any patients.");
                         }

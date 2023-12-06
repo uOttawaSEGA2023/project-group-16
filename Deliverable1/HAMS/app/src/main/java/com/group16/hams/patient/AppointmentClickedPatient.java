@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.ContactsContract;
 import android.view.View;
 import android.widget.RatingBar;
 import android.widget.TextView;
@@ -110,6 +111,8 @@ public class AppointmentClickedPatient extends AppCompatActivity {
     @RequiresApi(api = Build.VERSION_CODES.O)
     public void onClickCancelAppointmentButton(View view) {
         if (cancellationIsPossible()) {
+            System.out.println("LOOK FOR LOOP 1");
+
             TimeSlot delPatientAppointment = new TimeSlot(curHolder.getTimeSlot().getAppointmentDoctorEmail(),
                     curHolder.getAppointmentDate() + " " +
                             curHolder.getAppointmentStartTime() + " " +
@@ -117,9 +120,11 @@ public class AppointmentClickedPatient extends AppCompatActivity {
                     curHolder.getTimeSlot().getTimeSlotSpecialty(), curHolder.getTimeSlot().getStatus(),
                     curHolder.getTimeSlot().getRating());
 
+            System.out.println("LOOK FOR LOOP 2");
             //removing appointment
             ((Patient) Database.currentUser).removePatientAppointment(delPatientAppointment);
 
+            System.out.println("LOOK FOR LOOP 3");
             //updating patient database
             (new Handler()).post(new Runnable() {
                 @Override
@@ -132,6 +137,7 @@ public class AppointmentClickedPatient extends AppCompatActivity {
             String formatChange[] = curHolder.getTimeSlot().getDateAndTimeString().split(" ");
             String startDateAndTimeString = formatChange[0] + " " + formatChange[1];
 
+            System.out.println("LOOK FOR LOOP 4");
             //getting the doctor associated with the appointment
             Database.getDoctorWithID(curHolder.getTimeSlot().getAppointmentDoctorEmail(), new Database.MyCallBack3() {
                 @Override
@@ -150,6 +156,10 @@ public class AppointmentClickedPatient extends AppCompatActivity {
                 }
             });
 
+            System.out.println("LOOK FOR LOOP 5");
+            Database.changeAllTimeslotStatuses(curHolder.getTimeSlot(), TimeSlot.UNBOOKED_APPOINTMENT);
+
+            /*
             Database.getAllPatients(new Database.AllPatientsCallBack() {
                 @Override
                 public void onAllPatientsCallBack(ArrayList<Patient> patients, ArrayList<String> patientIDs) {
@@ -159,6 +169,8 @@ public class AppointmentClickedPatient extends AppCompatActivity {
                     }
                 }
             });
+
+             */
 
             Toast.makeText(AppointmentClickedPatient.this, "Canceled!", Toast.LENGTH_SHORT).show();
             finish();

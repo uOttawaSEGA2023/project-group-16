@@ -123,6 +123,9 @@ public class TimeSlotClicked extends AppCompatActivity {
             curBookingStatus = findViewById(R.id.currentBookingStatus);
             curBookingStatus.setText("Current Booking Status: " + curHolder.getAppointmentBooking());
 
+
+            Database.changeAllTimeslotStatuses(curHolder.getTimeSlot(), TimeSlot.BOOKED_APPOINTMENT);
+/*
             Database.getAllPatients(new Database.AllPatientsCallBack() {
                 @Override
                 public void onAllPatientsCallBack(ArrayList<Patient> patients, ArrayList<String> patientIDs) {
@@ -139,6 +142,8 @@ public class TimeSlotClicked extends AppCompatActivity {
                     }
                 }
             });
+
+ */
 
             Toast.makeText(TimeSlotClicked.this, "Booked!", Toast.LENGTH_SHORT).show();
             finish();

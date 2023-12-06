@@ -41,6 +41,8 @@ public class Database {
 
     public static boolean breakLoop;
 
+    public static ArrayList<String> changeIDs = new ArrayList<String>();
+
     public static User currentUser;
     public static DatabaseReference currentUserRef;
     public enum UserStatus {
@@ -52,6 +54,7 @@ public class Database {
 
     // Getting User Types
     public static void getPatient(String email, MyCallBack m) {
+        breakLoop = false;
         DatabaseReference patientRef = userRef.child("Patients");
         patientRef.addValueEventListener(new ValueEventListener() {
             @Override
@@ -69,7 +72,12 @@ public class Database {
                         break;
                     }
                 }
-                m.onCallBack(p);
+
+                if (!breakLoop) {
+                    System.out.println("TEST IF LOOPING 2");
+                    m.onCallBack(p);
+                    breakLoop = true;
+                }
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
@@ -203,12 +211,14 @@ public class Database {
                     breakLoop = true;
                 }
             }
+
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
                 System.out.println("ERROR: getAllPatients()");
             }
         });
     }
+
     public interface AllPatientsCallBack{
         void onAllPatientsCallBack(ArrayList<Patient> patients, ArrayList<String> patientIDs);
     }
@@ -671,7 +681,7 @@ public class Database {
                     dataSnapshot.getRef().removeValue();
                     System.out.println("Appointment deleted successfully.");
                 } else {
-                    System.out.println("Appointment not found in database.");
+                    System.out.println("Appointment not found in database. 1");
                 }
             }
 
@@ -698,7 +708,7 @@ public class Database {
                     dataSnapshot.getRef().removeValue();
                     System.out.println("Appointment deleted successfully.");
                 } else {
-                    System.out.println("Appointment not found in database.");
+                    System.out.println("Appointment not found in database. 2");
                 }
             }
 
@@ -725,7 +735,7 @@ public class Database {
                     dataSnapshot.getRef().removeValue();
                     System.out.println("Appointment deleted successfully.");
                 } else {
-                    System.out.println("Appointment not found in database.");
+                    System.out.println("Appointment not found in database. 3");
                 }
             }
 
@@ -752,7 +762,7 @@ public class Database {
                     dataSnapshot.getRef().removeValue();
                     System.out.println("Appointment deleted successfully.");
                 } else {
-                    System.out.println("Appointment not found in database.");
+                    System.out.println("Appointment not found in database. 4");
                 }
             }
 
@@ -811,11 +821,39 @@ public class Database {
         currentUserRef.child("appointments").child(a.getStartDateAndTimeString()).child("status").setValue(status);
     }
     public static void changeTimeSlotStatus(TimeSlot a, int status, String patientID){
+        System.out.println("CHANGED VALUE 1");
+
         DatabaseReference thisPatient = patientsRef.child(patientID);
         DatabaseReference temp;
 
+        System.out.println("CHANGED VALUE 2");
+
         temp = thisPatient.child("timeslots").child(a.getDateAndTimeString());
         temp.child("status").setValue(status);
+
+        System.out.println("CHANGED VALUE 3");
+    }
+
+    public static void changeAllTimeslotStatuses(TimeSlot slot, int status) {
+        patientsRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot s : snapshot.getChildren()) {
+                    DataSnapshot temp = s.child("timeslots").child(slot.getDateAndTimeString()).
+                            child("status");
+
+                    if (temp.getValue(Integer.class) != status) {
+                        patientsRef.child(s.getKey()).child("timeslots").child(slot.getDateAndTimeString()).
+                                child("status").setValue(status);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                System.out.println("ERROR: getAllPatients()");
+            }
+        });
     }
     public static void changePatientAppointmentRating(TimeSlot t, float v){
         currentUserRef.child("appointments").child(t.getDateAndTimeString()).child("rating").setValue(v);

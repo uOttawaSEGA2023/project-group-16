@@ -85,6 +85,7 @@ public class ShiftClicked extends AppCompatActivity {
             Database.getAllPatients(new Database.AllPatientsCallBack() {
                 @Override
                 public void onAllPatientsCallBack(ArrayList<Patient> patients, ArrayList<String> patientIDs) {
+                    System.out.println("SHIFT CLICKED");
                     for (String patientID : patientIDs) {
                         tempIDs.add(patientID);
                         int numberOfTimeSlots = AddShift.calculateNumberOfTimeSlots(delShift.getStartTime(), delShift.getEndTime());

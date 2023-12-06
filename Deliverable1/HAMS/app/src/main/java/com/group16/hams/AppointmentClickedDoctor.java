@@ -50,6 +50,7 @@ public class AppointmentClickedDoctor extends AppCompatActivity {
             @Override
             public void onCallBack(Patient p) {
                 if (p == null) {
+                    System.out.println("Looping 1");
                     //Might have to add more precautions here in case the patient gets deleted
                     //after the appointment has already been created. Otherwise this should never occur
                     System.out.println("Patient is not in database.");
@@ -57,6 +58,7 @@ public class AppointmentClickedDoctor extends AppCompatActivity {
 
                 else {
                     //MOVED HERE.... WAITS FOR DATABASE TO RETRIEVE INFO
+                    System.out.println("Looping 2");
                     System.out.println("P: " + p);
                     curPatient = p;
                     patientUsername.setText("Patient Username: " + curPatient.getUsername());
@@ -151,6 +153,7 @@ public class AppointmentClickedDoctor extends AppCompatActivity {
                 }
             });
 
+            /*
             Database.getAllPatients(new Database.AllPatientsCallBack() {
                 @Override
                 public void onAllPatientsCallBack(ArrayList<Patient> patients, ArrayList<String> patientIDs) {
@@ -160,6 +163,10 @@ public class AppointmentClickedDoctor extends AppCompatActivity {
                     }
                 }
             });
+
+             */
+
+            Database.changeAllTimeslotStatuses(delDoctorAppointment, TimeSlot.UNBOOKED_APPOINTMENT);
 
             Toast.makeText(AppointmentClickedDoctor.this, "Canceled!", Toast.LENGTH_SHORT).show();
             finish();
